@@ -72,23 +72,25 @@ func GetChampion() {
 			break
 		}
 	}
+	
 }
 
-func GetSpells(){
-	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/en_US/champion/Ahri.json"
 
-	resp, err := http.Get(url)
-	if err != nil {
-		fmt.Println("Erreur lors du GET :", err)
-		return 
-	}
+// func GetSpells(){
+// 	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/en_US/champion/Ahri.json"
 
-	defer resp.Body.Close()
+// 	resp, err := http.Get(url)
+// 	if err != nil {
+// 		fmt.Println("Erreur lors du GET :", err)
+// 		return 
+// 	}
 
-	body, err := io.ReadAll(resp.Body)
-		if err != nil {
-		fmt.Println("Erreur lors de la lecture du Body:", err)
-		return
-	}
+// 	defer resp.Body.Close()
 
-}
+// 	body, err := io.ReadAll(resp.Body)
+// 		if err != nil {
+// 		fmt.Println("Erreur lors de la lecture du Body:", err)
+// 		return
+// 	}
+
+// }

@@ -16,7 +16,7 @@ body {
   z-index: 1;
 
   height: 100vh;
-  background-color: rgb(255, 255, 255);
+  background-color: #626d71;
   color: black;
 
   display: flex;
@@ -73,7 +73,7 @@ body {
 }
 
 .sidebar nav a:hover {
-  color: red;
+  color: rgb(255, 255, 255);
   background: rgba(0,0,0,0.06);
   transform: translateX(4px);
 }
