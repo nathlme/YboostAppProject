@@ -1,8 +1,11 @@
 package main
 
 
-
-
-
-func main() {
+func main () {
+	GetVersion()
+	GetChampion()
 }
+
+
+
+
