@@ -1,9 +1,17 @@
 package main
 
+import  (
+	"fmt"
+)
 
 func main () {
-	GetVersion()
-	GetChampion()
+	champsL:= GetChampion()
+
+	champsSlice := SelecChamp(champsL)
+
+    randomChamp := GetRandomChampion(champsSlice)
+
+    fmt.Println(randomChamp.Name)
 }
 
 

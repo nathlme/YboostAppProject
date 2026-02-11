@@ -39,21 +39,20 @@ func GetVersion(){
 }
 
 
-func GetChampion() {
+func GetChampion() map[string]Champion {
 	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/en_US/champion.json"
 
 	resp,err := http.Get(url)
 	if err != nil {
-		fmt.Println("Erreur lors du GET :", err)
-		return 
+		fmt.Println("Erreur lors du GET :", err) 
 	}
 
 	defer resp.Body.Close()
-
+		
 	body, err := io.ReadAll(resp.Body)
 		if err != nil {
 		fmt.Println("Erreur lors de la lecture du Body:", err)
-		return
+		
 	}
 
 	var result ChampionResponse
@@ -61,34 +60,28 @@ func GetChampion() {
 	err = json.Unmarshal(body,&result)
 	if err != nil {
 		fmt.Println("Error JSON :", err)
-		return
+		
 	}
 
-	count := 0 
-	for key, champ := range result.Data{
-		fmt.Printf("%s -> %s (%v)\n",key,champ.Name,champ.Tags)
-		count++
-		if count == 5{
-			break
-		}
-	}
+	return result.Data
+
 }
 
-func GetSpells(){
-	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/en_US/champion/Ahri.json"
+// func GetSpells(){
+// 	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/en_US/champion/Ahri.json"
 
-	resp, err := http.Get(url)
-	if err != nil {
-		fmt.Println("Erreur lors du GET :", err)
-		return 
-	}
+// 	resp, err := http.Get(url)
+// 	if err != nil {
+// 		fmt.Println("Erreur lors du GET :", err)
+// 		return 
+// 	}
 
-	defer resp.Body.Close()
+// 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
-		if err != nil {
-		fmt.Println("Erreur lors de la lecture du Body:", err)
-		return
-	}
+// 	body, err := io.ReadAll(resp.Body)
+// 		if err != nil {
+// 		fmt.Println("Erreur lors de la lecture du Body:", err)
+// 		return
+// 	}
 
-}
+// }
