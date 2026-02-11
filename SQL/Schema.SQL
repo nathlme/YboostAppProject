@@ -1,3 +1,7 @@
+# & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
+# Get-Content .\Schema.sql | & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
+
+
 CREATE TABLE IF NOT EXISTS daily_champion (
   day DATE PRIMARY KEY,
   champion_id VARCHAR(50) NOT NULL
@@ -9,6 +13,10 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash VARCHAR(255) NOT NULL,
   pseudo VARCHAR(100) NOT NULL UNIQUE,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  update_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
+  update_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
 );
+
+
+
+exit 

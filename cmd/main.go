@@ -1,17 +1,27 @@
 package main
 
 import  (
-	"fmt"
+	
+	"net/http"
+	"os"
+	"log"
 )
 
+
 func main () {
-	champsL:= GetChampion()
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("Hello Yboost 🚀"))
+		})
+	
+	http.HandleFunc("/register", handlerRegister)
+		
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" 
+	}
 
-	champsSlice := SelecChamp(champsL)
-
-    randomChamp := GetRandomChampion(champsSlice)
-
-    fmt.Println(randomChamp.Name)
+	log.Println("Server running on port", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 
