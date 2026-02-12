@@ -1,12 +1,15 @@
-# & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
-# Get-Content .\Schema.sql | & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
+-- & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
+-- Get-Content .\Schema.sql | & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
 
 
+
+-- Daily champ table
 CREATE TABLE IF NOT EXISTS daily_champion (
   day DATE PRIMARY KEY,
   champion_id VARCHAR(50) NOT NULL
 );
 
+-- Users auth table
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
