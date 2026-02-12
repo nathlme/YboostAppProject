@@ -48,7 +48,8 @@ func handlerRegister(w http.ResponseWriter, r*http.Request ){
 			log.Println("Hash:", hash)
 
 			log.Println("Nouvelle inscription :", email,len(password),pseudo)
-			fmt.Fprint(w, "OK")
+			http.Redirect(w, r, "/logged", http.StatusSeeOther)
+			return
 			
 		default :
 			fmt.Fprint(w,"erreur 405")
