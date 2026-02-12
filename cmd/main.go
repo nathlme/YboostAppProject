@@ -41,6 +41,7 @@ func main () {
 
 	log.Println("Server running on port", port)
 	fmt.Println("http://localhost:8080/logged")
+	fmt.Println("http://localhost:8080/register")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
