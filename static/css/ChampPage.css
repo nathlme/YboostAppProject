@@ -75,7 +75,7 @@ body {
 }
 
 .sidebar nav a:hover {
-  color: rgb(255, 255, 255);
+  color: #FECA74;
   background: rgba(0,0,0,0.06);
   transform: translateX(4px);
 }
