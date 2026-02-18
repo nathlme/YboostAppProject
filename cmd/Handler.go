@@ -205,6 +205,8 @@ func handlerLogged(w http.ResponseWriter, r*http.Request){
 				http.Error(w, "DB error", 500)	
 				return 
 			}	
+			
+			log.Print(GetOrCreateDailyChampion())
 
 			t.Execute(w, struct {Pseudo string}{Pseudo: pseudo})
 
