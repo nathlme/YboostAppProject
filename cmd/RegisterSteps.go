@@ -18,10 +18,10 @@ func PasswordHash(password []byte) (string, error) {
 func validateRegister(email string,pseudo string,password string) string{
 	msg := ""
 	if !(len(email) >= 8 ){
-		msg = msg + "8 caractères minimum pour l'email requis, "
+		msg = msg + "Votre email doit contenir au moins 8 caractères "
 	}
 	if !(len(pseudo) >= 3){
-		msg = msg + "Pseudo doit contenir au moins 3 caractères "
+		msg = msg + "\nVotre pseudo doit contenir au moins 3 caractères "
 	}
 
 	msg = msg + StrongPassword(password)
@@ -33,10 +33,10 @@ func validateRegister(email string,pseudo string,password string) string{
 // Check if the password has at least a MAJ and a size of 8
 func StrongPassword(password string) string {
 	msg := ""
-	VerMaj := " Votre mot de passe doit contenir au moins une majuscule."
+	VerMaj := "\nVotre mot de passe doit contenir au moins une majuscule."
 	
 	if len(password) < 8 {
-		msg = msg + "Votre mot de passe doit contenir au moins 8 caractères"
+		msg = msg + "\nVotre mot de passe doit contenir au moins 8 caractères"
 	}
 
 	for i := 0; i < len(password); i++ {

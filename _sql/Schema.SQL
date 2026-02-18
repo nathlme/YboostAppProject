@@ -1,5 +1,7 @@
--- & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
--- Get-Content .\Schema.sql | & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
+-- Aller dans la DB :  & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
+-- Execute fichier SQL : Get-Content .\Schema.sql | & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
+-- Voir la base de données : SELECT DATABASE();
+-- Tunnel :  & "C:\Users\natha\tools\scalingo.exe" --app projetyboost --region osc-fr1 db-tunnel SCALINGO_MYSQL_URL
 
 
 
