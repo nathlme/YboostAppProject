@@ -27,5 +27,6 @@ func GetOrCreateDailyChampion() (string,error) {
 		return "",err
 	}
 
-	return championID,nil
+	
+	return championID, nil 
 }

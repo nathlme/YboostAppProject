@@ -2,8 +2,9 @@
 -- Execute fichier SQL : Get-Content .\Schema.sql | & "C:\Users\natha\tools\scalingo.exe" --app projetyboost mysql-console
 -- Voir la base de données : SELECT DATABASE();
 -- Tunnel :  & "C:\Users\natha\tools\scalingo.exe" --app projetyboost --region osc-fr1 db-tunnel SCALINGO_MYSQL_URL
-
-
+-- a rentrer dans PS :
+-- $env:SCALINGO_MYSQL_URL = ( & "C:\Users\natha\tools\scalingo.exe" --app projetyboost env | Select-String "SCALINGO_MYSQL_URL=" ).ToString().Split("=",2)[1]
+-- $env:MYSQL_TUNNEL_HOSTPORT="127.0.0.1:10000"
 
 -- Daily champ table
 CREATE TABLE IF NOT EXISTS daily_champion (
