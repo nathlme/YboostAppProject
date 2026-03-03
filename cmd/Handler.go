@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"golang.org/x/crypto/bcrypt"
 	"html/template"
+	"encoding/json"
 
 
 )
@@ -200,12 +201,7 @@ func handlerLogged(w http.ResponseWriter, r*http.Request){
 			if err!=nil {
 				http.Error(w,"Internal Server Error",500)
 				return
-			}				
-			if err != nil {
-				http.Error(w, "DB error", 500)	
-				return 
-			}	
-			
+			}					
 			log.Print(GetOrCreateDailyChampion())
 
 			t.Execute(w, struct {Pseudo string}{Pseudo: pseudo})
@@ -235,22 +231,42 @@ func handlerProfil(w http.ResponseWriter, r*http.Request){
 }
 
 
-func handlerChamps(w http.ResponseWriter, r*http.Request){
-	switch r.Method {
-		case http.MethodGet :
-			contenu, err := os.ReadFile("templates/ChampPage.html")
-
-				if err!=nil {
-					http.Error(w,"Internal Server Error",500)
-					return
-				}
-
-			w.Header().Set("Content-Type", "text/html")
-			w.Write(contenu)
-
-	default :
-			fmt.Fprint(w,"erreur 405")
+func handlerChamps(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
 	}
+
+	championID, err := GetOrCreateDailyChampion()
+	if err != nil {
+		http.Error(w, "ERR_GET_DAILY", http.StatusInternalServerError)
+		return
+	}
+
+	t, err := template.ParseFiles("templates/ChampPage.html")
+	if err != nil {
+		http.Error(w, "ERR_PARSE_TEMPLATE", http.StatusInternalServerError)
+		return
+	}
+
+	championsJSON, err := json.Marshal(championNames)
+	if err != nil {
+		log.Println("json error:", err)
+		return
+	}
+
+	data := struct {
+		ChampionID string
+		ChampionsJSON template.JS
+	}{
+		ChampionID: championID,
+		ChampionsJSON: template.JS(championsJSON),
+	}
+
+	if err := t.Execute(w, data); err != nil {
+		log.Println("jsp :", err)
+		return
+	}	
 }
 
 
@@ -327,5 +343,9 @@ func handlerList(w http.ResponseWriter, r*http.Request){
 	default :
 			fmt.Fprint(w,"erreur 405")
 	}
+}
+
+func handlerGuess(w http.ResponseWriter, r*http.Request) {
+	
 }
 

@@ -15,37 +15,37 @@
       <div class="horizontal-line"></div>
 
       <nav>
-        <a href="logged">
+        <a href="/logged">
           <img src="../static/images/HomeIcon.jpg" alt="" />
           <span>Accueil</span>
         </a>
 
-        <a href="Profil">
+        <a href="/Profil">
           <img src="../static/images/ProfileIcon.jpg" alt="" />
           <span>Profil</span>
         </a>
 
-        <a href="Champs">
+        <a href="/Champs">
           <img src="../static/images/ChampLogo.jpg" alt="" />
           <span>Champion</span>
         </a>
 
-        <a href="Items">
+        <a href="/Items">
           <img src="../static/images/ItemLogo.jpg" alt="" />
           <span>Items</span>
         </a>
 
-        <a href="Search">
+        <a href="/Search">
           <img src="../static/images/LoupeIcon.jpg" alt="" />
           <span>Recherche</span>
         </a>
 
-        <a href="News">
+        <a href="/News">
           <img src="../static/images/NewsIcon.jpg" alt="" />
           <span>À propos</span>
         </a>
 
-        <a href="List">
+        <a href="/List">
           <img src="../static/images/ListIcon.jpg" alt="" />
           <span>Tier list</span>
         </a>
@@ -55,9 +55,67 @@
     </aside>
 
     <main class="content">
-      <h1>UHC LoLdle</h1>
+      <div class="champPrint">
+        
+      </div>
+      <input type="text" id="champInput" placeholder="Choisir un champion..." autocomplete="off">
+      <div id="champList"></div>
     </main>
+    
 
-  </div>
+  
+    <script>
+      const champions = {{ .ChampionsJSON }};
+      console.log(champions);
+
+      let guessed = []
+
+      const input = document.getElementById("champInput");
+      const list = document.getElementById("champList");
+
+      function renderList(array) {
+        list.innerHTML = "";
+
+        for (let i = 0; i < array.length; i++) {
+            const item = document.createElement("div");
+
+            if (!guessed.includes(array[i])) {
+              item.textContent = array[i];
+              list.appendChild(item);
+
+              item.addEventListener("click",function() {
+                list.innerHTML = ""
+                input.value = this.textContent
+                guessed.push(input.value)   
+              })
+            }  
+        }
+        
+      }
+
+      input.addEventListener("focus", function() {
+      console.log("Input activé");
+      renderList(champions);
+      });
+
+      input.addEventListener("input", function() {
+      const value = input.value.toLowerCase();
+
+      let filtered = [];
+
+      for (let i = 0; i < champions.length; i++) {
+          if (champions[i].toLowerCase().startsWith(value)) {
+              filtered.push(champions[i]);
+          }
+      }
+
+      renderList(filtered);
+      });
+
+      
+          
+    </script>
+
+</div>
 </body>
 </html>

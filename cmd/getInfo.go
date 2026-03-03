@@ -7,7 +7,7 @@ import(
 	"net/http"
 
 )
-
+var championNames []string
 
 func GetVersion(){
 	url := "https://ddragon.leagueoflegends.com/api/versions.json"
@@ -66,6 +66,31 @@ func GetChampion() map[string]Champion {
 	return result.Data
 
 }
+
+func LoadChampsName(){
+	Dico := GetChampion()
+
+	for _, champ := range Dico {
+		championNames = append(championNames, champ .Name )
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // func GetSpells(){
 // 	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/en_US/champion/Ahri.json"

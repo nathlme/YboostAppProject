@@ -4,13 +4,18 @@ body {
 }
 
 
-
 .background-zone::before {
   content: "";
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.15);
   z-index: 0;   
+}
+
+.background-zone {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
 }
 
 .sidebar {
@@ -67,7 +72,7 @@ body {
   align-items: center;
   gap: 12px;
 
-  color: black;
+  color: rgb(0, 0, 0);
   padding: 10px 20px;
   border-radius: 10px;
 
@@ -113,4 +118,10 @@ body {
   width: 5px;                 
   height: 100%;
   background-color: #FECA74;
+}
+
+.background-zone {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
 }

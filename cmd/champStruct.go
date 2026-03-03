@@ -10,17 +10,22 @@ type ChampionResponse struct {
 	Data map[string]Champion `json:"data"`
 }
 
-
-type Spell struct {
-	ID string `json:"id"`
-	Name string `json:"name"`
-
+type Request struct {
+	Champ string `json:"champion"`
 }
 
-type SpellResponse struct{
-	Spells map[string]Spell `json : "spells"`
-}
 
-type ChampionDetailResponse struct {
-	Data map[string]SpellResponse `json:"data"`
-}
+
+// type Spell struct {
+// 	ID string `json:"id"`
+// 	Name string `json:"name"`
+
+// }
+
+// type SpellResponse struct{
+// 	Spells map[string]Spell `json:"spells"`
+// }
+
+// type ChampionDetailResponse struct {
+// 	Data map[string]SpellResponse `json:"data"`
+// }
