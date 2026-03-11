@@ -255,12 +255,22 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	champLore := ""
+
+	for _, card := range championCards {
+		if card.Name == championID{
+			champLore = card.Lore
+		}
+	} 
+
 	data := struct {
 		ChampionID string
 		ChampionsJSON template.JS
+		ChampLore string
 	}{
 		ChampionID: championID,
 		ChampionsJSON: template.JS(championsJSON),
+		ChampLore: champLore,
 	}
 
 	if err := t.Execute(w, data); err != nil {
