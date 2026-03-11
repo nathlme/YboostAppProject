@@ -249,7 +249,7 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	championsJSON, err := json.Marshal(championNames)
+	championsJSON, err := json.Marshal(championCards)
 	if err != nil {
 		log.Println("json error:", err)
 		return
@@ -346,6 +346,25 @@ func handlerList(w http.ResponseWriter, r*http.Request){
 }
 
 func handlerGuess(w http.ResponseWriter, r*http.Request) {
-	
+	switch r.Method {
+		case http.MethodPost :
+			var req GuessRequest
+			var check GuessResponse 
+
+			err := json.NewDecoder(r.Body).Decode(&req)
+
+			if err != nil {
+				http.Error(w,"JSON invalide", 400)
+				return
+			}
+			 
+			check.Same = SameChamp(req.Champion) 
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(check)
+			
+	default :
+			http.Error(w,"Erreur",http.StatusMethodNotAllowed)
+	}
 }
 
+ 

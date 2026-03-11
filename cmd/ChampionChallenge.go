@@ -1,9 +1,10 @@
 package main
 
 import (
-	
 	"database/sql"
+	"log"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -34,5 +35,13 @@ func GetOrCreateDailyChampion() (string, error) {
 
 func pickRandomChampionName() string {
 	rand.Seed(time.Now().UnixNano())
-	return championNames[rand.Intn(len(championNames))]
+	return championCards[rand.Intn(len(championCards))].ID
+}
+
+func SameChamp(guess string) bool {
+    dayli, err := GetOrCreateDailyChampion()
+    if err != nil {
+        log.Print("erreur DB")
+    }
+    return strings.EqualFold(guess, dayli) 
 }

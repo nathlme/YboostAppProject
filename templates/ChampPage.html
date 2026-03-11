@@ -55,17 +55,41 @@
     </aside>
 
     <main class="content">
-      <div class="champPrint">
-        
+      <div class="page-brand">
+        <span class="brand-small">UHC</span>
+        <span class="brand-big">LoLdle</span>
       </div>
-      <input type="text" id="champInput" placeholder="Choisir un champion..." autocomplete="off">
-      <div id="champList"></div>
-    </main>
-    
 
-  
+      <section class="game-wrapper">
+        <div class="intro-box">
+          <h1 class="page-title">Champion Challenge</h1>
+          <p class="intro-text">
+            Ici tu pourras mettre plus tard ton long texte d’introduction, tes règles,
+            ou un petit contexte sur le fonctionnement du jeu.
+          </p>
+        </div>
+
+        <div class="search-zone">
+          <div class="search-box">
+            <input type="text" id="champInput" placeholder="Choisir un champion..." autocomplete="off">
+            <div id="champList"></div>
+          </div>
+
+          <div id="try"></div>
+        </div>
+
+        <section class="guesses-zone">
+          <h2 class="guesses-title">Champions déjà proposés :</h2>
+          <div id="guessedHistory" class="guessed-history"></div>
+        </section>
+
+        <p class="debug-daily">{{ .ChampionID }}</p>
+      </section>
+    </main>
+
     <script>
       const champions = {{ .ChampionsJSON }};
+      champions.sort((a, b) => a.name.localeCompare(b.name));
       console.log(champions);
 
       let guessed = []
@@ -74,24 +98,47 @@
       const list = document.getElementById("champList");
 
       function renderList(array) {
-        list.innerHTML = "";
+          list.innerHTML = "";
 
-        for (let i = 0; i < array.length; i++) {
+          for (let i = 0; i < array.length; i++) {
             const item = document.createElement("div");
 
-            if (!guessed.includes(array[i])) {
-              item.textContent = array[i];
+            if (!guessed.includes(array[i].name)) {
+              const img = document.createElement("img");
+              img.src = array[i].imageUrl;
+              img.alt = array[i].name;
+
+              const span = document.createElement("span");
+              span.textContent = array[i].name;
+
+              item.appendChild(img);
+              item.appendChild(span);
               list.appendChild(item);
 
-              item.addEventListener("click",function() {
-                list.innerHTML = ""
-                input.value = this.textContent
-                guessed.push(input.value)   
-              })
-            }  
+              item.addEventListener("click", function() {
+                list.innerHTML = "";
+                guessed.push(array[i].name);
+                submitGuess(array[i].name);
+                input.value = "";
+              });
+            }
+          }
         }
-        
-      }
+
+      input.addEventListener("keydown",function(event) {
+        let filtered = FilteredList(champions)
+                if (event.key == "Enter"){  
+                  if (filtered.length > 0){
+                    let closerElmt = filtered [0]
+                    if (!guessed.includes(closerElmt.name)){
+                      guessed.push(closerElmt.name) 
+                      submitGuess(closerElmt.name)
+                      renderList(FilteredList(champions))
+                      input.value = ""
+                    }
+                  } 
+                }
+              })
 
       input.addEventListener("focus", function() {
       console.log("Input activé");
@@ -99,20 +146,77 @@
       });
 
       input.addEventListener("input", function() {
-      const value = input.value.toLowerCase();
-
-      let filtered = [];
-
-      for (let i = 0; i < champions.length; i++) {
-          if (champions[i].toLowerCase().startsWith(value)) {
-              filtered.push(champions[i]);
-          }
-      }
-
-      renderList(filtered);
+        renderList(FilteredList(champions));
       });
 
-      
+      async function submitGuess(name) {
+        const guessedHistory = document.getElementById("guessedHistory")
+        
+        const response = await fetch("/guess", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ champion: name })
+        })
+
+        let verify = document.getElementById("try")
+        const data = await response.json()
+        
+        const champ = champions.find(c => c.name === name);
+
+        const img = document.createElement("img");
+        img.src = champ.imageUrl;
+        img.alt = champ.name;
+
+        const span = document.createElement("span");
+        span.textContent = champ.name;
+        
+        if (data.correct) {
+            input.style.display = "none"
+            list.style.display = "none" 
+
+            verify.textContent = `Bien joué c'était bien ${champ.name} !`
+            console.log("le bon")
+            
+            let alreadyGuess = document.createElement("div")
+            alreadyGuess.classList.add("guess-row")
+            alreadyGuess.classList.add("true")
+            alreadyGuess.appendChild(img)
+            alreadyGuess.appendChild(span)
+            guessedHistory.prepend(alreadyGuess)
+        
+        }else {
+          verify.textContent = `Dommage ce n'est pas ${champ.name}`
+
+          let alreadyGuess = document.createElement("div")
+
+          alreadyGuess.classList.add("guess-row")
+          alreadyGuess.classList.add("false")
+
+          alreadyGuess.appendChild(img)
+          alreadyGuess.appendChild(span)
+
+          guessedHistory.prepend(alreadyGuess)
+        }
+        
+      }
+
+
+     function FilteredList(champs) {
+        let finalList = [];
+
+        for (let i = 0; i < champs.length; i++) {
+          let minuChamp = champs[i].name.toLowerCase();
+          let minuGuess = input.value.toLowerCase();
+
+          if (minuChamp.startsWith(minuGuess) && !guessed.includes(champs[i].name)) {
+            finalList.push(champs[i]);
+          }
+        }
+
+        return finalList;
+      }
+
+      const guessedHistory = document.getElementById("guessedHistory")
           
     </script>
 

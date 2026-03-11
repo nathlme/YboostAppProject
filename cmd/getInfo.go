@@ -7,7 +7,7 @@ import(
 	"net/http"
 
 )
-var championNames []string
+var championCards []ChampionCard
 
 func GetVersion(){
 	url := "https://ddragon.leagueoflegends.com/api/versions.json"
@@ -67,12 +67,25 @@ func GetChampion() map[string]Champion {
 
 }
 
-func LoadChampsName(){
+func LoadChampionCards(){
+	
+	championCards = []ChampionCard{}
+
 	Dico := GetChampion()
 
 	for _, champ := range Dico {
-		championNames = append(championNames, champ .Name )
+		var card ChampionCard
+		card.ID = champ.ID
+		card.Name = champ.Name
+		card.Lore = champ.Lore
+		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/champion/", card.ID)
+		championCards = append(championCards,card)
 	}
+}
+
+func BuildUrl(baseUrl string, champId string) string {
+	newUrl := baseUrl + champId + ".png"
+	return newUrl
 }
 
 

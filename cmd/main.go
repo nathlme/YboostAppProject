@@ -16,7 +16,7 @@ var db *sql.DB
 
 
 func main () {
-	LoadChampsName()
+	LoadChampionCards()
 
 	raw := os.Getenv("SCALINGO_MYSQL_URL")
 	fmt.Println("RAW =", raw)
@@ -109,7 +109,7 @@ func main () {
 	fmt.Println("http://localhost:8080/logged")
 	fmt.Println("http://localhost:8080/register")
 	fmt.Println("http://localhost:8080/login")
-	log.Println(len(championNames))
+	log.Println(len(championCards))
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 

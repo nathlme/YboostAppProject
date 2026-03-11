@@ -1,15 +1,18 @@
 body {
   margin: 0;
   color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(35, 60, 95, 0.45), transparent 35%),
+    linear-gradient(135deg, #0a1428 0%, #09111f 45%, #05080f 100%);
 }
-
 
 .background-zone::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.15);
-  z-index: 0;   
+  background: rgba(0, 0, 0, 0.12);
+  z-index: 0;
 }
 
 .background-zone {
@@ -18,40 +21,37 @@ body {
   display: flex;
 }
 
+/* =========================
+   SIDEBAR — inchangée visuellement
+   ========================= */
+
 .sidebar {
   position: relative;
-  z-index: 1;
-
+  z-index: 2;
   height: 100vh;
   background-color: #626d71;
   color: black;
-
   display: flex;
   flex-direction: column;
   gap: 16px;
-
   padding: 20px 12px;
-
-  width: 80px;                 
+  width: 80px;
   transition: width 0.25s ease;
-  overflow: hidden;           
+  overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar:hover {
-  width: 260px;               
+  width: 260px;
 }
-
 
 .sidebar-logo {
   width: 80px;
   height: 80px;
   object-fit: cover;
   border-radius: 10px;
-  margin: 0 auto;              
+  margin: 0 auto;
 }
-
-
 
 .horizontal-line {
   width: 100%;
@@ -71,11 +71,9 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-
   color: rgb(0, 0, 0);
   padding: 10px 20px;
   border-radius: 10px;
-
   transition: background 0.2s, transform 0.2s, color 0.2s;
 }
 
@@ -103,25 +101,516 @@ body {
   transform: translateX(0);
 }
 
-.content {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  padding: 40px;
-}
-
 .vertical-line {
   position: absolute;
   top: 0;
   right: 0;
-
-  width: 5px;                 
+  width: 5px;
   height: 100%;
   background-color: #FECA74;
 }
 
-.background-zone {
+/* =========================
+   CONTENU PRINCIPAL
+   ========================= */
+
+.content {
   position: relative;
-  min-height: 100vh;
+  z-index: 1;
+  flex: 1;
+  padding: 40px 48px;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.page-brand {
+  position: absolute;
+  top: 28px;
+  right: 42px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.brand-small {
+  font-size: 18px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c8aa6e;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(200, 170, 110, 0.25);
+}
+
+.brand-big {
+  font-size: 42px;
+  font-weight: 800;
+  color: #f0e6d2;
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px rgba(201, 170, 110, 0.18);
+}
+
+/* =========================
+   WRAPPER CENTRAL
+   ========================= */
+
+.game-wrapper {
+  width: min(900px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+}
+
+.intro-box {
+  width: min(760px, 100%);
+  padding: 24px 28px;
+  border: 1px solid rgba(200, 170, 110, 0.35);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(9, 20, 40, 0.92), rgba(4, 11, 22, 0.92));
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.38),
+    inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.page-title {
+  margin: 0 0 12px 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: #f0e6d2;
+  text-align: center;
+}
+
+.intro-text {
+  margin: 0;
+  line-height: 1.7;
+  color: #cdd7e5;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* =========================
+   ZONE RECHERCHE
+   ========================= */
+
+.search-zone {
+  width: min(760px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 5;
+}
+
+.search-box {
+  width: min(560px, 100%);
+  position: relative;
+  z-index: 10;
+}
+
+#champInput {
+  width: 100%;
+  box-sizing: border-box;
+  height: 58px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(200, 170, 110, 0.55);
+  background:
+    linear-gradient(180deg, rgba(10, 20, 38, 0.95), rgba(4, 11, 22, 0.98));
+  color: #f0e6d2;
+  font-size: 17px;
+  outline: none;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.34),
+    inset 0 0 0 1px rgba(255,255,255,0.02);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+#champInput::placeholder {
+  color: #93a1b5;
+}
+
+#champInput:focus {
+  border-color: #c8aa6e;
+  box-shadow:
+    0 0 0 3px rgba(200, 170, 110, 0.14),
+    0 12px 28px rgba(0,0,0,0.34);
+  transform: translateY(-1px);
+}
+
+#champList {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  background:
+    linear-gradient(180deg, rgba(7, 18, 34, 0.98), rgba(5, 11, 20, 0.98));
+  border: 1px solid rgba(200, 170, 110, 0.42);
+  border-radius: 14px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.48);
+  z-index: 50;
+  backdrop-filter: blur(6px);
+}
+
+#champList:empty {
+  display: none;
+}
+
+#champList div {
+  padding: 14px 16px;
+  color: #f0e6d2;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, padding-left 0.18s ease;
+}
+
+#champList div:last-child {
+  border-bottom: none;
+}
+
+#champList div:hover {
+  background: rgba(200, 170, 110, 0.14);
+  color: #ffe7b0;
+  padding-left: 22px;
+}
+
+/* scrollbar */
+#champList::-webkit-scrollbar {
+  width: 9px;
+}
+
+#champList::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+}
+
+#champList::-webkit-scrollbar-thumb {
+  background: rgba(200, 170, 110, 0.45);
+  border-radius: 10px;
+}
+
+/* =========================
+   MESSAGE
+   ========================= */
+
+#try {
+  min-height: 24px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #f0e6d2;
+  text-align: center;
+  text-shadow: 0 0 12px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   LISTE DES GUESSES
+   ========================= */
+
+.guesses-zone {
+  width: min(760px, 100%);
+  margin-top: 16px;
+  padding: 22px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(200, 170, 110, 0.25);
+  background:
+    linear-gradient(180deg, rgba(7, 18, 34, 0.90), rgba(5, 11, 20, 0.90));
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+  position: relative;
+  z-index: 1;
+}
+
+.guesses-title {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  text-align: center;
+  color: #f0e6d2;
+}
+
+.guessed-history {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 50px;
+}
+
+.guess-row {
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.2px;
+  border: 1px solid transparent;
+}
+
+.guess-row.false {
+  background: linear-gradient(180deg, rgba(123, 28, 28, 0.88), rgba(83, 18, 18, 0.92));
+  border-color: rgba(255, 120, 120, 0.25);
+}
+
+.guess-row.true {
+  background: linear-gradient(180deg, rgba(25, 94, 55, 0.88), rgba(17, 66, 38, 0.92));
+  border-color: rgba(125, 255, 178, 0.22);
+}
+
+/* =========================
+   DEBUG TEMPORAIRE
+   ========================= */
+
+.debug-daily {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255,255,255,0.18);
+  text-align: center;
+  user-select: none;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 900px) {
+  .content {
+    padding: 28px 20px;
+  }
+
+  .page-brand {
+    right: 20px;
+    top: 18px;
+  }
+
+  .brand-big {
+    font-size: 32px;
+  }
+
+  .brand-small {
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+
+  .intro-box,
+  .guesses-zone,
+  .search-zone {
+    width: 100%;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+}
+
+
+/* Ligne d'un champion guess */
+.guess-row {
+  display: flex;
+  align-items: center;   /* centre verticalement texte et image */
+  gap: 12px;             /* espace entre image et nom */
+
+  padding: 8px 12px;
+  margin: 6px 0;
+
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Image du champion */
+.guess-row img {
+  width: 36px;
+  height: 36px;
+
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Nom du champion */
+.guess-row span {
+  display: flex;
+  align-items: center;
+}
+
+/* Mauvaise réponse */
+.guess-row.false {
+  background-color: rgba(180, 40, 40, 0.6);
+  border: 1px solid rgba(255, 80, 80, 0.6);
+}
+
+/* Bonne réponse */
+.guess-row.true {
+  background-color: rgba(40, 150, 80, 0.7);
+  border: 1px solid rgba(80, 220, 120, 0.7);
+}
+
+/* =========================
+   BARRE DE RECHERCHE
+========================= */
+
+#champInput {
+  width: 520px;          /* plus large */
+  padding: 16px 18px;    /* plus haut */
+
+  border-radius: 10px;
+  border: 1px solid #c89b3c;
+
+  background-color: #1e2328;
+  color: #f0e6d2;
+
+  font-size: 18px;
+
+  outline: none;
+
+  display: block;
+  margin: 0 auto 10px auto;
+
+  text-align: center;
+}
+
+#champInput::placeholder {
+  color: #a09b8c;
+  text-align: center;
+}
+
+
+/* =========================
+   LISTE DES CHAMPIONS
+========================= */
+
+#champList {
+  width: 520px;
+  margin: 0 auto;
+
+  background-color: #1e2328;
+
+  border: 1px solid #c89b3c;
+  border-radius: 8px;
+
+  max-height: 240px;
+  overflow-y: auto;
+
+  position: relative;
+  z-index: 20;
+}
+
+/* Scroll custom */
+#champList::-webkit-scrollbar {
+  width: 6px;
+}
+
+#champList::-webkit-scrollbar-thumb {
+  background: #c89b3c;
+  border-radius: 4px;
+}
+
+
+/* =========================
+   ITEM DE LA LISTE
+========================= */
+
+#champList div {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 8px 10px;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+#champList div:hover {
+  background-color: rgba(200,155,60,0.2);
+}
+
+/* image dans dropdown */
+
+#champList img {
+  width: 28px;
+  height: 28px;
+
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* nom champion */
+
+#champList span {
+  font-size: 14px;
+  color: #f0e6d2;
+}
+
+
+/* =========================
+   HISTORIQUE DES GUESSES
+========================= */
+
+#guessedHistory {
+  width: 80%;
+  max-width: 900px;
+
+  margin: 30px auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ligne guess */
+
+.guess-row {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 10px 14px;
+
+  width: 100%;
+
+  border-radius: 8px;
+
+  font-size: 16px;
+}
+
+/* image guess */
+
+.guess-row img {
+  width: 28px;
+  height: 28px;
+
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* texte guess */
+
+.guess-row span {
+  display: flex;
+  align-items: center;
+}
+
+/* mauvais */
+
+.guess-row.false {
+  background-color: rgba(170,50,50,0.6);
+  border: 1px solid rgba(255,80,80,0.6);
+}
+
+/* bon */
+
+.guess-row.true {
+  background-color: rgba(40,150,80,0.7);
+  border: 1px solid rgba(80,220,120,0.7);
+}
+
+.guess-row span {
+  flex: 1;
 }

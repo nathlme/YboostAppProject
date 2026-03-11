@@ -1,0 +1,93 @@
+body {
+  margin: 0;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #0f1419;
+
+  font-family: Arial, Helvetica, sans-serif;
+  color: #f0e6d2;
+}
+
+
+/* carte formulaire */
+
+form {
+  background-color: #1e2328;
+
+  padding: 40px 50px;
+
+  border-radius: 10px;
+
+  border: 1px solid #c89b3c;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  min-width: 320px;
+}
+
+
+/* labels */
+
+label {
+  font-size: 14px;
+  color: #c8aa6e;
+}
+
+
+/* inputs */
+
+input {
+  padding: 10px 12px;
+
+  border-radius: 6px;
+  border: 1px solid #463714;
+
+  background-color: #0f1419;
+  color: #f0e6d2;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: border 0.2s;
+}
+
+input:focus {
+  border: 1px solid #c89b3c;
+}
+
+
+/* bouton */
+
+button {
+  margin-top: 10px;
+
+  padding: 12px;
+
+  border-radius: 6px;
+  border: none;
+
+  background-color: #c89b3c;
+  color: #0f1419;
+
+  font-weight: bold;
+  font-size: 15px;
+
+  cursor: pointer;
+
+  transition: background 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background-color: #f0c14b;
+}
+
+button:active {
+  transform: scale(0.98);
+}
