@@ -62,16 +62,20 @@
 
       <section class="game-wrapper">
         <div class="intro-box">
-          <h1 class="page-title">Champion Challenge</h1>
-          <p class="intro-text">
+          <p class="page-title">Devinez à quel champion de League of legends ce lore appartient ! </p>
+        </div>
+        <div class="intro-box">
+          <p id="lore" class="intro-text">
             {{ .ChampLore}}
           </p>
+          <p id="tries" class="hint-text"></p>
         </div>
 
         <div class="search-zone">
           <div class="search-box">
             <input type="text" id="champInput" placeholder="Choisir un champion..." autocomplete="off">
             <div id="champList"></div>
+            <p id="triesDisplay" class="tries-count"></p>
           </div>
 
           <div id="try"></div>
@@ -173,7 +177,7 @@
             input.style.display = "none"
             list.style.display = "none" 
 
-            verify.textContent = `Bien joué c'était bien ${champ.name} !`
+            verify.textContent = `Bien joué ! C'était ${champ.name}`
             console.log("le bon")
             
             let alreadyGuess = document.createElement("div")
@@ -184,7 +188,7 @@
             guessedHistory.prepend(alreadyGuess)
         
         }else {
-          verify.textContent = `Dommage ce n'est pas ${champ.name}`
+          verify.textContent = `${champ.name} n'est pas le bon champion`
 
           let alreadyGuess = document.createElement("div")
 
@@ -195,6 +199,8 @@
           alreadyGuess.appendChild(span)
 
           guessedHistory.prepend(alreadyGuess)
+          tries++
+          updateLore()
         }
         
       }
@@ -216,7 +222,79 @@
       }
 
       const guessedHistory = document.getElementById("guessedHistory")
-          
+
+      let tries = 0
+      let fullLore = ""
+
+      window.onload = () => {
+          const loreElement = document.getElementById("lore")
+          fullLore = loreElement.textContent
+          updateLore()
+      }
+
+    function firstInt(lore) {
+    let limit = Math.floor(lore.length / 3)
+    let result = ""
+
+    for (let i = 0; i < lore.length; i++) {
+        if (i < limit) {
+            result += lore[i]
+        } else {
+            if (lore[i] === " ") {
+                result += " "
+            } else {
+                result += "*"
+            }
+        }
+    }
+
+    return result
+}
+
+function secondInt(lore) {
+    let limit = Math.floor(lore.length / 2)
+    let result = ""
+
+    for (let i = 0; i < lore.length; i++) {
+        if (i < limit) {
+            result += lore[i]
+        } else {
+            if (lore[i] === " ") {
+                result += " "
+            } else {
+                result += "*"
+            }
+        }
+    }
+
+    return result
+}
+
+    function updateLore() {
+        let displayLore = ""
+        let FirstIntCount = 3 - tries
+        let SecondIntCount = 6 - tries
+        let message = ""
+
+        if (tries <= 2) {
+            displayLore = firstInt(fullLore)
+            message = `Premier indice dans ${FirstIntCount} essais`
+            document.getElementById("tries").textContent = message
+        } else if (tries <= 5) {
+            displayLore = secondInt(fullLore)
+            message = `Dernier indice dans ${SecondIntCount} essais`
+            document.getElementById("tries").textContent = message
+        } else {
+            displayLore = fullLore
+            message = "Plus d'indice disponible..."
+            document.getElementById("tries").textContent = message
+        }
+
+        document.getElementById("lore").textContent = displayLore
+        document.getElementById("triesDisplay").textContent = `Essais : ${tries}`
+    }
+    
+    
     </script>
 
 </div>

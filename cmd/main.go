@@ -53,11 +53,6 @@ func main () {
     host,
     dbName,
 	)
-
-	// fmt.Println(user)
-	// fmt.Println(pass)
-	// fmt.Println(host)
-	// fmt.Println(dbName)
 	
 
 	db, err = sql.Open("mysql",dsn)
@@ -105,7 +100,6 @@ func main () {
 		port = "8080" 
 	}
 
-	log.Println("Server running on port", port)
 	fmt.Println("http://localhost:8080/logged")
 	fmt.Println("http://localhost:8080/register")
 	fmt.Println("http://localhost:8080/login")

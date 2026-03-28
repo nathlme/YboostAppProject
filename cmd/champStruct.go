@@ -14,6 +14,14 @@ type Champion struct {
 	Lore string `json:"blurb"`
 }
 
+type ChampionDetail struct {
+    Data map[string]struct {
+        Name  string `json:"name"`
+        Title string `json:"title"`
+        Lore  string `json:"lore"`
+    } `json:"data"`
+}
+
 type ChampionResponse struct {
 	Data map[string]Champion `json:"data"`
 }

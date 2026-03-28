@@ -255,13 +255,15 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	champLore := ""
+	name, title, lore, err := GetFullLore()
+	if err != nil {
+		log.Println("json error:", err)
+		return
+	}
 
-	for _, card := range championCards {
-		if card.Name == championID{
-			champLore = card.Lore
-		}
-	} 
+	bannedWord := []string{name, title}
+	lore = HideName(lore, bannedWord)
+
 
 	data := struct {
 		ChampionID string
@@ -270,7 +272,7 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 	}{
 		ChampionID: championID,
 		ChampionsJSON: template.JS(championsJSON),
-		ChampLore: champLore,
+		ChampLore: lore,
 	}
 
 	if err := t.Execute(w, data); err != nil {

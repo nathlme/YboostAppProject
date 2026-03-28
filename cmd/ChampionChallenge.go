@@ -6,6 +6,8 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+    "regexp"
+
 )
 
 func GetOrCreateDailyChampion() (string, error) {
@@ -44,4 +46,31 @@ func SameChamp(guess string) bool {
         log.Print("erreur DB")
     }
     return strings.EqualFold(guess, dayli) 
+}
+
+
+    
+
+
+func HideName(lore string, banned []string) string {
+	for _, word := range banned {
+		if word == "" {
+			continue
+		}
+
+		mask := ""
+		for i := 0; i < len(word); i++ {
+			if word[i] == ' ' || word[i] == '-' || word[i] == '\'' {
+				mask += string(word[i])
+			} else {
+				mask += "*"
+			}
+		}
+
+		pattern := "(?i)" + regexp.QuoteMeta(word)
+		re := regexp.MustCompile(pattern)
+		lore = re.ReplaceAllString(lore, mask)
+	}
+
+	return lore
 }

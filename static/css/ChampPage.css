@@ -614,3 +614,38 @@ body {
 .guess-row span {
   flex: 1;
 }
+
+
+#lore {
+  line-height: 1.6;
+  max-width: 700px;
+  margin: auto;
+  text-align: center;
+}
+
+
+.tries-count {
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #e0c27a;
+  text-align: center;
+  background: rgba(224, 194, 122, 0.08);
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  
+}
+
+
+.hint-text {
+  margin-top: 15px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #8fb3ff;
+  text-align: center;
+  background: rgba(143, 179, 255, 0.1);
+  padding: 8px 14px;
+  border-radius: 10px;
+  display: inline-block;
+}

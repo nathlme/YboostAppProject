@@ -89,13 +89,44 @@ func BuildUrl(baseUrl string, champId string) string {
 }
 
 
+func GetFullLore() (string, string, string, error) {
+	dayliChamp, err := GetOrCreateDailyChampion()
+	if err != nil {
+		return "", "", "", err
+	}
 
+	lang := "fr_FR"
 
+	championUrl := fmt.Sprintf(
+		"https://ddragon.leagueoflegends.com/cdn/16.2.1/data/%s/champion/%s.json",
+		lang,
+		dayliChamp,
+	)
+	resp, err := http.Get(championUrl)
+	if err != nil {
+		return "", "", "", err
+	}
+	defer resp.Body.Close()
 
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", "", "", err
+	}
 
+	var details ChampionDetail
 
+	err = json.Unmarshal(body, &details)
+	if err != nil {
+		return "", "", "", err
+	}
 
+	champ, ok := details.Data[dayliChamp]
+	if !ok {
+		return "", "", "", fmt.Errorf("champion introuvable dans les données JSON")
+	}
 
+	return champ.Name, champ.Title, champ.Lore, nil
+}
 
 
 
