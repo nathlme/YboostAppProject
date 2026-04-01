@@ -90,6 +90,7 @@
       </section>
     </main>
 
+    <script src="../static/js/common.js"></script>
     <script>
       const champions = {{ .ChampionsJSON }};
       champions.sort((a, b) => a.name.localeCompare(b.name));
@@ -99,58 +100,35 @@
 
       const input = document.getElementById("champInput");
       const list = document.getElementById("champList");
+      const guessedHistory = document.getElementById("guessedHistory")
 
-      function renderList(array) {
-          list.innerHTML = "";
+      let tries = 0
+      let fullLore = ""
 
-          for (let i = 0; i < array.length; i++) {
-            const item = document.createElement("div");
-
-            if (!guessed.includes(array[i].name)) {
-              const img = document.createElement("img");
-              img.src = array[i].imageUrl;
-              img.alt = array[i].name;
-
-              const span = document.createElement("span");
-              span.textContent = array[i].name;
-
-              item.appendChild(img);
-              item.appendChild(span);
-              list.appendChild(item);
-
-              item.addEventListener("click", function() {
-                list.innerHTML = "";
-                guessed.push(array[i].name);
-                submitGuess(array[i].name);
-                input.value = "";
-              });
-            }
-          }
-        }
-
-      input.addEventListener("keydown",function(event) {
-        let filtered = FilteredList(champions)
-                if (event.key == "Enter"){  
-                  if (filtered.length > 0){
-                    let closerElmt = filtered [0]
-                    if (!guessed.includes(closerElmt.name)){
-                      guessed.push(closerElmt.name) 
-                      submitGuess(closerElmt.name)
-                      renderList(FilteredList(champions))
-                      input.value = ""
-                    }
-                  } 
-                }
-              })
+      
+      input.addEventListener("input", function() {
+        const filtered = FilteredList(champions, input.value);
+        renderList(filtered, list, guessed, input, submitGuess);
+      });
 
       input.addEventListener("focus", function() {
-      console.log("Input activé");
-      renderList(champions);
+        console.log("Input activé");
+        renderList(FilteredList(champions, input.value), list, guessed, input, submitGuess);
       });
 
-      input.addEventListener("input", function() {
-        renderList(FilteredList(champions));
-      });
+      input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          const filtered = FilteredList(champions, input.value);
+          const closerElmt = filtered.find(champ => !guessed.includes(champ.name));
+
+          if (closerElmt) {
+            guessed.push(closerElmt.name);
+            submitGuess(closerElmt.name);
+            input.value = "";
+            renderList([], list, guessed, input, submitGuess);
+          }
+        }
+      }); 
 
       async function submitGuess(name) {
         const guessedHistory = document.getElementById("guessedHistory")
@@ -203,28 +181,8 @@
           updateLore()
         }
         
-      }
+      } 
 
-
-     function FilteredList(champs) {
-        let finalList = [];
-
-        for (let i = 0; i < champs.length; i++) {
-          let minuChamp = champs[i].name.toLowerCase();
-          let minuGuess = input.value.toLowerCase();
-
-          if (minuChamp.startsWith(minuGuess) && !guessed.includes(champs[i].name)) {
-            finalList.push(champs[i]);
-          }
-        }
-
-        return finalList;
-      }
-
-      const guessedHistory = document.getElementById("guessedHistory")
-
-      let tries = 0
-      let fullLore = ""
 
       window.onload = () => {
           const loreElement = document.getElementById("lore")
@@ -233,23 +191,23 @@
       }
 
     function firstInt(lore) {
-    let limit = Math.floor(lore.length / 3)
-    let result = ""
+        let limit = Math.floor(lore.length / 3)
+        let result = ""
 
-    for (let i = 0; i < lore.length; i++) {
-        if (i < limit) {
-            result += lore[i]
-        } else {
-            if (lore[i] === " ") {
-                result += " "
+        for (let i = 0; i < lore.length; i++) {
+            if (i < limit) {
+                result += lore[i]
             } else {
-                result += "*"
+                if (lore[i] === " ") {
+                    result += " "
+                } else {
+                    result += "*"
+                }
             }
         }
-    }
 
-    return result
-}
+        return result
+    }
 
 function secondInt(lore) {
     let limit = Math.floor(lore.length / 2)

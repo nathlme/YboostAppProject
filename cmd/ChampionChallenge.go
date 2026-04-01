@@ -15,7 +15,7 @@ func GetOrCreateDailyChampion() (string, error) {
 
     var championName string
 
-    err := db.QueryRow("SELECT champion_name FROM daily_champion WHERE day = ?", today).Scan(&championName)
+    err := db.QueryRow("SELECT champion_id FROM daily_champion WHERE day = ?", today).Scan(&championName)
     if err == nil {
         return championName, nil
     }
@@ -24,12 +24,12 @@ func GetOrCreateDailyChampion() (string, error) {
     }
 
     candidate := pickRandomChampionName()
-    _, err = db.Exec("INSERT INTO daily_champion (day, champion_name) VALUES (?, ?)", today, candidate)
+    _, err = db.Exec("INSERT INTO daily_champion (day, champion_id) VALUES (?, ?)", today, candidate)
     if err == nil {
         return candidate, nil
     }
 
-    err2 := db.QueryRow("SELECT champion_name FROM daily_champion WHERE day = ?", today).Scan(&championName)
+    err2 := db.QueryRow("SELECT champion_id FROM daily_champion WHERE day = ?", today).Scan(&championName)
     if err2 != nil {
         return "", err 
     }
@@ -44,7 +44,7 @@ func pickRandomChampionName() string {
 func SameChamp(guess string) bool {
     dayli, err := GetOrCreateDailyChampion()
     if err != nil {
-        log.Print("erreur DB")
+        log.Print("Erreur DB")
     }
     return strings.EqualFold(guess, dayli) 
 }

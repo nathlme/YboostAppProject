@@ -284,20 +284,70 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 
 
 func handlerItems(w http.ResponseWriter, r*http.Request){
-	switch r.Method {
-		case http.MethodGet :
-			contenu, err := os.ReadFile("templates/ItemsPage.html")
+	if r.Method != http.MethodGet {
+		http.Error(w,"Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
 
-				if err!=nil {
-					http.Error(w,"Internal Server Error",500)
-					return
-				}
+	itemName, err := GetOrCreateDailyItem()
+	if err != nil {
+		http.Error(w, "ERR_GET_DAILY_ITEM", http.StatusInternalServerError)
+		return 
+	}
 
-			w.Header().Set("Content-Type", "text/html")
-			w.Write(contenu)
+	t, err := template.ParseFiles("templates/ItemsPage.html")
+	if err != nil {
+		http.Error(w, "ERR_PARSE_TEMPLATE_ITEM", http.StatusInternalServerError)
+		return 
+	}
 
-	default :
-			fmt.Fprint(w,"erreur 405")
+	itemJSON, err := json.Marshal(itemCards)
+	if err != nil {
+		log.Println("json error:", err)
+		return 
+	}
+
+	var dailyCard ItemCard
+	finded := false 
+
+	for _, card := range itemCards {
+		if card .Name == itemName {
+			dailyCard.Name = card.Name 
+			dailyCard.ImageId = card.ImageId
+			dailyCard.ImageUrl = card.ImageUrl
+			dailyCard.Stats = card.Stats
+			dailyCard.Price = card.Price
+			finded = true 
+		}
+	}
+	
+	if !finded {
+		return
+	}
+
+	itemStatsJSON, err := json.Marshal(dailyCard.Stats)
+	if err != nil {
+		http.Error(w, "ERR_MARSHAL_ITEM_STATS", http.StatusInternalServerError)
+		return
+	}
+
+	data := struct {
+		ItemName      string
+		ItemStats     map[string]float64
+		ItemPrice     int
+		ItemJSON      template.JS
+		ItemStatsJSON template.JS
+	}{
+		ItemName:      dailyCard.Name,
+		ItemStats:     dailyCard.Stats,
+		ItemPrice:     dailyCard.Price,
+		ItemJSON:      template.JS(itemJSON),
+		ItemStatsJSON: template.JS(itemStatsJSON),
+	}
+
+	if err := t.Execute(w, data); err != nil {
+		log.Println("jsp item :", err) 
+		return 
 	}
 }
 
@@ -378,5 +428,28 @@ func handlerGuess(w http.ResponseWriter, r*http.Request) {
 			http.Error(w,"Erreur",http.StatusMethodNotAllowed)
 	}
 }
+
+func handlerGuessItem(w http.ResponseWriter, r*http.Request) {
+	switch r.Method {
+		case http.MethodPost :
+			var req ItemGuessRequest
+			var check GuessResponse 
+
+			err := json.NewDecoder(r.Body).Decode(&req)
+
+			if err != nil {
+				http.Error(w,"JSON invalide", 400)
+				return
+			}
+			 
+			check.Same = SameItem(req.Item) 
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(check)
+			
+	default :
+			http.Error(w,"Erreur",http.StatusMethodNotAllowed)
+	}
+}
+
 
  

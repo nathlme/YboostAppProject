@@ -3,7 +3,7 @@
 -- Daily champ table
 CREATE TABLE IF NOT EXISTS daily_champion (
   day DATE PRIMARY KEY,
-  champion_name VARCHAR(50) NOT NULL
+  champion_id VARCHAR(50) NOT NULL
 );
 
 -- Daily item table

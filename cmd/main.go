@@ -17,7 +17,8 @@ var db *sql.DB
 
 func main () {
 	LoadChampionCards()
-
+	LoadItemCard()
+	GetVersion()
 	raw := os.Getenv("SCALINGO_MYSQL_URL")
 	fmt.Println("RAW =", raw)
 
@@ -90,6 +91,7 @@ func main () {
 	http.HandleFunc("/List",handlerList)
 	http.HandleFunc("/login",handlerLogin)
 	http.HandleFunc("/guess", handlerGuess)
+	http.HandleFunc("/guess-item", handlerGuessItem)
 
 
 	

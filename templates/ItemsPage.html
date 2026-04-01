@@ -7,7 +7,7 @@
 </head>
 
 <body>
-  <div class="background-zone">
+<div class="background-zone">
   
     <aside class="sidebar">
       <img class="sidebar-logo" src="../static/images/LOLicon.jpg" alt="LoL" />
@@ -15,37 +15,37 @@
       <div class="horizontal-line"></div>
 
       <nav>
-        <a href="logged">
+        <a href="/logged">
           <img src="../static/images/HomeIcon.jpg" alt="" />
           <span>Accueil</span>
         </a>
 
-        <a href="Profil">
+        <a href="/Profil">
           <img src="../static/images/ProfileIcon.jpg" alt="" />
           <span>Profil</span>
         </a>
 
-        <a href="Champs">
+        <a href="/Champs">
           <img src="../static/images/ChampLogo.jpg" alt="" />
           <span>Champion</span>
         </a>
 
-        <a href="Items">
+        <a href="/Items">
           <img src="../static/images/ItemLogo.jpg" alt="" />
           <span>Items</span>
         </a>
 
-        <a href="Search">
+        <a href="/Search">
           <img src="../static/images/LoupeIcon.jpg" alt="" />
           <span>Recherche</span>
         </a>
 
-        <a href="News">
+        <a href="/News">
           <img src="../static/images/NewsIcon.jpg" alt="" />
           <span>À propos</span>
         </a>
 
-        <a href="List">
+        <a href="/List">
           <img src="../static/images/ListIcon.jpg" alt="" />
           <span>Tier list</span>
         </a>
@@ -55,9 +55,142 @@
     </aside>
 
     <main class="content">
-      <h1>UHC LoLdle</h1>
+      <div class="page-brand">
+        <span class="brand-small">UHC</span>
+        <span class="brand-big">LoLdle</span>
+      </div>
+
+      <section class="game-wrapper">
+        <div class="intro-box">
+          <p class="page-title">Devinez quel item de League of legends a ces statistiques ! </p>
+        </div>
+    
+          <div class="intro-box stats-box">
+          <div id="stats" class="intro-text"></div>
+          <p id="tries" class="hint-text"></p>
+        </div>
+
+        <div class="search-zone">
+          <div class="search-box">
+            <input type="text" id="itemInput" placeholder="Choisir un item..." autocomplete="off">
+            <div id="itemList"></div>
+            <p id="triesDisplay" class="tries-count"></p>
+          </div>
+
+          <div id="try"></div>
+        </div>
+
+        <section class="guesses-zone">
+          <h2 class="guesses-title">Item déjà proposés :</h2>
+          <div id="guessedHistory" class="guessed-history"></div>
+        </section>
+
+        <p class="debug-daily">{{ .ItemName }}</p>
+      </section>
     </main>
 
-  </div>
+    <script src="../static/js/common.js"></script>
+    <script>
+      const items = {{ .ItemJSON }};
+      const itemStats = {{ .ItemStatsJSON }};
+
+      window.onload = () => {
+        renderStats(itemStats);
+      }
+
+      items.sort((a, b) => a.name.localeCompare(b.name));
+      console.log(items);
+      
+      let guessed = [];
+
+      const input = document.getElementById("itemInput");
+      const list = document.getElementById("itemList");
+      const guessedHistory = document.getElementById("guessedHistory")
+
+      let tries = 0
+      let fullLore = ""
+      
+      input.addEventListener("input", function() {
+        const filtered = FilteredList(items, input.value);
+        renderList(filtered, list, guessed, input, submitGuess);
+      });
+
+      input.addEventListener("focus", function() {
+        console.log("Input activé");
+        renderList(FilteredList(items, input.value), list, guessed, input, submitGuess);
+      });
+
+      // When the user presses Enter, submits the first matching item if it has not been guessed yet
+      input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          const filtered = FilteredList(items, input.value);
+          const closerElmt = filtered.find(item => !guessed.includes(item.name));
+
+          if (closerElmt) {
+            guessed.push(closerElmt.name);
+            submitGuess(closerElmt.name);
+            input.value = "";
+            renderList([], list, guessed, input, submitGuess);
+          }
+        }
+      }); 
+      
+      // Submit the guess of the player and return if its correct or not 
+      async function submitGuess(name) {
+        const guessedHistory = document.getElementById("guessedHistory")
+        
+        const response = await fetch("/guess-item", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ item: name })
+        })
+
+        let verify = document.getElementById("try")
+        const data = await response.json()
+        
+        const item = items.find(c => c.name === name);
+
+        const img = document.createElement("img");
+        img.src = item.imageUrl;
+        img.alt = item.name;
+
+        const span = document.createElement("span");
+        span.textContent = item.name;
+        
+        if (data.correct) {
+            input.style.display = "none"
+            list.style.display = "none" 
+
+            verify.textContent = `Bien joué ! C'était ${item.name}`
+            console.log("le bon")
+            
+            let alreadyGuess = document.createElement("div")
+            alreadyGuess.classList.add("guess-row")
+            alreadyGuess.classList.add("true")
+            alreadyGuess.appendChild(img)
+            alreadyGuess.appendChild(span)
+            guessedHistory.prepend(alreadyGuess)
+        
+        }else {
+          verify.textContent = `${item.name} n'est pas le bon item`
+
+          let alreadyGuess = document.createElement("div")
+
+          alreadyGuess.classList.add("guess-row")
+          alreadyGuess.classList.add("false")
+
+          alreadyGuess.appendChild(img)
+          alreadyGuess.appendChild(span)
+
+          guessedHistory.prepend(alreadyGuess)
+          tries++
+          updateLore()
+        } 
+      }
+
+
+    </script>
+
+</div>
 </body>
 </html>

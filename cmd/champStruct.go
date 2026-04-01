@@ -37,14 +37,39 @@ type GuessResponse struct  {
 
 
 type Item struct {
-	Name		string	`json:"name"`
-	Price		string	`json:"base"`
-	SellPrice	string	`json:"sell"`
-	Stats		[]int	`json:"stats"`
+	Name  string            `json:"name"`
+	Maps  map[string]bool   `json:"maps"`
+	Gold  GoldData          `json:"gold"`
+	Image ImageData         `json:"image"`
+	Stats map[string]float64 `json:"stats"`
+}
+
+type GoldData struct {
+	Base        int  `json:"base"`
+	Total       int  `json:"total"`
+	Sell        int  `json:"sell"`
+	Purchasable bool `json:"purchasable"`
+}
+
+type ImageData struct {
+	Full string `json:"full"`
+}
+
+type ItemCard struct {
+	Name 	 	string  			`json:"name"`
+	ImageId	 	string  			`json:"full"`
+	ImageUrl 	string  			`json:"imageUrl"`
+	Price		int					`json:"base"`
+	Stats 		map[string]float64	`json:"stats"`
+
 }
 
 type ItemResponse struct {
 	Data	map[string]Item	  `json:"data"`
+}
+
+type ItemGuessRequest struct {
+	Item string `json:"item"`
 }
 
 

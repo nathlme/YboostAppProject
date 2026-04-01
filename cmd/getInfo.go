@@ -1,13 +1,15 @@
 package main
 
-import(
+import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
-
+	"strings"
 )
 var championCards []ChampionCard
+var itemCards []ItemCard
 
 func GetVersion(){
 	url := "https://ddragon.leagueoflegends.com/api/versions.json"
@@ -79,12 +81,17 @@ func LoadChampionCards(){
 		card.Name = champ.Name
 		card.Lore = champ.Lore
 		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/champion/", card.ID)
-		championCards = append(championCards,card)
+		championCards = append(championCards, card)
 	}
 }
 
 func BuildUrl(baseUrl string, champId string) string {
-	newUrl := baseUrl + champId + ".png"
+	var newUrl = ""
+	if strings.HasSuffix(champId, ".png") {
+		newUrl = baseUrl + champId
+	} else {
+		newUrl = baseUrl + champId + ".png"
+	}
 	return newUrl
 }
 
@@ -129,7 +136,7 @@ func GetFullLore() (string, string, string, error) {
 }
 
 
-func GetItem() map[string]Item {
+func GetItem() (map[string]Item, error) {
 	url	:=	"https://ddragon.leagueoflegends.com/cdn/16.2.1/data/fr_FR/item.json"
 
 	resp, err := http.Get(url)
@@ -151,11 +158,38 @@ func GetItem() map[string]Item {
 		fmt.Println("Error JSON:", err)
 	}
 
-	return ItemResult.Data
+	return ItemResult.Data, nil
 }
 
-func LoadItemCard() {
-	
+func LoadItemCard() error {
+	itemCards = []ItemCard{}
+
+	dico, err := GetItem()
+	if err != nil {
+		return err
+	}
+
+	for _, item := range dico {
+		if !IsValidChallengeItem(item) {
+			continue
+		}
+
+		var card ItemCard
+		card.Name = item.Name
+		card.ImageId = item.Image.Full
+		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/item/", card.ImageId)
+		card.Price = item.Gold.Base
+		card.Stats = item.Stats
+		
+		itemCards = append(itemCards, card)
+	}
+
+	if len(itemCards) == 0 {
+		return fmt.Errorf("aucun item valide chargé")
+	}
+
+	log.Printf("%d items valides chargés\n", len(itemCards))
+	return nil
 }
 
 
