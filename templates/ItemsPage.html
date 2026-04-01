@@ -66,8 +66,12 @@
         </div>
     
           <div class="intro-box stats-box">
-          <div id="stats" class="intro-text"></div>
-          <p id="tries" class="hint-text"></p>
+          <div id="stats" class="intro-text"></div> 
+        </div>
+
+        <div class="hint-zone">
+          <p id="first-hint" class="hint-text"></p>
+          <p id="second-hint" class="hint-text"></p>
         </div>
 
         <div class="search-zone">
@@ -96,6 +100,7 @@
 
       window.onload = () => {
         renderStats(itemStats);
+        updateHint()
       }
 
       items.sort((a, b) => a.name.localeCompare(b.name));
@@ -184,10 +189,25 @@
 
           guessedHistory.prepend(alreadyGuess)
           tries++
-          updateLore()
+          updateHint()
         } 
       }
 
+      function updateHint() {
+        let FirstIntCount = 3 - tries
+        let SecondIntCount = 6 - tries
+        let message = ""
+
+        if (tries <= 2) {
+            message = `Premier indice dans ${FirstIntCount} essais`
+            document.getElementById("first-hint").textContent = message
+        } 
+        if (tries <= 5) {
+            message = `Deuxième indice dans ${SecondIntCount} essais`
+            document.getElementById("second-hint").textContent = message
+        } 
+        document.getElementById("triesDisplay").textContent = `Essais : ${tries}`
+    }
 
     </script>
 

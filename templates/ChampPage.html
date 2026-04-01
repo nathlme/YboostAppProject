@@ -178,7 +178,7 @@
 
           guessedHistory.prepend(alreadyGuess)
           tries++
-          updateLore()
+          updateHint()
         }
         
       } 
@@ -187,7 +187,7 @@
       window.onload = () => {
           const loreElement = document.getElementById("lore")
           fullLore = loreElement.textContent
-          updateLore()
+          updateHint()
       }
 
     function firstInt(lore) {
@@ -228,7 +228,7 @@ function secondInt(lore) {
     return result
 }
 
-    function updateLore() {
+    function updateHint() {
         let displayLore = ""
         let FirstIntCount = 3 - tries
         let SecondIntCount = 6 - tries

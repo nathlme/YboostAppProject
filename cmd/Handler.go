@@ -61,7 +61,7 @@ func handlerRegister(w http.ResponseWriter, r*http.Request ){
 				return 
 			}	
 
-			http.Redirect(w, r, "/Login", http.StatusSeeOther)
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			
 
 			log.Println("Hash:", hash)
