@@ -68,7 +68,7 @@ func IsValidChallengeItem(item Item) bool {
 	}
 
 	// 3. Optionnel : éviter les entrées bizarres sans vrai contenu
-	if item.Name == "" {
+	if strings.HasSuffix(item.Name, "légendaire") || strings.HasSuffix(item.Name, "Bonus de stats") {
 		return false
 	}
 
