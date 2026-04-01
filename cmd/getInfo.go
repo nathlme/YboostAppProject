@@ -129,6 +129,37 @@ func GetFullLore() (string, string, string, error) {
 }
 
 
+func GetItem() map[string]Item {
+	url	:=	"https://ddragon.leagueoflegends.com/cdn/16.2.1/data/fr_FR/item.json"
+
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("Erreur lors du Get :", err)
+	}
+
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Erreur lors de la lecture du Body:", err)
+	}
+
+	var ItemResult ItemResponse	
+
+	err = json.Unmarshal(body,&ItemResult)
+	if err != nil {
+		fmt.Println("Error JSON:", err)
+	}
+
+	return ItemResult.Data
+}
+
+func LoadItemCard() {
+	
+}
+
+
+
 
 
 

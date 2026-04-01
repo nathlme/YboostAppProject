@@ -1,10 +1,10 @@
 package main
 
 type ChampionCard struct {
-	ID string `json:"id"`
-	Name string `json:"name"`
+	ID 		 string `json:"id"`
+	Name 	 string `json:"name"`
 	ImageUrl string `json:"imageUrl"`
-	Lore string `json:"lore"`
+	Lore	 string `json:"lore"`
 }
 
 type Champion struct {	
@@ -34,6 +34,26 @@ type GuessRequest struct {
 type GuessResponse struct  {
 	Same bool `json:"correct"`
 }
+
+
+type Item struct {
+	Name		string	`json:"name"`
+	Price		string	`json:"base"`
+	SellPrice	string	`json:"sell"`
+	Stats		[]int	`json:"stats"`
+}
+
+type ItemResponse struct {
+	Data	map[string]Item	  `json:"data"`
+}
+
+
+
+
+
+
+
+
 
 // type Spell struct {
 // 	ID string `json:"id"`

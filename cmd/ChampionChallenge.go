@@ -13,31 +13,32 @@ import (
 func GetOrCreateDailyChampion() (string, error) {
     today := time.Now().UTC().Format("2006-01-02")
 
-    var championID string
-    err := db.QueryRow("SELECT champion_id FROM daily_champion WHERE day = ?", today).Scan(&championID)
+    var championName string
+
+    err := db.QueryRow("SELECT champion_name FROM daily_champion WHERE day = ?", today).Scan(&championName)
     if err == nil {
-        return championID, nil
+        return championName, nil
     }
     if err != sql.ErrNoRows {
         return "", err
     }
 
     candidate := pickRandomChampionName()
-    _, err = db.Exec("INSERT INTO daily_champion (day, champion_id) VALUES (?, ?)", today, candidate)
+    _, err = db.Exec("INSERT INTO daily_champion (day, champion_name) VALUES (?, ?)", today, candidate)
     if err == nil {
         return candidate, nil
     }
 
-    err2 := db.QueryRow("SELECT champion_id FROM daily_champion WHERE day = ?", today).Scan(&championID)
+    err2 := db.QueryRow("SELECT champion_name FROM daily_champion WHERE day = ?", today).Scan(&championName)
     if err2 != nil {
         return "", err 
     }
-    return championID, nil
+    return championName, nil
 }
 
 func pickRandomChampionName() string {
 	rand.Seed(time.Now().UnixNano())
-	return championCards[rand.Intn(len(championCards))].ID
+	return championCards[rand.Intn(len(championCards))].Name
 }
 
 func SameChamp(guess string) bool {
