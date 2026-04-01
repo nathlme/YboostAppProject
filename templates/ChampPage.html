@@ -62,20 +62,19 @@
 
       <section class="game-wrapper">
         <div class="intro-box">
-          <p class="page-title">Devinez à quel champion de League of legends ce lore appartient ! </p>
-        </div>
-        <div class="intro-box">
+          <p class="page-title">Devinez à quel champion de League of legends ce lore appartient ! </p><br><br>
           <p id="lore" class="intro-text">
             {{ .ChampLore}}
           </p>
           <p id="tries" class="hint-text"></p>
         </div>
-
+      
+        
         <div class="search-zone">
+          <p id="triesDisplay" class="tries-count"></p>
           <div class="search-box">
             <input type="text" id="champInput" placeholder="Choisir un champion..." autocomplete="off">
             <div id="champList"></div>
-            <p id="triesDisplay" class="tries-count"></p>
           </div>
 
           <div id="try"></div>

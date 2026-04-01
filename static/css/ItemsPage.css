@@ -211,7 +211,7 @@ body {
 .search-box {
   width: min(560px, 100%);
   position: relative;
-  z-index: 10;
+  z-index: 1;
 }
 
 
@@ -283,8 +283,7 @@ body {
    ========================= */
 
 .guesses-zone {
-  width: min(760px, 100%);
-  margin-top: 16px;
+  width: min(500px, 100%);
   padding: 22px 24px;
   border-radius: 18px;
   border: 1px solid rgba(200, 170, 110, 0.25);
@@ -389,10 +388,11 @@ body {
 ========================= */
 
 #itemInput {
-  width: 520px;          /* plus large */
-  padding: 16px 18px;    /* plus haut */
+  width: 100%;    
+  box-sizing: border-box;      
+  padding: 16px 18px;    
 
-  border-radius: 100px;
+  border-radius: 10px;
   border: 1px solid #c89b3c;
 
   background-color: #1e2328;
@@ -403,7 +403,7 @@ body {
   outline: none;
 
   display: block;
-  margin: 0 auto 10px auto;
+  margin: 0;
 
   text-align: center;
 }
@@ -419,19 +419,19 @@ body {
 ========================= */
 
 #itemList {
-  width: 520px;
-  margin: 0 auto;
-
-  background-color: #1e2328;
-
-  border: 1px solid #c89b3c;
-  border-radius: 8px;
-
+  position: absolute;      
+  top: 100%;               
+  left: 0;
+  width: 100%;              
+  
   max-height: 240px;
   overflow-y: auto;
 
-  position: relative;
-  z-index: 20;
+  background-color: #1e2328;
+  border: 1px solid #c89b3c;
+  border-radius: 8px;
+
+  z-index: 999;            
 }
 
 /* Scroll custom */
