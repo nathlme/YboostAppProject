@@ -214,28 +214,6 @@ body {
   z-index: 10;
 }
 
-#champInput {
-  width: 100%;
-  box-sizing: border-box;
-  height: 58px;
-  padding: 0 18px;
-  border-radius: 14px;
-  border: 1px solid rgba(200, 170, 110, 0.55);
-  background:
-    linear-gradient(180deg, rgba(10, 20, 38, 0.95), rgba(4, 11, 22, 0.98));
-  color: #f0e6d2;
-  font-size: 17px;
-  outline: none;
-  box-shadow:
-    0 12px 28px rgba(0,0,0,0.34),
-    inset 0 0 0 1px rgba(255,255,255,0.02);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-#champInput::placeholder {
-  color: #93a1b5;
-}
-
 #champInput:focus {
   border-color: #c8aa6e;
   box-shadow:
@@ -244,33 +222,11 @@ body {
   transform: translateY(-1px);
 }
 
-#champList {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  width: 100%;
-  max-height: 300px;
-  overflow-y: auto;
-  background:
-    linear-gradient(180deg, rgba(7, 18, 34, 0.98), rgba(5, 11, 20, 0.98));
-  border: 1px solid rgba(200, 170, 110, 0.42);
-  border-radius: 14px;
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.48);
-  z-index: 50;
-  backdrop-filter: blur(6px);
-}
 
 #champList:empty {
   display: none;
 }
 
-#champList div {
-  padding: 14px 16px;
-  color: #f0e6d2;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease, padding-left 0.18s ease;
-}
 
 #champList div:last-child {
   border-bottom: none;
@@ -341,24 +297,7 @@ body {
   min-height: 50px;
 }
 
-.guess-row {
-  padding: 14px 16px;
-  border-radius: 12px;
-  font-weight: 700;
-  color: white;
-  letter-spacing: 0.2px;
-  border: 1px solid transparent;
-}
 
-.guess-row.false {
-  background: linear-gradient(180deg, rgba(123, 28, 28, 0.88), rgba(83, 18, 18, 0.92));
-  border-color: rgba(255, 120, 120, 0.25);
-}
-
-.guess-row.true {
-  background: linear-gradient(180deg, rgba(25, 94, 55, 0.88), rgba(17, 66, 38, 0.92));
-  border-color: rgba(125, 255, 178, 0.22);
-}
 
 /* =========================
    DEBUG TEMPORAIRE
@@ -406,47 +345,6 @@ body {
   }
 }
 
-
-/* Ligne d'un champion guess */
-.guess-row {
-  display: flex;
-  align-items: center;   /* centre verticalement texte et image */
-  gap: 12px;             /* espace entre image et nom */
-
-  padding: 8px 12px;
-  margin: 6px 0;
-
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-/* Image du champion */
-.guess-row img {
-  width: 36px;
-  height: 36px;
-
-  object-fit: cover;
-  border-radius: 6px;
-}
-
-/* Nom du champion */
-.guess-row span {
-  display: flex;
-  align-items: center;
-}
-
-/* Mauvaise réponse */
-.guess-row.false {
-  background-color: rgba(180, 40, 40, 0.6);
-  border: 1px solid rgba(255, 80, 80, 0.6);
-}
-
-/* Bonne réponse */
-.guess-row.true {
-  background-color: rgba(40, 150, 80, 0.7);
-  border: 1px solid rgba(80, 220, 120, 0.7);
-}
 
 /* =========================
    BARRE DE RECHERCHE
@@ -526,9 +424,6 @@ body {
   transition: background 0.15s ease;
 }
 
-#champList div:hover {
-  background-color: rgba(200,155,60,0.2);
-}
 
 /* image dans dropdown */
 
@@ -595,6 +490,7 @@ body {
 .guess-row span {
   display: flex;
   align-items: center;
+  flex: 1;
 }
 
 /* mauvais */
@@ -609,10 +505,6 @@ body {
 .guess-row.true {
   background-color: rgba(40,150,80,0.7);
   border: 1px solid rgba(80,220,120,0.7);
-}
-
-.guess-row span {
-  flex: 1;
 }
 
 
