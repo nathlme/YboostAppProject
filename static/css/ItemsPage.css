@@ -527,10 +527,10 @@ body {
 ========================= */
 
 #guessedHistory {
-  width: 80%;
+  width: 90%;
   max-width: 900px;
 
-  margin: 30px auto;
+  margin-left: 15px;
 
   display: flex;
   flex-direction: column;
