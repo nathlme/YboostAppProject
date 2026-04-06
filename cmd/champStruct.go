@@ -42,6 +42,7 @@ type Item struct {
 	Gold  GoldData          `json:"gold"`
 	Image ImageData         `json:"image"`
 	Stats map[string]float64 `json:"stats"`
+	SpecialRecipe	int		 `json:"specialRecipe"`
 }
 
 type GoldData struct {
@@ -61,7 +62,7 @@ type ItemCard struct {
 	ImageUrl 	string  			`json:"imageUrl"`
 	Price		int					`json:"base"`
 	Stats 		map[string]float64	`json:"stats"`
-
+	SpecialRecipe	int		 		`json:"specialRecipe"`
 }
 
 type ItemResponse struct {

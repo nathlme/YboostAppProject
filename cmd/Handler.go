@@ -317,6 +317,7 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 			dailyCard.ImageUrl = card.ImageUrl
 			dailyCard.Stats = card.Stats
 			dailyCard.Price = card.Price
+			dailyCard.SpecialRecipe = card.SpecialRecipe
 			finded = true 
 		}
 	}

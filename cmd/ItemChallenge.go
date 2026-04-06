@@ -62,15 +62,40 @@ func IsValidChallengeItem(item Item) bool {
 		return false
 	}
 
-	// 2. Doit exister sur la map SR (map 11)
-	if !item.Maps["30"] {
+	// 2. Doit être disponible sur Summoner’s Rift
+	if item.Maps == nil || !item.Maps["11"] {
 		return false
 	}
 
-	// 3. Optionnel : éviter les entrées bizarres sans vrai contenu
-	if strings.HasSuffix(item.Name, "légendaire") || strings.HasSuffix(item.Name, "Bonus de stats") {
+	// 3. Exclure items ARAM spécifiques
+	blacklist := map[string]bool{
+		"Lame du gardien":  true,
+		"Marteau du gardien": true,
+		"Corne du gardien":   true,
+		"Orbe du gardien":    true,
+		"Poro-Snax":         true,
+	}
+
+	if blacklist[item.Name] {
 		return false
 	}
+
+	// 4. Éviter les items techniques / internes
+	if strings.Contains(item.Name, "Bonus") ||
+		strings.Contains(item.Name, "Test") ||
+		strings.Contains(item.Name, "Dummy") {
+		return false
+	}
+
+	if item.Gold.Total < 500 {
+		return false
+	}
+
+	if item.SpecialRecipe != 0 {
+		return false
+	}
+
+
 
 	return true
 }

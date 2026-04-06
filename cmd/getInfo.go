@@ -180,6 +180,7 @@ func LoadItemCard() error {
 		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/item/", card.ImageId)
 		card.Price = item.Gold.Base
 		card.Stats = item.Stats
+		card.SpecialRecipe = item.SpecialRecipe
 		
 		itemCards = append(itemCards, card)
 	}
