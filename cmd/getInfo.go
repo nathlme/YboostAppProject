@@ -137,28 +137,26 @@ func GetFullLore() (string, string, string, error) {
 
 
 func GetItem() (map[string]Item, error) {
-	url	:=	"https://ddragon.leagueoflegends.com/cdn/16.2.1/data/fr_FR/item.json"
+	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/fr_FR/item.json"
 
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("Erreur lors du Get :", err)
+		return nil, err
 	}
-
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("Erreur lors de la lecture du Body:", err)
+		return nil, err
 	}
 
-	var ItemResult ItemResponse	
-
-	err = json.Unmarshal(body,&ItemResult)
+	var itemResult ItemResponse
+	err = json.Unmarshal(body, &itemResult)
 	if err != nil {
-		fmt.Println("Error JSON:", err)
+		return nil, err
 	}
 
-	return ItemResult.Data, nil
+	return itemResult.Data, nil
 }
 
 func LoadItemCard() error {
@@ -178,7 +176,7 @@ func LoadItemCard() error {
 		card.Name = item.Name
 		card.ImageId = item.Image.Full
 		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/item/", card.ImageId)
-		card.Price = item.Gold.Base
+		card.Price = item.Gold.Total
 		card.Stats = item.Stats
 		card.SpecialRecipe = item.SpecialRecipe
 		

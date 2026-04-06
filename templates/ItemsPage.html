@@ -64,6 +64,7 @@
         <div class="intro-box">
           <p class="page-title">Devinez quel item de League of legends a ces statistiques ! </p><br><br>
           <div id="stats" class="intro-text"></div> 
+          <p id="price-hint" class="intro-text"></p>
         </div>
     
           
@@ -97,6 +98,9 @@
       const items = {{ .ItemJSON }};
       const itemStats = {{ .ItemStatsJSON }};
 
+      const dailyItemName = {{ .ItemName }};
+      const dailyItem = items.find(item => item.name === dailyItemName);
+
       window.onload = () => {
         renderStats(itemStats);
         updateHint()
@@ -112,8 +116,7 @@
       const guessedHistory = document.getElementById("guessedHistory")
 
       let tries = 0
-      let fullLore = ""
-      
+
       input.addEventListener("input", function() {
         const filtered = FilteredList(items, input.value);
         renderList(filtered, list, guessed, input, submitGuess);
@@ -192,21 +195,32 @@
         } 
       }
 
-      function updateHint() {
-        let FirstIntCount = 3 - tries
-        let SecondIntCount = 6 - tries
-        let message = ""
 
-        if (tries <= 2) {
-            message = `Premier indice dans ${FirstIntCount} essais`
-            document.getElementById("first-hint").textContent = message
-        } 
-        if (tries <= 5) {
-            message = `Deuxième indice dans ${SecondIntCount} essais`
-            document.getElementById("second-hint").textContent = message
-        } 
-        document.getElementById("triesDisplay").textContent = `Essais : ${tries}`
-    }
+      function FirstHint() {
+        return dailyItem.price;
+      }
+
+      function updateHint() {
+        let priceHint = "";
+        let firstHintCount = 3 - tries;
+        let secondHintCount = 6 - tries;
+
+        if (tries < 3) {
+          document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais`;
+        } else {
+          priceHint = FirstHint();
+          document.getElementById("first-hint").textContent = "Premier indice débloqué";
+        }
+
+        if (tries < 6) {
+          document.getElementById("second-hint").textContent = `Deuxième indice dans ${secondHintCount} essais`;
+        } else {
+          document.getElementById("second-hint").textContent = "Deuxième indice débloqué";
+        }
+
+        document.getElementById("price-hint").textContent = priceHint;
+        document.getElementById("triesDisplay").textContent = `Essais : ${tries}`;
+      }
 
     </script>
 

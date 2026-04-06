@@ -60,7 +60,7 @@ type ItemCard struct {
 	Name 	 	string  			`json:"name"`
 	ImageId	 	string  			`json:"full"`
 	ImageUrl 	string  			`json:"imageUrl"`
-	Price		int					`json:"base"`
+	Price		int					`json:"price"`
 	Stats 		map[string]float64	`json:"stats"`
 	SpecialRecipe	int		 		`json:"specialRecipe"`
 }

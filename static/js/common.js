@@ -9,28 +9,33 @@ function FilteredList(array, inputValue) {
 function renderList(array, list, guessed, input, submitGuess) {
   list.innerHTML = "";
 
+  const displayedNames = new Set();
+
   for (let i = 0; i < array.length; i++) {
+    if (guessed.includes(array[i].name)) continue;
+    if (displayedNames.has(array[i].name)) continue;
+
+    displayedNames.add(array[i].name);
+
     const item = document.createElement("div");
 
-    if (!guessed.includes(array[i].name)) {
-      const img = document.createElement("img");
-      img.src = array[i].imageUrl;
-      img.alt = array[i].name;
+    const img = document.createElement("img");
+    img.src = array[i].imageUrl;
+    img.alt = array[i].name;
 
-      const span = document.createElement("span");
-      span.textContent = array[i].name;
+    const span = document.createElement("span");
+    span.textContent = array[i].name;
 
-      item.appendChild(img);
-      item.appendChild(span);
-      list.appendChild(item);
+    item.appendChild(img);
+    item.appendChild(span);
+    list.appendChild(item);
 
-      item.addEventListener("click", function() {
-        list.innerHTML = "";
-        guessed.push(array[i].name);
-        submitGuess(array[i].name);
-        input.value = "";
-      });
-    }
+    item.addEventListener("click", function() {
+      list.innerHTML = "";
+      guessed.push(array[i].name);
+      submitGuess(array[i].name);
+      input.value = "";
+    });
   }
 }
 
@@ -67,6 +72,10 @@ const statConfig = {
   FlatCritChanceMod: {
     label: "Crit Chance",
     icon: "/static/images/stats/Crit.png"
+  },
+  FlatMPPoolMod: {
+    label: "Mana",
+    icon: "/static/images/stats/Mana.png"
   }
 };
 

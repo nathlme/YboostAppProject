@@ -34,10 +34,11 @@ func GetOrCreateDailyItem () (string, error) {
 
 
 	candidate, err := pickRandomItemName()
-	_, err = db.Exec("INSERT INTO daily_item (day, item_name) VALUES (?,?)",  today, candidate)
-	if err == nil {
-		return candidate, nil
+	if err != nil {
+		return "", err
 	}
+
+	_, err = db.Exec("INSERT INTO daily_item (day, item_name) VALUES (?,?)", today, candidate)
 
 	err2 := db.QueryRow("SELECT item_name FROM daily_item WHERE day = ?", today).Scan(&itemName)
 	if err2 != nil {
@@ -73,6 +74,7 @@ func IsValidChallengeItem(item Item) bool {
 		"Marteau du gardien": true,
 		"Corne du gardien":   true,
 		"Orbe du gardien":    true,
+		"Couronne du Roi-démon": true, 
 		"Poro-Snax":         true,
 	}
 
@@ -87,7 +89,7 @@ func IsValidChallengeItem(item Item) bool {
 		return false
 	}
 
-	if item.Gold.Total < 500 {
+	if item.Gold.Total < 2000 {
 		return false
 	}
 

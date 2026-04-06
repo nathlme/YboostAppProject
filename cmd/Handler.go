@@ -323,8 +323,9 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 	}
 	
 	if !finded {
-		return
-	}
+	http.Error(w, "ERR_DAILY_ITEM_NOT_FOUND_IN_ITEMCARDS", http.StatusInternalServerError)
+	return
+}
 
 	itemStatsJSON, err := json.Marshal(dailyCard.Stats)
 	if err != nil {
