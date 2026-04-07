@@ -106,3 +106,25 @@ function renderStats(stats) {
     statsContainer.appendChild(row);
   }
 }
+
+function renderComponentsHint(components) {
+  const container = document.getElementById("components-hint");
+  container.innerHTML = "";
+
+  for (let i = 0; i < components.length; i++) {
+    const row = document.createElement("div");
+    row.classList.add("component-row");
+
+    const img = document.createElement("img");
+    img.src = components[i].imageUrl;
+    img.alt = components[i].name;
+    img.classList.add("component-icon");
+
+    const span = document.createElement("span");
+    span.textContent = components[i].name;
+
+    row.appendChild(img);
+    row.appendChild(span);
+    container.appendChild(row);
+  }
+}

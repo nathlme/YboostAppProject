@@ -179,6 +179,7 @@ func LoadItemCard() error {
 		card.Price = item.Gold.Total
 		card.Stats = item.Stats
 		card.SpecialRecipe = item.SpecialRecipe
+		card.From = item.From 
 		
 		itemCards = append(itemCards, card)
 	}
@@ -192,8 +193,20 @@ func LoadItemCard() error {
 }
 
 
+func GetItemComponents(fromIDs []string, dico map[string]Item) []ItemComponent {
+	components := []ItemComponent{}
 
+	for _, id := range fromIDs {
+		if comp, ok := dico[id]; ok {
+			components = append(components, ItemComponent{
+				Name:     comp.Name,
+				ImageUrl: BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/item/", comp.Image.Full),
+			})
+		}
+	}
 
+	return components
+}
 
 
 

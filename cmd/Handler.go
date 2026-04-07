@@ -318,6 +318,8 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 			dailyCard.Stats = card.Stats
 			dailyCard.Price = card.Price
 			dailyCard.SpecialRecipe = card.SpecialRecipe
+			dailyCard.From = card.From
+
 			finded = true 
 		}
 	}
@@ -333,18 +335,34 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 		return
 	}
 
+	dico, err := GetItem()
+	if err != nil {
+		http.Error(w, "ERR_GET_ITEMS_DICT", http.StatusInternalServerError)
+		return
+	}
+
+	dailyComponents := GetItemComponents(dailyCard.From, dico)
+
+	componentsJSON, err := json.Marshal(dailyComponents)
+	if err != nil {
+		http.Error(w, "ERR_MARSHAL_COMPONENTS", http.StatusInternalServerError)
+		return
+	}
+
 	data := struct {
 		ItemName      string
 		ItemStats     map[string]float64
 		ItemPrice     int
 		ItemJSON      template.JS
 		ItemStatsJSON template.JS
+		ItemComponentsJSON template.JS
 	}{
 		ItemName:      dailyCard.Name,
 		ItemStats:     dailyCard.Stats,
 		ItemPrice:     dailyCard.Price,
 		ItemJSON:      template.JS(itemJSON),
 		ItemStatsJSON: template.JS(itemStatsJSON),
+		ItemComponentsJSON: template.JS(componentsJSON),
 	}
 
 	if err := t.Execute(w, data); err != nil {

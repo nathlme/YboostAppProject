@@ -79,6 +79,10 @@
 
           <div id="second-hint-box" class="hint-box">
               <p id="second-hint" class="hint-text"></p>
+              <p class="price-hint">Composants de l'item :</p>
+              <div id="components-hint">
+                  
+              </div>
           </div>
            
         </div>
@@ -106,6 +110,8 @@
     <script>
       const items = {{ .ItemJSON }};
       const itemStats = {{ .ItemStatsJSON }};
+      const itemComponents = {{ .ItemComponentsJSON }};
+    
 
       const dailyItemName = {{ .ItemName }};
       const dailyItem = items.find(item => item.name === dailyItemName);
@@ -117,6 +123,9 @@
 
       items.sort((a, b) => a.name.localeCompare(b.name));
       console.log(items);
+      console.log("itemComponents =", itemComponents);
+      console.log(typeof renderList);
+      console.log(typeof renderComponentsHint);
       
       let guessed = [];
 
@@ -225,6 +234,7 @@
           document.getElementById("second-hint").textContent = `Deuxième indice dans ${secondHintCount} essais`;
         } else {
           document.getElementById("second-hint").textContent = "Deuxième indice débloqué";
+          renderComponentsHint(itemComponents);
         }
 
         document.getElementById("price-hint").textContent = priceHint;
