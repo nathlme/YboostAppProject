@@ -64,14 +64,23 @@
         <div class="intro-box">
           <p class="page-title">Devinez quel item de League of legends a ces statistiques ! </p><br><br>
           <div id="stats" class="intro-text"></div> 
-          <p id="price-hint" class="intro-text"></p>
         </div>
     
           
 
         <div class="hint-zone">
-          <p id="first-hint" class="hint-text"></p>
-          <p id="second-hint" class="hint-text"></p>
+          <div id="first-hint-box" class="hint-box">
+              <p id="first-hint" class="hint-text"></p>
+              <div class="price">
+                <img src="/static/images/stats/Price.png" alt="Price icon" id="price-icon">
+                <p id="price-hint" class="price-hint"></p>
+              </div>
+          </div>
+
+          <div id="second-hint-box" class="hint-box">
+              <p id="second-hint" class="hint-text"></p>
+          </div>
+           
         </div>
 
         <div class="search-zone">
@@ -197,11 +206,11 @@
 
 
       function FirstHint() {
-        return dailyItem.price;
+        return `Prix de l'item : ${dailyItem.price}`;
       }
 
       function updateHint() {
-        let priceHint = "";
+        let priceHint = "Prix de l'item : ";
         let firstHintCount = 3 - tries;
         let secondHintCount = 6 - tries;
 
