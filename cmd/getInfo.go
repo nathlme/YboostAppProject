@@ -8,8 +8,11 @@ import (
 	"net/http"
 	"strings"
 )
+
+
 var championCards []ChampionCard
 var itemCards []ItemCard
+
 
 func GetVersion(){
 	url := "https://ddragon.leagueoflegends.com/api/versions.json"
