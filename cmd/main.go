@@ -16,7 +16,10 @@ var db *sql.DB
 
 
 func main () {
-	LoadChampionCards()
+	if err := LoadChampionCards(); err != nil {
+		log.Fatal(err)
+	}
+	
 	LoadItemCard()
 	GetVersion()
 	raw := os.Getenv("SCALINGO_MYSQL_URL")

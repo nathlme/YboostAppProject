@@ -8,10 +8,11 @@ import (
 	"time"
     "regexp"
 	"unicode"
+	"fmt"
 
 )
 
-// Checks if for today’s date there is an associated champion and returns it, otherwise it randomly chooses one
+// Checks if for today’s date there is an associated champion in the daily_champion DB and returns it, otherwise it randomly chooses one
 func GetOrCreateDailyChampion() (string, error) {
     today := time.Now().UTC().Format("2006-01-02")
 
@@ -25,7 +26,10 @@ func GetOrCreateDailyChampion() (string, error) {
         return "", err
     }
 
-    candidate := pickRandomChampionID()
+    candidate, err := pickRandomChampionID()
+	if err != nil {
+		return "", err
+	}
 
     _, err = db.Exec("INSERT INTO daily_champion (day, champion_id) VALUES (?, ?)", today, candidate)
     if err == nil {
@@ -41,14 +45,14 @@ func GetOrCreateDailyChampion() (string, error) {
 }
 
 
-// Choose a random name from a list of champions and return it
-func pickRandomChampionID() string {
+// Choose a random ID from a list of champions and return it
+func pickRandomChampionID() (string,error) {
     if len(championCards) == 0 {
-		return ""
+		return "", fmt.Errorf("championCards est vide")
 	}
     
 	rand.Seed(time.Now().UnixNano())
-	return championCards[rand.Intn(len(championCards))].ID
+	return championCards[rand.Intn(len(championCards))].ID, nil 
 }
 
 

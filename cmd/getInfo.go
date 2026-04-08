@@ -48,49 +48,56 @@ func GetVersion(){
 
 
 //	Return a map of the ChampionResponse struct fill with every champion in the Lol API response 
-func GetChampion() map[string]Champion {
-	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/fr_FR/champion.json"
+func GetChampion() (map[string]Champion, error) {
+	url := "https://ddragon.leagueoflegends.com/cdn/16.7.1/data/fr_FR/champion.json"
 
-	resp,err := http.Get(url)
+	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("Erreur lors du GET :", err) 
+		return nil, fmt.Errorf("erreur lors du GET: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("status code inattendu: %d", resp.StatusCode)
 	}
 
-	defer resp.Body.Close()
-		
 	body, err := io.ReadAll(resp.Body)
-		if err != nil {
-		fmt.Println("Erreur lors de la lecture du Body:", err)
-		
+	if err != nil {
+		return nil, fmt.Errorf("erreur lors de la lecture du body: %w", err)
 	}
 
 	var result ChampionResponse
-	
-	err = json.Unmarshal(body,&result)
+
+	err = json.Unmarshal(body, &result)
 	if err != nil {
-		fmt.Println("Error JSON :", err)
-		
+		return nil, fmt.Errorf("erreur JSON: %w", err)
 	}
 
-	return result.Data
+	return result.Data, nil
 }
 
 
 // Fill an object of the struct ChampionCard and add it to the championCards list
-func LoadChampionCards(){
+func LoadChampionCards() error{
 	
 	championCards = []ChampionCard{}
 
-	Dico := GetChampion()
+	Dico, err := GetChampion()
+	if err != nil {
+		return err
+	}
+
 
 	for _, champ := range Dico {
 		var card ChampionCard
 		card.ID = champ.ID
 		card.Name = champ.Name
 		card.Lore = champ.Lore
-		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/champion/", card.ID)
+		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.7.1/img/champion/", card.ID)
 		championCards = append(championCards, card)
 	}
+	
+	return nil 
 }
 
 
@@ -154,7 +161,7 @@ func GetFullLore() (string, string, string, error) {
 
 // Return a map of the ItemResponse struct fill with every item in the Lol API response 
 func GetItem() (map[string]Item, error) {
-	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/fr_FR/item.json"
+	url := "https://ddragon.leagueoflegends.com/cdn/16.7.1/data/fr_FR/item.json"
 
 	resp, err := http.Get(url)
 	if err != nil {

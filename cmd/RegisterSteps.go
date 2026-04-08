@@ -4,12 +4,14 @@ import(
 	"golang.org/x/crypto/bcrypt"
 )
 
+
 // Hash the password 
 func PasswordHash(password []byte) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword(password,bcrypt.DefaultCost) 
 	if err != nil {
 		return "",err
 	}
+
 	return string(hash), nil
 }
 
@@ -17,9 +19,11 @@ func PasswordHash(password []byte) (string, error) {
 // Check the size of email and pseudo 
 func validateRegister(email string,pseudo string,password string) string{
 	msg := ""
+
 	if !(len(email) >= 8 ){
 		msg = msg + "Votre email doit contenir au moins 8 caractères "
 	}
+
 	if !(len(pseudo) >= 3){
 		msg = msg + "\nVotre pseudo doit contenir au moins 3 caractères "
 	}
@@ -48,5 +52,4 @@ func StrongPassword(password string) string {
 	msg = msg + VerMaj
 
 	return msg
-
 }

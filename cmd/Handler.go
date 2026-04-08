@@ -13,12 +13,13 @@ import (
 
 )
 
+
+
 func handlerRegister(w http.ResponseWriter, r*http.Request ){
 	switch r.Method {
 		case http.MethodGet :
 
 			contenu, err := os.ReadFile("templates/RegisterPage.html")
-
 			if err!=nil {
 				http.Error(w,"Internal Server Error",500)
 				return
@@ -38,8 +39,9 @@ func handlerRegister(w http.ResponseWriter, r*http.Request ){
 			email := r.FormValue("email")
 			password := r.FormValue("password")
 			pseudo := r.FormValue("pseudo")
-			
+	
 			message := validateRegister(email,pseudo,password)
+
 			if message != "" {
 				http.Error(w,message,400)
 				return
@@ -73,8 +75,6 @@ func handlerRegister(w http.ResponseWriter, r*http.Request ){
 		default :
 			fmt.Fprint(w,"erreur 405")
 	} 
-
-	
 }
 
 
@@ -91,6 +91,7 @@ func handlerLogin(w http.ResponseWriter, r*http.Request){
 
 			w.Header().Set("Content-Type", "text/html")
 			w.Write(contenu)
+
 		case http.MethodPost :
 
 			err := r.ParseForm()
@@ -101,8 +102,6 @@ func handlerLogin(w http.ResponseWriter, r*http.Request){
 
 			email := r.FormValue("email")
 			password := r.FormValue("password")
-
-
 			row := db.QueryRow("SELECT id, password_hash, pseudo FROM users WHERE email = ?",email)
 			
 			var id int
@@ -121,8 +120,6 @@ func handlerLogin(w http.ResponseWriter, r*http.Request){
 				return 
 			}	
 			
-			
-			
 			res := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 
 			if res != nil {
@@ -131,12 +128,14 @@ func handlerLogin(w http.ResponseWriter, r*http.Request){
 
 			}else {
 				log.Println("email : ",email,", pseudo : ",pseudo)
+
 				sessionID, err := generateSessionID()
 
 				if err != nil {
 					http.Error(w,"Cookie issues",500)
 					return
 				}
+
 				sessions[sessionID] = id
 
 				cookie := http.Cookie{
@@ -151,17 +150,11 @@ func handlerLogin(w http.ResponseWriter, r*http.Request){
 
 				http.Redirect(w, r, "/logged", http.StatusSeeOther)
 				return 
-			}
-			
-
-			
-			
+			}			
 		default :
 				fmt.Fprint(w,"erreur 405")
 		}
 }
-
-
 
 
 
