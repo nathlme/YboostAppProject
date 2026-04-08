@@ -5,7 +5,7 @@ type Champion struct {
 	ID   string   `json:"id"`
 	Name string   `json:"name"`
 	Tags []string `json:"tags"`
-	Lore string `json:"blurb"`
+	Lore string   `json:"blurb"`
 }
 
 

@@ -2,24 +2,24 @@ package main
 
 
 type Item struct {
-	Name  string            `json:"name"`
-	Maps  map[string]bool   `json:"maps"`
-	Gold  GoldData          `json:"gold"`
-	Image ImageData         `json:"image"`
-	Stats map[string]float64 `json:"stats"`
-	SpecialRecipe	int		`json:"specialRecipe"`
-	From []string			`json:"from"`
+	Name  			string            	`json:"name"`
+	Maps  			map[string]bool   	`json:"maps"`
+	Gold 			GoldData          	`json:"gold"`
+	Image 			ImageData         	`json:"image"`
+	Stats 			map[string]float64 	`json:"stats"`
+	SpecialRecipe	int					`json:"specialRecipe"`
+	From 			[]string			`json:"from"`
 }
 
 
 type ItemCard struct {
-	Name 	 	string  			`json:"name"`
-	ImageId	 	string  			`json:"full"`
-	ImageUrl 	string  			`json:"imageUrl"`
-	Price		int					`json:"price"`
-	Stats 		map[string]float64	`json:"stats"`
-	SpecialRecipe	int		 		`json:"specialRecipe"`
-	From          []string           `json:"from"`
+	Name 	 		string  			`json:"name"`
+	ImageId	 		string  			`json:"full"`
+	ImageUrl 		string  			`json:"imageUrl"`
+	Price			int					`json:"price"`
+	Stats 			map[string]float64	`json:"stats"`
+	SpecialRecipe	int		 			`json:"specialRecipe"`
+	From          	[]string           	`json:"from"`
 }
 
 

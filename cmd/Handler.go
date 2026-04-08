@@ -372,61 +372,6 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 }
 
 
-func handlerSearch(w http.ResponseWriter, r*http.Request){
-	switch r.Method {
-		case http.MethodGet :
-			contenu, err := os.ReadFile("templates/SearchPage.html")
-
-				if err!=nil {
-					http.Error(w,"Internal Server Error",500)
-					return
-				}
-
-			w.Header().Set("Content-Type", "text/html")
-			w.Write(contenu)
-
-	default :
-			fmt.Fprint(w,"erreur 405")
-	}
-}
-
-
-func handlerNews(w http.ResponseWriter, r*http.Request){
-	switch r.Method {
-		case http.MethodGet :
-			contenu, err := os.ReadFile("templates/NewsPage.html")
-
-				if err!=nil {
-					http.Error(w,"Internal Server Error",500)
-					return
-				}
-
-			w.Header().Set("Content-Type", "text/html")
-			w.Write(contenu)
-
-	default :
-			fmt.Fprint(w,"erreur 405")
-	}
-}
-
-func handlerList(w http.ResponseWriter, r*http.Request){
-	switch r.Method {
-		case http.MethodGet :
-			contenu, err := os.ReadFile("templates/ListPage.html")
-
-				if err!=nil {
-					http.Error(w,"Internal Server Error",500)
-					return
-				}
-
-			w.Header().Set("Content-Type", "text/html")
-			w.Write(contenu)
-
-	default :
-			fmt.Fprint(w,"erreur 405")
-	}
-}
-
 func handlerGuess(w http.ResponseWriter, r*http.Request) {
 	switch r.Method {
 		case http.MethodPost :
@@ -470,6 +415,3 @@ func handlerGuessItem(w http.ResponseWriter, r*http.Request) {
 			http.Error(w,"Erreur",http.StatusMethodNotAllowed)
 	}
 }
-
-
- 

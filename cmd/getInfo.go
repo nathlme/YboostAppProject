@@ -10,18 +10,21 @@ import (
 )
 
 
+// A list of Champion object 
 var championCards []ChampionCard
+// A list of Item object 
 var itemCards []ItemCard
 
 
+// Print the latest version of the League of legends API 
 func GetVersion(){
 	url := "https://ddragon.leagueoflegends.com/api/versions.json"
 
 	resp, err := http.Get(url)
 	if err != nil {
-			fmt.Println("Erreur lors du GET :", err)
-			return 
-		}
+		fmt.Println("Erreur lors du GET :", err)
+		return 
+	}
 
 	defer resp.Body.Close()
 
@@ -44,8 +47,9 @@ func GetVersion(){
 }
 
 
+//	Return a map of the ChampionResponse struct fill with every champion in the Lol API response 
 func GetChampion() map[string]Champion {
-	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/en_US/champion.json"
+	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/fr_FR/champion.json"
 
 	resp,err := http.Get(url)
 	if err != nil {
@@ -69,9 +73,10 @@ func GetChampion() map[string]Champion {
 	}
 
 	return result.Data
-
 }
 
+
+// Fill an object of the struct ChampionCard and add it to the championCards list
 func LoadChampionCards(){
 	
 	championCards = []ChampionCard{}
@@ -88,18 +93,24 @@ func LoadChampionCards(){
 	}
 }
 
+
+// Build an url based on a base and a champion id and return it
 func BuildUrl(baseUrl string, champId string) string {
 	var newUrl = ""
+
 	if strings.HasSuffix(champId, ".png") {
 		newUrl = baseUrl + champId
 	} else {
 		newUrl = baseUrl + champId + ".png"
 	}
+	
 	return newUrl
 }
 
 
+// Return the name, the title and the complet lore in French of the daily champ 
 func GetFullLore() (string, string, string, error) {
+
 	dayliChamp, err := GetOrCreateDailyChampion()
 	if err != nil {
 		return "", "", "", err
@@ -112,10 +123,12 @@ func GetFullLore() (string, string, string, error) {
 		lang,
 		dayliChamp,
 	)
+
 	resp, err := http.Get(championUrl)
 	if err != nil {
 		return "", "", "", err
 	}
+
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
@@ -123,14 +136,14 @@ func GetFullLore() (string, string, string, error) {
 		return "", "", "", err
 	}
 
-	var details ChampionDetail
+	var champDetails ChampionDetail
 
-	err = json.Unmarshal(body, &details)
+	err = json.Unmarshal(body, &champDetails)
 	if err != nil {
 		return "", "", "", err
 	}
 
-	champ, ok := details.Data[dayliChamp]
+	champ, ok := champDetails.Data[dayliChamp]
 	if !ok {
 		return "", "", "", fmt.Errorf("champion introuvable dans les données JSON")
 	}
@@ -139,6 +152,7 @@ func GetFullLore() (string, string, string, error) {
 }
 
 
+// Return a map of the ItemResponse struct fill with every item in the Lol API response 
 func GetItem() (map[string]Item, error) {
 	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/fr_FR/item.json"
 
@@ -146,6 +160,7 @@ func GetItem() (map[string]Item, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
@@ -154,6 +169,7 @@ func GetItem() (map[string]Item, error) {
 	}
 
 	var itemResult ItemResponse
+
 	err = json.Unmarshal(body, &itemResult)
 	if err != nil {
 		return nil, err
@@ -162,6 +178,8 @@ func GetItem() (map[string]Item, error) {
 	return itemResult.Data, nil
 }
 
+
+// Fill an object of the struct ItemCard and add it to the itemCards list
 func LoadItemCard() error {
 	itemCards = []ItemCard{}
 
@@ -176,6 +194,7 @@ func LoadItemCard() error {
 		}
 
 		var card ItemCard
+
 		card.Name = item.Name
 		card.ImageId = item.Image.Full
 		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/item/", card.ImageId)
@@ -196,6 +215,7 @@ func LoadItemCard() error {
 }
 
 
+// Return a list of the object component 
 func GetItemComponents(fromIDs []string, dico map[string]Item) []ItemComponent {
 	components := []ItemComponent{}
 
@@ -210,27 +230,3 @@ func GetItemComponents(fromIDs []string, dico map[string]Item) []ItemComponent {
 
 	return components
 }
-
-
-
-
-
-
-// func GetSpells(){
-// 	url := "https://ddragon.leagueoflegends.com/cdn/16.2.1/data/en_US/champion/Ahri.json"
-
-// 	resp, err := http.Get(url)
-// 	if err != nil {
-// 		fmt.Println("Erreur lors du GET :", err)
-// 		return 
-// 	}
-
-// 	defer resp.Body.Close()
-
-// 	body, err := io.ReadAll(resp.Body)
-// 		if err != nil {
-// 		fmt.Println("Erreur lors de la lecture du Body:", err)
-// 		return
-// 	}
-
-// }
