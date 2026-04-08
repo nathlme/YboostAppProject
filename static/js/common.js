@@ -107,6 +107,8 @@ function renderStats(stats) {
   }
 }
 
+
+
 function renderComponentsHint(components) {
   const container = document.getElementById("components-hint");
   container.innerHTML = "";

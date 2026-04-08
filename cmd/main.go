@@ -85,11 +85,12 @@ func main () {
 
 	// Handlers
 	http.HandleFunc("/register", handlerRegister)
+	http.HandleFunc("/login",handlerLogin)
 	http.HandleFunc("/logged",handlerLogged)
 	http.HandleFunc("/Profil",handlerProfil)
 	http.HandleFunc("/Champs",handlerChamps)
 	http.HandleFunc("/Items",handlerItems)
-	http.HandleFunc("/login",handlerLogin)
+	http.HandleFunc("/Spells",handlerSpell)
 	http.HandleFunc("/guess", handlerGuess)
 	http.HandleFunc("/guess-item", handlerGuessItem)
 

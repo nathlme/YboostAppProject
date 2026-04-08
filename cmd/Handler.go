@@ -1,16 +1,14 @@
 package main
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 	"os"
-	"log"
-	"database/sql"
 	"golang.org/x/crypto/bcrypt"
-	"html/template"
-	"encoding/json"
-
-
 )
 
 
@@ -363,6 +361,34 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 		return 
 	}
 }
+
+
+
+func handlerSpell(w http.ResponseWriter, r*http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w,"Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
+
+	t, err := template.ParseFiles("templates/SpellPage.html")
+	if err != nil {
+		http.Error(w, "ERR_PARSE_TEMPLATE_ITEM", http.StatusInternalServerError)
+		return 
+	}
+
+	data := struct {
+
+	}{
+
+	}
+
+	if err := t.Execute(w, data); err != nil {
+		log.Println("jsp item :", err) 
+		return 
+	}
+}
+
+
 
 
 func handlerGuess(w http.ResponseWriter, r*http.Request) {
