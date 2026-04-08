@@ -87,7 +87,7 @@
           <div id="guessedHistory" class="guessed-history"></div>
         </section>
 
-        <p class="debug-daily">{{ .ItemName }}</p>
+        <p class="debug-daily">{{ printf "%q" .ItemName }}</p>
       </section>
     </main>
 
@@ -98,7 +98,7 @@
       const itemComponents = {{ .ItemComponentsJSON }};
     
 
-      const dailyItemName = {{ .ItemName }};
+      const dailyItemName = {{ printf "%q" .ItemName }};
       const dailyItem = items.find(item => item.name === dailyItemName);
 
       window.onload = () => {
@@ -180,6 +180,9 @@
             alreadyGuess.appendChild(img)
             alreadyGuess.appendChild(span)
             guessedHistory.prepend(alreadyGuess)
+
+            tries++
+            updateHint()
         
         }else {
           verify.textContent = `${item.name} n'est pas le bon item`

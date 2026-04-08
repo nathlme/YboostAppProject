@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
     "regexp"
+	"unicode"
 
 )
 
@@ -24,7 +25,7 @@ func GetOrCreateDailyChampion() (string, error) {
         return "", err
     }
 
-    candidate := pickRandomChampionName()
+    candidate := pickRandomChampionID()
 
     _, err = db.Exec("INSERT INTO daily_champion (day, champion_id) VALUES (?, ?)", today, candidate)
     if err == nil {
@@ -41,24 +42,65 @@ func GetOrCreateDailyChampion() (string, error) {
 
 
 // Choose a random name from a list of champions and return it
-func pickRandomChampionName() string {
+func pickRandomChampionID() string {
     if len(championCards) == 0 {
 		return ""
 	}
     
 	rand.Seed(time.Now().UnixNano())
-	return championCards[rand.Intn(len(championCards))].Name
+	return championCards[rand.Intn(len(championCards))].ID
 }
 
 
 // Check if the guessed champion is the same as the daily champion 
 func SameChamp(guess string) bool {
-    dayli, err := GetOrCreateDailyChampion()
-    if err != nil {
-        log.Print("Erreur DB")
-    }
+	dailyID, err := GetOrCreateDailyChampion()
+	if err != nil {
+		log.Println("Erreur DB:", err)
+		return false
+	}
 
-    return strings.EqualFold(guess, dayli) 
+	normalizedGuess := normalizeChampionName(guess)
+
+	for _, champ := range championCards {
+		if normalizeChampionName(champ.Name) == normalizedGuess {
+			return champ.ID == dailyID
+		}
+	}
+
+	return false
+}
+
+
+// Replace special characters in a string
+func normalizeChampionName(s string) string {
+	s = strings.ToLower(strings.TrimSpace(s))
+
+	var b strings.Builder
+	for _, r := range s {
+		switch r {
+		case '\'', '’', '-', ' ':
+			continue
+		case 'é', 'è', 'ê', 'ë':
+			r = 'e'
+		case 'à', 'â', 'ä':
+			r = 'a'
+		case 'î', 'ï':
+			r = 'i'
+		case 'ô', 'ö':
+			r = 'o'
+		case 'ù', 'û', 'ü':
+			r = 'u'
+		case 'ç':
+			r = 'c'
+		}
+
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			b.WriteRune(r)
+		}
+	}
+
+	return b.String()
 }
 
 

@@ -70,7 +70,7 @@
           <div id="guessedHistory" class="guessed-history"></div>
         </section>
 
-        <p class="debug-daily">{{ .ChampionID }}</p>
+        <p class="debug-daily">{{ printf "%q" .ChampionID }}</p>
       </section>
     </main>
 
@@ -124,7 +124,16 @@
         })
 
         let verify = document.getElementById("try")
-        const data = await response.json()
+        
+        const raw = await response.text();
+        console.log("status =", response.status);
+        console.log("raw response =", raw);
+
+        if (!response.ok) {
+          throw new Error("Server error");
+        }
+
+        const data = JSON.parse(raw);
         
         const champ = champions.find(c => c.name === name);
 
@@ -148,6 +157,8 @@
             alreadyGuess.appendChild(img)
             alreadyGuess.appendChild(span)
             guessedHistory.prepend(alreadyGuess)
+            tries++
+            updateHint()
         
         }else {
           verify.textContent = `${champ.name} n'est pas le bon champion`
