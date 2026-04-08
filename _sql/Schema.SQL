@@ -12,6 +12,12 @@ CREATE TABLE IF NOT EXISTS daily_item (
   item_name VARCHAR(50) NOT NULL
 );
 
+-- Daily spell table
+CREATE TABLE IF NOT EXISTS daily_spell (
+  day DATE PRIMARY KEY,
+  champion_id VARCHAR(50) NOT NULL
+);
+
 -- Users auth table
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,

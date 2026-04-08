@@ -102,12 +102,15 @@ func main () {
 	if port == "" {
 		port = "8080" 
 	}
-
+	
+	
 	fmt.Println("http://localhost:8080/logged")
 	fmt.Println("http://localhost:8080/register")
 	fmt.Println("http://localhost:8080/login")
 	log.Println(len(championCards))
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+
+	
 }
 
 

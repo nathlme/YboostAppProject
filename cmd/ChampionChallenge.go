@@ -13,12 +13,13 @@ import (
 )
 
 // Checks if for today’s date there is an associated champion in the daily_champion DB and returns it, otherwise it randomly chooses one
-func GetOrCreateDailyChampion() (string, error) {
+func GetOrCreateDailyChampion(table string) (string, error) {
     today := time.Now().UTC().Format("2006-01-02")
 
     var championID string
 
-    err := db.QueryRow("SELECT champion_id FROM daily_champion WHERE day = ?", today).Scan(&championID)
+    querySelect := fmt.Sprintf("SELECT champion_id FROM %s WHERE day = ?", table)
+    err := db.QueryRow(querySelect, today).Scan(&championID)
     if err == nil {
         return championID, nil
     }
@@ -27,16 +28,17 @@ func GetOrCreateDailyChampion() (string, error) {
     }
 
     candidate, err := pickRandomChampionID()
-	if err != nil {
-		return "", err
-	}
+    if err != nil {
+        return "", err
+    }
 
-    _, err = db.Exec("INSERT INTO daily_champion (day, champion_id) VALUES (?, ?)", today, candidate)
+    queryInsert := fmt.Sprintf("INSERT INTO %s (day, champion_id) VALUES (?, ?)", table)
+    _, err = db.Exec(queryInsert, today, candidate)
     if err == nil {
         return candidate, nil
     }
 
-    err2 := db.QueryRow("SELECT champion_id FROM daily_champion WHERE day = ?", today).Scan(&championID)
+    err2 := db.QueryRow(querySelect, today).Scan(&championID)
     if err2 != nil {
         return "", err2
     }
@@ -58,7 +60,7 @@ func pickRandomChampionID() (string,error) {
 
 // Check if the guessed champion is the same as the daily champion 
 func SameChamp(guess string) bool {
-	dailyID, err := GetOrCreateDailyChampion()
+	dailyID, err := GetOrCreateDailyChampion("daily_champion")
 	if err != nil {
 		log.Println("Erreur DB:", err)
 		return false

@@ -193,7 +193,7 @@ func handlerLogged(w http.ResponseWriter, r*http.Request){
 				http.Error(w,"Internal Server Error",500)
 				return
 			}					
-			log.Print(GetOrCreateDailyChampion())
+			log.Print(GetOrCreateDailyChampion("daily_champion"))
 
 			t.Execute(w, struct {Pseudo string}{Pseudo: pseudo})
 
@@ -228,7 +228,7 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	championID, err := GetOrCreateDailyChampion()
+	championID, err := GetOrCreateDailyChampion("daily_champion")
 	if err != nil {
 		http.Error(w, "ERR_GET_DAILY", http.StatusInternalServerError)
 		return
