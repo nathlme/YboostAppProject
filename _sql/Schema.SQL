@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS daily_item (
 -- Daily spell table
 CREATE TABLE IF NOT EXISTS daily_spell (
   day DATE PRIMARY KEY,
-  champion_id VARCHAR(50) NOT NULL
+  champion_id VARCHAR(50) NOT NULL,
+  spell_slot VARCHAR(1) NOT NULL 
 );
 
 -- Users auth table

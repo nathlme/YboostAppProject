@@ -243,7 +243,10 @@ func GetItemComponents(fromIDs []string, dico map[string]Item) []ItemComponent {
 
 // Return a map of the SpellResponse struct fill with every spell of a champion in the Lol API response 
 func GetSpell() (map[string]Spell, error) {
-	champion := GetOrCreateDailyChampion("daily_spell")
+	champion, err := GetOrCreateDailyChampion("daily_spell")
+	if err != nil {
+		return nil, err 
+	}
 
 	url := "https://ddragon.leagueoflegends.com/cdn/16.7.1/data/fr_FR/champion/" + champion + ".json"
 

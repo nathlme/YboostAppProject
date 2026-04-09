@@ -1,24 +1,30 @@
 package main 
 
-
-type Spell struct {
-	ID				string	`json:"id"`
-	Name			string	`json:"name"`
-	Description 	string 	`json:"description"`
-	ImageUrl		Image	`json:"image"`
-}
-
-type SpellCard struct {
-	ID				string	`json:"id"`
-	Name			string	`json:"name"`
-	Description 	string 	`json:"description"`
-	ImageUrl		Image	`json:"image"`
-}
-
-type SpellResponse struct {
-	Data map[string]Spell `json:"data"`
-}
-
 type Image struct {
 	Full string `json:"full"`
+}
+
+type Spell struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Image       Image  `json:"image"`
+}
+
+type ChampionData struct {
+	ID     string  `json:"id"`
+	Name   string  `json:"name"`
+	Spells []Spell `json:"spells"`
+}
+
+
+
+type DailySpell struct {
+	ChampionID   string
+	ChampionName string
+	SpellSlot    string
+	SpellID      string
+	SpellName    string
+	Description  string
+	ImageURL     string
 }
