@@ -1,5 +1,4 @@
 package main 
-
 type Image struct {
 	Full string `json:"full"`
 }
@@ -17,7 +16,9 @@ type ChampionData struct {
 	Spells []Spell `json:"spells"`
 }
 
-
+type ChampionSpellResponse struct {
+	Data map[string]ChampionData `json:"data"`
+}
 
 type DailySpell struct {
 	ChampionID   string

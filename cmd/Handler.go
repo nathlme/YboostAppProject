@@ -363,31 +363,41 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 }
 
 
-
-func handlerSpell(w http.ResponseWriter, r*http.Request) {
+func handlerSpell(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		http.Error(w,"Méthode non autorisée", http.StatusMethodNotAllowed)
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
 
+	spell, err := GetDailySpell()
+	if err != nil {
+		http.Error(w, "Erreur chargement spell", http.StatusInternalServerError)
+		log.Println("spell error:", err)
+		return
+	}
+
+	log.Println("Champion :", spell.ChampionName)
+	log.Println("Slot :", spell.SpellSlot)
+	log.Println("Spell :", spell.SpellName)
+	log.Println("Description :", spell.Description)
+
 	t, err := template.ParseFiles("templates/SpellPage.html")
 	if err != nil {
-		http.Error(w, "ERR_PARSE_TEMPLATE_ITEM", http.StatusInternalServerError)
-		return 
+		http.Error(w, "ERR_PARSE_TEMPLATE_SPELL", http.StatusInternalServerError)
+		return
 	}
 
 	data := struct {
-
+		Description string
 	}{
-
+		Description: spell.Description,
 	}
 
 	if err := t.Execute(w, data); err != nil {
-		log.Println("jsp item :", err) 
-		return 
+		log.Println("template spell:", err)
+		return
 	}
 }
-
 
 
 
