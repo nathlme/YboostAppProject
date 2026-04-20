@@ -104,7 +104,7 @@
     
 
       const dailyItemName = {{ printf "%q" .ItemName }};
-      const dailyItem = items.find(item => item.name === dailyItemName);
+      const dailyItemPrice = {{ .ItemPrice }};
 
       window.onload = () => {
         renderStats(itemStats);
@@ -207,10 +207,7 @@
       }
 
 
-      function FirstHint() {
-        return `Prix de l'item : ${dailyItem.price}`;
-      }
-
+      
       function updateHint() {
         let priceHint = "Prix de l'item : ";
         let firstHintCount = 3 - tries;
@@ -219,8 +216,9 @@
         if (tries < 3) {
           document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais`;
         } else {
-          priceHint = FirstHint();
+          priceHint = `Prix de l'item : ${dailyItemPrice}`
           document.getElementById("first-hint").textContent = "Premier indice débloqué";
+           
         }
 
         if (tries < 6) {
