@@ -43,10 +43,56 @@
             <div class="vertical-line"></div>
         </aside>
 
-        <main class="content"> 
-            <h1>Spell Challenge</h1>
-            <p>{{.Description}}</p>
-        </main>
+        <main class="content">
+      <div class="page-brand">
+        <span class="brand-small">UHC</span>
+        <span class="brand-big">LoLdle</span>
+      </div>
+
+      <section class="game-wrapper">
+        <div class="intro-box">
+          <p class="page-title">Devinez à quel personnage de League of legends appartient ce sort ! </p><br><br>
+          <div id="stats" class="intro-text"></div> 
+        </div>
+    
+          
+
+        <div class="hint-zone">
+          <div id="first-hint-box" class="hint-box">
+              <p id="first-hint" class="hint-text"></p>
+              <div class="price">
+                <p id="price-hint" class="price-hint"></p>
+              </div>
+          </div>
+
+          <div id="second-hint-box" class="hint-box">
+              <p id="second-hint" class="hint-text"></p>
+              <p class="price-hint"> </p>
+              <div id="components-hint">
+                  
+              </div>
+          </div>
+           
+        </div>
+
+        <div class="search-zone">
+          <p id="triesDisplay" class="tries-count"></p>
+          <div class="search-box">
+            <input type="text" id="itemInput" placeholder="Choisir un Spell..." autocomplete="off">
+            <div id="itemList"></div>
+          </div>
+
+          <div id="try"></div>
+        </div>
+
+        <section class="guesses-zone">
+          <h2 class="guesses-title">Sort déjà proposés :</h2>
+          <div id="guessedHistory" class="guessed-history"></div>
+        </section>
+
+        <p class="debug-daily"></p>
+      </section>
+    </main>
     </div>
 </body>
 </html>

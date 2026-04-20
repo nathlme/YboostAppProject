@@ -21,6 +21,9 @@ body {
   display: flex;
 }
 
+/* =========================
+   SIDEBAR — inchangée visuellement
+   ========================= */
 
 .sidebar {
   position: relative;
@@ -107,5 +110,504 @@ body {
   background-color: #FECA74;
 }
 
+/* =========================
+   CONTENU PRINCIPAL
+   ========================= */
+
+.content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.page-brand {
+  position: absolute;
+  top: 28px;
+  right: 42px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.brand-small {
+  font-size: 18px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #c8aa6e;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(200, 170, 110, 0.25);
+}
+
+.brand-big {
+  font-size: 42px;
+  font-weight: 800;
+  color: #f0e6d2;
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px rgba(201, 170, 110, 0.18);
+}
+
+/* =========================
+   WRAPPER CENTRAL
+   ========================= */
+
+.game-wrapper {
+  width: min(900px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+}
+
+.intro-box {
+  width: min(760px, 100%);
+  padding: 24px 28px;
+  border: 1px solid rgba(200, 170, 110, 0.35);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(9, 20, 40, 0.92), rgba(4, 11, 22, 0.92));
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.38),
+    inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.page-title {
+  margin: 0 0 12px 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: #f0e6d2;
+  text-align: center;
+}
+
+.intro-text {
+  margin: 0;
+  line-height: 1.7;
+  color: #cdd7e5;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* =========================
+   ZONE RECHERCHE
+   ========================= */
+
+.search-zone {
+  width: min(760px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 5;
+}
+
+.search-box {
+  width: min(560px, 100%);
+  position: relative;
+  z-index: 1;
+}
 
 
+#itemInput::placeholder {
+  color: #93a1b5;
+}
+
+#itemInput:focus {
+  border-color: #c8aa6e;
+  box-shadow:
+    0 0 0 3px rgba(200, 170, 110, 0.14),
+    0 12px 28px rgba(0,0,0,0.34);
+  transform: translateY(-1px);
+}
+
+
+#itemList:empty {
+  display: none;
+}
+
+#itemList div {
+  padding: 14px 16px;
+  color: #f0e6d2;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, padding-left 0.18s ease;
+}
+
+#itemList div:last-child {
+  border-bottom: none;
+}
+
+#itemList div:hover {
+  background: rgba(200, 170, 110, 0.14);
+  color: #ffe7b0;
+  padding-left: 22px;
+}
+
+/* scrollbar */
+#itemList::-webkit-scrollbar {
+  width: 9px;
+}
+
+#itemList::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+}
+
+#itemList::-webkit-scrollbar-thumb {
+  background: rgba(200, 170, 110, 0.45);
+  border-radius: 10px;
+}
+
+/* =========================
+   MESSAGE
+   ========================= */
+
+#try {
+  min-height: 24px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #f0e6d2;
+  text-align: center;
+  text-shadow: 0 0 12px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   LISTE DES GUESSES
+   ========================= */
+
+.guesses-zone {
+  width: min(500px, 100%);
+  padding: 22px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(200, 170, 110, 0.25);
+  background:
+    linear-gradient(180deg, rgba(7, 18, 34, 0.90), rgba(5, 11, 20, 0.90));
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+  position: relative;
+  z-index: 1;
+}
+
+.guesses-title {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  text-align: center;
+  color: #f0e6d2;
+}
+
+.guessed-history {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 50px;
+}
+
+.hint-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 22px 30px;
+  border-radius: 18px;
+  border: 1px solid rgba(200, 170, 110, 0.25);
+  background:
+  linear-gradient(180deg, rgba(7, 18, 34, 0.90), rgba(5, 11, 20, 0.90));
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+  position: relative;
+  z-index: 1;
+}
+
+.hint-zone {
+  display: flex;
+  flex-direction: row;
+
+}
+
+#second-hint-box {
+  margin-left: 20px;
+}
+
+ 
+
+/* =========================
+   DEBUG TEMPORAIRE
+   ========================= */
+
+.debug-daily {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255,255,255,0.18);
+  text-align: center;
+  user-select: none;
+}
+
+
+/* Image du item */
+.guess-row img {
+  width: 36px;
+  height: 36px;
+
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Nom du item */
+.guess-row span {
+  display: flex;
+  align-items: center;
+}
+
+/* Mauvaise réponse */
+.guess-row.false {
+  background-color: rgba(180, 40, 40, 0.6);
+  border: 1px solid rgba(255, 80, 80, 0.6);
+}
+
+/* Bonne réponse */
+.guess-row.true {
+  background-color: rgba(40, 150, 80, 0.7);
+  border: 1px solid rgba(80, 220, 120, 0.7);
+}
+
+/* =========================
+   BARRE DE RECHERCHE
+========================= */
+
+#itemInput {
+  width: 100%;    
+  box-sizing: border-box;      
+  padding: 16px 18px;    
+
+  border-radius: 10px;
+  border: 1px solid #c89b3c;
+
+  background-color: #1e2328;
+  color: #f0e6d2;
+
+  font-size: 18px;
+
+  outline: none;
+
+  display: block;
+  margin: 0;
+
+  text-align: center;
+}
+
+#itemInput::placeholder {
+  color: #a09b8c;
+  text-align: center;
+}
+
+
+/* =========================
+   LISTE DES ITEMS
+========================= */
+
+#itemList {
+  position: absolute;      
+  top: 100%;               
+  left: 0;
+  width: 100%;              
+  
+  max-height: 240px;
+  overflow-y: auto;
+
+  background-color: #1e2328;
+  border: 1px solid #c89b3c;
+  border-radius: 8px;
+
+  z-index: 999;            
+}
+
+/* Scroll custom */
+#itemList::-webkit-scrollbar {
+  width: 6px;
+}
+
+#itemList::-webkit-scrollbar-thumb {
+  background: #c89b3c;
+  border-radius: 4px;
+}
+
+
+/* =========================
+   ITEM DE LA LISTE
+========================= */
+
+#itemList div {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 8px 10px;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+#itemList div:hover {
+  background-color: rgba(200,155,60,0.2);
+}
+
+/* image dans dropdown */
+
+#itemList img {
+  width: 28px;
+  height: 28px;
+
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* nom item */
+
+#itemList span {
+  font-size: 14px;
+  color: #f0e6d2;
+}
+
+ 
+ 
+
+ 
+  
+
+
+/* =========================
+   HISTORIQUE DES GUESSES
+========================= */
+
+#guessedHistory {
+  width: 90%;
+  max-width: 900px;
+
+  margin-left: 15px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ligne guess */
+
+.guess-row {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 10px 14px;
+
+  width: 100%;
+
+  border-radius: 8px;
+
+  font-size: 16px;
+}
+
+/* image guess */
+
+.guess-row img {
+  width: 28px;
+  height: 28px;
+
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* texte guess */
+
+.guess-row span {
+  display: flex;
+  align-items: center;
+}
+
+/* mauvais */
+
+.guess-row.false {
+  background-color: rgba(170,50,50,0.6);
+  border: 1px solid rgba(255,80,80,0.6);
+}
+
+#components-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.component-row {
+  width: 220px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+   box-sizing: border-box;
+}
+
+ 
+
+.component-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+} 
+
+/* bon */
+
+.guess-row.true {
+  background-color: rgba(40,150,80,0.7);
+  border: 1px solid rgba(80,220,120,0.7);
+}
+
+.guess-row span {
+  flex: 1;
+}
+
+
+#lore {
+  line-height: 1.6;
+  max-width: 700px;
+  margin: auto;
+  text-align: center;
+}
+
+
+.tries-count {
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #e0c27a;
+  text-align: center;
+  background: rgba(224, 194, 122, 0.08);
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  
+}
+
+
+.hint-text {
+  margin-top: 15px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #8fb3ff;
+  text-align: center;
+  background: rgba(143, 179, 255, 0.1);
+  padding: 8px 14px;
+  border-radius: 10px;
+  display: inline-block;
+}
