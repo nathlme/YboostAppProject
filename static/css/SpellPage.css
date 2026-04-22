@@ -29,7 +29,7 @@ body {
   position: relative;
   z-index: 2;
   height: 100vh;
-  background-color: #626d71;
+  background-color: #162841;
   color: black;
   display: flex;
   flex-direction: column;
@@ -46,8 +46,8 @@ body {
 }
 
 .sidebar-logo {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 10px;
   margin: 0 auto;
@@ -215,11 +215,11 @@ body {
 }
 
 
-#itemInput::placeholder {
+#champInput::placeholder {
   color: #93a1b5;
 }
 
-#itemInput:focus {
+#champInput:focus {
   border-color: #c8aa6e;
   box-shadow:
     0 0 0 3px rgba(200, 170, 110, 0.14),
@@ -228,11 +228,11 @@ body {
 }
 
 
-#itemList:empty {
+#champList:empty {
   display: none;
 }
 
-#itemList div {
+#champList div {
   padding: 14px 16px;
   color: #f0e6d2;
   border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -240,27 +240,27 @@ body {
   transition: background 0.18s ease, color 0.18s ease, padding-left 0.18s ease;
 }
 
-#itemList div:last-child {
+#champList div:last-child {
   border-bottom: none;
 }
 
-#itemList div:hover {
+#champList div:hover {
   background: rgba(200, 170, 110, 0.14);
   color: #ffe7b0;
   padding-left: 22px;
 }
 
 /* scrollbar */
-#itemList::-webkit-scrollbar {
+#champList::-webkit-scrollbar {
   width: 9px;
 }
 
-#itemList::-webkit-scrollbar-track {
+#champList::-webkit-scrollbar-track {
   background: rgba(255,255,255,0.04);
   border-radius: 10px;
 }
 
-#itemList::-webkit-scrollbar-thumb {
+#champList::-webkit-scrollbar-thumb {
   background: rgba(200, 170, 110, 0.45);
   border-radius: 10px;
 }
@@ -333,7 +333,15 @@ body {
   margin-left: 20px;
 }
 
- 
+.price{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#price-icon {
+  width: 27px;
+}
 
 /* =========================
    DEBUG TEMPORAIRE
@@ -379,7 +387,7 @@ body {
    BARRE DE RECHERCHE
 ========================= */
 
-#itemInput {
+#champInput {
   width: 100%;    
   box-sizing: border-box;      
   padding: 16px 18px;    
@@ -400,7 +408,7 @@ body {
   text-align: center;
 }
 
-#itemInput::placeholder {
+#champInput::placeholder {
   color: #a09b8c;
   text-align: center;
 }
@@ -410,7 +418,7 @@ body {
    LISTE DES ITEMS
 ========================= */
 
-#itemList {
+#champList {
   position: absolute;      
   top: 100%;               
   left: 0;
@@ -427,11 +435,11 @@ body {
 }
 
 /* Scroll custom */
-#itemList::-webkit-scrollbar {
+#champList::-webkit-scrollbar {
   width: 6px;
 }
 
-#itemList::-webkit-scrollbar-thumb {
+#champList::-webkit-scrollbar-thumb {
   background: #c89b3c;
   border-radius: 4px;
 }
@@ -441,7 +449,7 @@ body {
    ITEM DE LA LISTE
 ========================= */
 
-#itemList div {
+#champList div {
   display: flex;
   align-items: center;
 
@@ -454,13 +462,13 @@ body {
   transition: background 0.15s ease;
 }
 
-#itemList div:hover {
+#champList div:hover {
   background-color: rgba(200,155,60,0.2);
 }
 
 /* image dans dropdown */
 
-#itemList img {
+#champList img {
   width: 28px;
   height: 28px;
 
@@ -470,16 +478,52 @@ body {
 
 /* nom item */
 
-#itemList span {
+#champList span {
   font-size: 14px;
   color: #f0e6d2;
 }
 
- 
- 
+#stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
 
- 
-  
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  width: fit-content;
+  min-width: 140px;
+  padding: 6px 10px;
+
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.stat-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
+
+.stat-row span {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.price-hint{
+  width: fit-content;
+
+  padding: 6px 10px;
+
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+}
 
 
 /* =========================

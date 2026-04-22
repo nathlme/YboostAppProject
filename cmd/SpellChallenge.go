@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"net/http"
 	"encoding/json"
-	
+	"regexp"
+	"html"
+	"strings"
 )
 
 func GetOrCreateDailySpell() (string,string,error) {
@@ -114,4 +116,22 @@ func GetDailySpell() (*DailySpell, error) {
 
 	return card, nil
 
+}
+
+
+func CleanTooltip(tooltip string) string {
+	clean := html.UnescapeString(tooltip)
+
+	reTags := regexp.MustCompile(`<[^>]+>`)
+	clean = reTags.ReplaceAllString(clean, "")
+
+
+	reVars := regexp.MustCompile(`\{\{[^}]+\}\}`)
+	clean = reVars.ReplaceAllString(clean, "...")
+
+
+	clean = strings.ReplaceAll(clean, "\n", " ")
+	clean = regexp.MustCompile(`\s+`).ReplaceAllString(clean, " ")
+
+	return strings.TrimSpace(clean)
 }

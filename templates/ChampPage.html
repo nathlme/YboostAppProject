@@ -237,17 +237,14 @@ function secondInt(lore) {
         if (tries <= 2) {
             displayLore = firstInt(fullLore)
             message = `Premier indice dans ${FirstIntCount} essais`
-            document.getElementById("tries").textContent = message
         } else if (tries <= 5) {
             displayLore = secondInt(fullLore)
             message = `Dernier indice dans ${SecondIntCount} essais`
-            document.getElementById("tries").textContent = message
         } else {
             displayLore = fullLore
             message = "Plus d'indice disponible..."
-            document.getElementById("tries").textContent = message
         }
-
+        document.getElementById("tries").textContent = message
         document.getElementById("lore").textContent = displayLore
         document.getElementById("triesDisplay").textContent = `Essais : ${tries}`
     }

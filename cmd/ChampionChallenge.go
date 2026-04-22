@@ -59,8 +59,8 @@ func pickRandomChampionID() (string,error) {
 
 
 // Check if the guessed champion is the same as the daily champion 
-func SameChamp(guess string) bool {
-	dailyID, err := GetOrCreateDailyChampion("daily_champion")
+func SameChamp(guess string, table string ) bool {
+	dailyID, err := GetOrCreateDailyChampion(table)
 	if err != nil {
 		log.Println("Erreur DB:", err)
 		return false
@@ -73,7 +73,7 @@ func SameChamp(guess string) bool {
 			return champ.ID == dailyID
 		}
 	}
-
+	 
 	return false
 }
 
@@ -131,5 +131,6 @@ func HideName(lore string, banned []string) string {
 		lore = re.ReplaceAllString(lore, mask)
 	}
 
+	 
 	return lore
 }

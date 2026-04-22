@@ -376,10 +376,21 @@ func handlerSpell(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	championsJSON, err := json.Marshal(championCards)
+	if err != nil {
+		log.Println("json error:", err)
+		return
+	}
+
+	bannedWord := []string{spell.ChampionName}
+	correctDescription := CleanTooltip(spell.Description)
+	description := HideName(correctDescription, bannedWord)
+
+
 	log.Println("Champion :", spell.ChampionName)
 	log.Println("Slot :", spell.SpellSlot)
 	log.Println("Spell :", spell.SpellName)
-	log.Println("Description :", spell.Description)
+	log.Println("Description :", description)
 
 	t, err := template.ParseFiles("templates/SpellPage.html")
 	if err != nil {
@@ -389,8 +400,10 @@ func handlerSpell(w http.ResponseWriter, r *http.Request) {
 
 	data := struct {
 		Description string
+		ChampionsJSON template.JS
 	}{
-		Description: spell.Description,
+		Description: description,
+		ChampionsJSON: template.JS(championsJSON),
 	}
 
 	if err := t.Execute(w, data); err != nil {
@@ -414,7 +427,7 @@ func handlerGuess(w http.ResponseWriter, r*http.Request) {
 				return
 			}
 			 
-			check.Same = SameChamp(req.Champion) 
+			check.Same = SameChamp(req.Champion,"daily_champion") 
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(check)
 			
@@ -437,6 +450,28 @@ func handlerGuessItem(w http.ResponseWriter, r*http.Request) {
 			}
 			 
 			check.Same = SameItem(req.Item) 
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(check)
+			
+	default :
+			http.Error(w,"Erreur",http.StatusMethodNotAllowed)
+	}
+}
+
+func handlerGuessSpell(w http.ResponseWriter, r*http.Request) {
+	switch r.Method {
+		case http.MethodPost :
+			var req GuessRequest
+			var check GuessResponse 
+
+			err := json.NewDecoder(r.Body).Decode(&req)
+
+			if err != nil {
+				http.Error(w,"JSON invalide", 400)
+				return
+			}
+			 
+			check.Same = SameChamp(req.Champion, "daily_spell") 
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(check)
 			

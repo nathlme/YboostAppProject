@@ -93,6 +93,7 @@ func main () {
 	http.HandleFunc("/Spells",handlerSpell)
 	http.HandleFunc("/guess", handlerGuess)
 	http.HandleFunc("/guess-item", handlerGuessItem)
+	http.HandleFunc("/guessSpell", handlerGuessSpell)
 
 
 	
