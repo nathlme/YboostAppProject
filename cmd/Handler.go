@@ -384,13 +384,7 @@ func handlerSpell(w http.ResponseWriter, r *http.Request) {
 
 	bannedWord := []string{spell.ChampionName}
 	correctDescription := CleanTooltip(spell.Description)
-	description := HideName(correctDescription, bannedWord)
-
-
-	log.Println("Champion :", spell.ChampionName)
-	log.Println("Slot :", spell.SpellSlot)
-	log.Println("Spell :", spell.SpellName)
-	log.Println("Description :", description)
+	description := HideName(correctDescription, bannedWord) 
 
 	t, err := template.ParseFiles("templates/SpellPage.html")
 	if err != nil {
@@ -401,9 +395,11 @@ func handlerSpell(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Description string
 		ChampionsJSON template.JS
+		SpellSlot	string
 	}{
 		Description: description,
 		ChampionsJSON: template.JS(championsJSON),
+		SpellSlot: spell.SpellSlot,
 	}
 
 	if err := t.Execute(w, data); err != nil {
@@ -459,6 +455,28 @@ func handlerGuessItem(w http.ResponseWriter, r*http.Request) {
 }
 
 func handlerGuessSpell(w http.ResponseWriter, r*http.Request) {
+	switch r.Method {
+		case http.MethodPost :
+			var req GuessRequest
+			var check GuessResponse 
+
+			err := json.NewDecoder(r.Body).Decode(&req)
+
+			if err != nil {
+				http.Error(w,"JSON invalide", 400)
+				return
+			}
+			 
+			check.Same = SameChamp(req.Champion, "daily_spell") 
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(check)
+			
+	default :
+			http.Error(w,"Erreur",http.StatusMethodNotAllowed)
+	}
+}
+
+func handlerGuessSlot(w http.ResponseWriter, r*http.Request) {
 	switch r.Method {
 		case http.MethodPost :
 			var req GuessRequest

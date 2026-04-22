@@ -9,7 +9,7 @@
     <div class="background-zone">
   
         <aside class="sidebar">
-            <img class="sidebar-logo" src="../static/images/LogoLol.webp" alt="LoL" />
+            <img class="sidebar-logo" src="../static/images/LOLicon.jpg" alt="LoL" />
 
             <div class="horizontal-line"></div>
 
@@ -89,6 +89,13 @@
         </section>
 
         <p class="debug-daily"></p>
+
+        <div id="2nd-challenge"> 
+          <div id="Buttons">
+
+          </div>
+        </div>
+
       </section>
     </main>
     </div>
@@ -130,8 +137,9 @@
       }); 
 
       window.onload = () => {
-          updateHint()
-      }
+          updateHint();
+           
+      };
 
       async function submitGuess(name) {
         const guessedHistory = document.getElementById("guessedHistory")
@@ -178,6 +186,7 @@
             guessedHistory.prepend(alreadyGuess)
             tries++
             updateHint()
+            createButtonRow();
         
         }else {
           verify.textContent = `${champ.name} n'est pas le bon champion`
@@ -215,6 +224,11 @@
         }
 
         document.getElementById("triesDisplay").textContent = `Essais : ${tries}`;
+      }
+
+
+      function compareSlots (spell) {
+        
       }
 
     </script>

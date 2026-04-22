@@ -130,3 +130,27 @@ function renderComponentsHint(components) {
     container.appendChild(row);
   }
 }
+
+
+function createButtonRow() {
+  const secondChallenge = document.getElementById("2nd-challenge");
+  const container = document.getElementById("Buttons");
+   
+  const introBox = document.createElement("div");
+  introBox.classList.add("intro-box");
+
+  const pageTitle = document.createElement("p");
+  pageTitle.classList.add("page-title");
+  pageTitle.textContent = "Bravo, maintenant lequel est-ce ?";
+
+  introBox.append(pageTitle)
+
+  container.innerHTML = "";
+  ["A", "Z", "E", "R"].forEach(letter => {
+    const btn = document.createElement("button");
+    btn.textContent = letter;
+    container.appendChild(btn);
+  });
+
+  secondChallenge.insertBefore(introBox, container);
+}
