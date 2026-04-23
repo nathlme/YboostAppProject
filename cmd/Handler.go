@@ -375,7 +375,7 @@ func handlerSpell(w http.ResponseWriter, r *http.Request) {
 		log.Println("spell error:", err)
 		return
 	}
-
+	 
 	championsJSON, err := json.Marshal(championCards)
 	if err != nil {
 		log.Println("json error:", err)
@@ -395,17 +395,23 @@ func handlerSpell(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Description string
 		ChampionsJSON template.JS
+
 		SpellSlot	string
+		SpellImg 	string 
+		SpellName    string
 	}{
 		Description: description,
 		ChampionsJSON: template.JS(championsJSON),
 		SpellSlot: spell.SpellSlot,
+		SpellImg: spell.ImageURL,
+		SpellName: spell.SpellName,
 	}
 
 	if err := t.Execute(w, data); err != nil {
 		log.Println("template spell:", err)
 		return
 	}
+	
 }
 
 

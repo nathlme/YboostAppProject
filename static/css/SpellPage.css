@@ -714,3 +714,16 @@ body {
     border: 2px solid red;
     color: white;
 }
+
+.img-hint {
+  box-shadow:
+      0 0 12px rgba(200,170,110,0.6),
+      0 0 25px rgba(70,130,255,0.25);
+  border: 2px solid rgba(200,170,110,0.6);
+  border-radius: 10px;
+}
+
+.hidden {
+  display: none;
+}
+ 

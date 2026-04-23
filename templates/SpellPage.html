@@ -63,11 +63,12 @@
         <div class="hint-zone">
           <div id="first-hint-box" class="hint-box">
               <p id="first-hint" class="hint-text"></p>
-               
+              <p id="name-hint" ></p>
           </div>
 
           <div id="second-hint-box" class="hint-box">
               <p id="second-hint" class="hint-text"></p>
+              <p id="img-hint" class="hidden"></p>
                 
           </div>
            
@@ -103,6 +104,8 @@
     <script>
       const champions = {{ .ChampionsJSON }};
       const spellSlot = {{ .SpellSlot}};
+      const spellImg = {{ .SpellImg}};
+      const spellName = {{ .SpellName}};
 
       champions.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -140,7 +143,11 @@
 
       window.onload = () => {
           updateHint();
-           
+          const img = document.createElement("img");
+            img.src = spellImg;
+            img.alt = "";
+            img.classList.add("img-hint");
+          document.getElementById("img-hint").appendChild(img)     
       };
 
       async function submitGuess(name) {
@@ -212,16 +219,18 @@
         let secondHintCount = 6 - tries;
 
         if (tries < 3) {
-          document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais`;
+          document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais : nom du sort`;
         } else {
-          document.getElementById("first-hint").textContent = "Premier indice débloqué";
-           
+          document.getElementById("first-hint").textContent = "Premier indice débloqué : nom du sort";
+          document.getElementById("name-hint").textContent = spellName;
+
         }
 
         if (tries < 6) {
-          document.getElementById("second-hint").textContent = `Deuxième indice dans ${secondHintCount} essais`;
+          document.getElementById("second-hint").textContent = `Deuxième indice dans ${secondHintCount} essais : image du sort`;
         } else {
-          document.getElementById("second-hint").textContent = "Deuxième indice débloqué";
+          document.getElementById("second-hint").textContent = "Deuxième indice débloqué : image du sort";
+          document.getElementById("img-hint").classList.remove("hidden");
            
         }
 
@@ -234,7 +243,7 @@
           document.getElementById("checkSlot").textContent  = `T'es un crack enfaite, c'était bien le ${spellSlot} spell !`
           btn.classList.add("correct");
         }else {
-          document.getElementById("checkSlot").textContent  = `T'es claqué au sol...`
+          document.getElementById("checkSlot").textContent  = `T'es claqué au sol... C'était le ${spellSlot} spell`
           btn.classList.add("incorrect");
         }
         

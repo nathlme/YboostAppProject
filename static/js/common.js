@@ -133,6 +133,7 @@ function renderComponentsHint(components) {
 
 
 function createButtonRow() {
+  let canGuess = true
   const secondChallenge = document.getElementById("2nd-challenge");
   const container = document.getElementById("Buttons");
    
@@ -151,7 +152,10 @@ function createButtonRow() {
     btn.textContent = letter;
 
     btn.addEventListener("click", () => {
-            compareSlot(letter, btn);
+          if (canGuess) { 
+              compareSlot(letter, btn);
+              canGuess = false 
+              }
         });
 
     container.appendChild(btn);
