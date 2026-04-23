@@ -476,24 +476,5 @@ func handlerGuessSpell(w http.ResponseWriter, r*http.Request) {
 	}
 }
 
-func handlerGuessSlot(w http.ResponseWriter, r*http.Request) {
-	switch r.Method {
-		case http.MethodPost :
-			var req GuessRequest
-			var check GuessResponse 
-
-			err := json.NewDecoder(r.Body).Decode(&req)
-
-			if err != nil {
-				http.Error(w,"JSON invalide", 400)
-				return
-			}
-			 
-			check.Same = SameChamp(req.Champion, "daily_spell") 
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(check)
-			
-	default :
-			http.Error(w,"Erreur",http.StatusMethodNotAllowed)
-	}
-}
+ 
+ 

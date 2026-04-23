@@ -92,8 +92,8 @@
 
         <div id="2nd-challenge"> 
           <div id="Buttons">
-
-          </div>
+          </div><br>
+          <p id="checkSlot" class="guesses-title"></p>
         </div>
 
       </section>
@@ -102,6 +102,8 @@
     <script src="../static/js/common.js"></script>
     <script>
       const champions = {{ .ChampionsJSON }};
+      const spellSlot = {{ .SpellSlot}};
+
       champions.sort((a, b) => a.name.localeCompare(b.name));
 
       let guessed = []
@@ -227,7 +229,14 @@
       }
 
 
-      function compareSlots (spell) {
+      function compareSlot(slot, btn) {
+        if (slot == spellSlot) {
+          document.getElementById("checkSlot").textContent  = `T'es un crack enfaite, c'était bien le ${spellSlot} spell !`
+          btn.classList.add("correct");
+        }else {
+          document.getElementById("checkSlot").textContent  = `T'es claqué au sol...`
+          btn.classList.add("incorrect");
+        }
         
       }
 

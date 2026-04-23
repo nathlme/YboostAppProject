@@ -702,3 +702,15 @@ body {
     transform: scale(0.95);
     box-shadow: 0 0 6px rgba(200,170,110,0.4);
 }
+
+#Buttons button.correct {
+    background: linear-gradient(145deg, #0f5132, #198754);
+    border: 2px solid #00ff88;
+    color: white;
+}
+
+#Buttons button.incorrect {
+    background: linear-gradient(145deg, #5a1010, #a61b1b);
+    border: 2px solid red;
+    color: white;
+}

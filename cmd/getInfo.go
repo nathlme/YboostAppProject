@@ -44,8 +44,7 @@ func GetVersion() string{
 		fmt.Println("Erreur JSON :", err)
 		return ""
 	}
-
-	fmt.Println("Version la plus récente :", versions[0])
+	
 	return versions[0]
 }
 

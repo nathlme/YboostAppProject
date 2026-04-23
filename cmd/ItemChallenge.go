@@ -77,6 +77,7 @@ func IsValidChallengeItem(item Item) bool {
 
 	blacklist := map[string]bool{
 		"Lame du gardien":  true,
+		"Lame du parieur":  true,
 		"Marteau du gardien": true,
 		"Corne du gardien":   true,
 		"Orbe du gardien":    true,

@@ -94,7 +94,7 @@ func main () {
 	http.HandleFunc("/guess", handlerGuess)
 	http.HandleFunc("/guess-item", handlerGuessItem)
 	http.HandleFunc("/guessSpell", handlerGuessSpell)
-	http.HandleFunc("/guessSlot", handlerGuessSlot)
+ 
 
 
 

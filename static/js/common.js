@@ -146,9 +146,14 @@ function createButtonRow() {
   introBox.append(pageTitle)
 
   container.innerHTML = "";
-  ["A", "Z", "E", "R"].forEach(letter => {
+  ["Q", "W", "E", "R"].forEach(letter => {
     const btn = document.createElement("button");
     btn.textContent = letter;
+
+    btn.addEventListener("click", () => {
+            compareSlot(letter, btn);
+        });
+
     container.appendChild(btn);
   });
 
