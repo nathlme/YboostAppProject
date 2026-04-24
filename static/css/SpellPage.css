@@ -664,6 +664,7 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+    
 }
 
 #Buttons button {
@@ -726,4 +727,16 @@ body {
 .hidden {
   display: none;
 }
- 
+
+ @keyframes happyShake {
+  0%   { transform: scale(1) rotate(0deg); }
+  20%  { transform: scale(1.08) rotate(-4deg); }
+  40%  { transform: scale(1.12) rotate(4deg); }
+  60%  { transform: scale(1.10) rotate(-3deg); }
+  80%  { transform: scale(1.06) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.happy-win {
+  animation: happyShake 0.6s ease;
+}

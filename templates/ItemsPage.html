@@ -93,6 +93,11 @@
         </section>
 
         <p class="debug-daily">{{ printf "%q" .ItemName }}</p>
+
+        <div>
+          <p id="dailyTimer" class="tries-count">Item à jour</p>
+        </div>
+
       </section>
     </main>
 
@@ -107,8 +112,9 @@
       const dailyItemPrice = {{ .ItemPrice }};
 
       window.onload = () => {
+        loadGame();
         renderStats(itemStats);
-        updateHint()
+        updateHint();
       }
 
       items.sort((a, b) => a.name.localeCompare(b.name));
@@ -182,12 +188,23 @@
             let alreadyGuess = document.createElement("div")
             alreadyGuess.classList.add("guess-row")
             alreadyGuess.classList.add("true")
+
+            alreadyGuess.classList.add("happy-win");
+
             alreadyGuess.appendChild(img)
             alreadyGuess.appendChild(span)
             guessedHistory.prepend(alreadyGuess)
 
+            setTimeout(() => {
+                alreadyGuess.classList.remove("happy-win");
+            }, 700);
+
             tries++
-            updateHint()
+            updateHint();
+
+            itemSolved = true;
+            saveGame();
+            startDailyCountdown("item");
         
         }else {
           verify.textContent = `${item.name} n'est pas le bon item`
@@ -202,7 +219,8 @@
 
           guessedHistory.prepend(alreadyGuess)
           tries++
-          updateHint()
+          updateHint();
+          saveGame();
         } 
       }
 
@@ -232,6 +250,47 @@
         document.getElementById("triesDisplay").textContent = `Essais : ${tries}`;
       }
 
+
+
+      function saveGame() {
+          const data = {
+              tries: tries,
+              guessed: guessed,
+              solvedItem: itemSolved,
+              history: document.getElementById("guessedHistory").innerHTML,
+              dayKey: getTodayKey()
+          };
+
+          localStorage.setItem("itemDaily", JSON.stringify(data));
+      }
+
+
+      function loadGame() {
+        const raw = localStorage.getItem("itemDaily");
+        if (!raw) return;
+
+        const data = JSON.parse(raw);
+
+        if (data.dayKey !== getTodayKey()) {
+            localStorage.removeItem("itemDaily");
+            return;
+        }
+
+        tries = data.tries;
+        guessed = data.guessed;
+        itemSolved = data.solvedItem;
+        
+
+        document.getElementById("guessedHistory").innerHTML = data.history;
+
+        updateHint();
+
+        if (itemSolved) {
+            input.style.display = "none";
+            list.style.display = "none";
+            createButtonRow();
+        }
+      }
     </script>
 
 </div>

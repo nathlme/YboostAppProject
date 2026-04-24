@@ -76,6 +76,11 @@
         </section>
 
         <p class="debug-daily">{{ printf "%q" .ChampionID }}</p>
+
+        <div>
+          <p id="dailyTimer" class="tries-count">Champion à jour</p>
+        </div>
+
       </section>
     </main>
 
@@ -94,6 +99,12 @@
       let tries = 0
       let fullLore = ""
 
+      window.onload = () => {
+          loadGame();
+          const loreElement = document.getElementById("lore");
+          fullLore = loreElement.textContent;
+          updateHint();
+      }
       
       input.addEventListener("input", function() {
         const filtered = FilteredList(champions, input.value);
@@ -159,11 +170,22 @@
             let alreadyGuess = document.createElement("div")
             alreadyGuess.classList.add("guess-row")
             alreadyGuess.classList.add("true")
+            alreadyGuess.classList.add("happy-win");
+
             alreadyGuess.appendChild(img)
             alreadyGuess.appendChild(span)
+
             guessedHistory.prepend(alreadyGuess)
+
+            setTimeout(() => {
+                alreadyGuess.classList.remove("happy-win");
+            }, 700);
+
             tries++
-            updateHint()
+            updateHint();
+            championSolved = true
+            saveGame();
+            startDailyCountdown("champion");
         
         }else {
           verify.textContent = `${champ.name} n'est pas le bon champion`
@@ -178,17 +200,14 @@
 
           guessedHistory.prepend(alreadyGuess)
           tries++
-          updateHint()
+          updateHint();
+          saveGame();
         }
         
       } 
 
 
-      window.onload = () => {
-          const loreElement = document.getElementById("lore")
-          fullLore = loreElement.textContent
-          updateHint()
-      }
+       
 
     function firstInt(lore) {
         let limit = Math.floor(lore.length / 3)
@@ -235,20 +254,62 @@ function secondInt(lore) {
         let message = ""
 
         if (tries <= 2) {
-            displayLore = firstInt(fullLore)
-            message = `Premier indice dans ${FirstIntCount} essais`
+            displayLore = firstInt(fullLore);
+            message = `Premier indice dans ${FirstIntCount} essais`;
         } else if (tries <= 5) {
-            displayLore = secondInt(fullLore)
-            message = `Dernier indice dans ${SecondIntCount} essais`
+            displayLore = secondInt(fullLore);
+            message = `Dernier indice dans ${SecondIntCount} essais`;
         } else {
-            displayLore = fullLore
-            message = "Plus d'indice disponible..."
+            displayLore = fullLore;
+            message = "Plus d'indice disponible...";
         }
-        document.getElementById("tries").textContent = message
-        document.getElementById("lore").textContent = displayLore
-        document.getElementById("triesDisplay").textContent = `Essais : ${tries}`
+        document.getElementById("tries").textContent = message;
+        document.getElementById("lore").textContent = displayLore;
+        lore = displayLore;
+        document.getElementById("triesDisplay").textContent = `Essais : ${tries}`;
     }
     
+
+    function saveGame() {
+          const data = {
+              lore: lore,
+              tries: tries,
+              guessed: guessed,
+              solvedChampion: championSolved, 
+              history: document.getElementById("guessedHistory").innerHTML,
+              dayKey: getTodayKey()
+          };
+
+          localStorage.setItem("champDaily", JSON.stringify(data));
+      }
+
+
+      function loadGame() {
+        const raw = localStorage.getItem("champDaily");
+        if (!raw) return;
+
+        const data = JSON.parse(raw);
+
+        if (data.dayKey !== getTodayKey()) {
+            localStorage.removeItem("champDaily");
+            return;
+        }
+
+        tries = data.tries;
+        guessed = data.guessed;
+        championSolved = data.solvedChampion;
+         
+
+        document.getElementById("guessedHistory").innerHTML = data.history;
+
+        updateHint();
+
+        if (championSolved) {
+            input.style.display = "none";
+            list.style.display = "none";
+            createButtonRow();
+        }
+      }
     
     </script>
 

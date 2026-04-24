@@ -147,9 +147,14 @@ function createButtonRow() {
   introBox.append(pageTitle)
 
   container.innerHTML = "";
-  ["Q", "W", "E", "R"].forEach(letter => {
+  ["Passive", "Q", "W", "E", "R"].forEach(letter => {
     const btn = document.createElement("button");
-    btn.textContent = letter;
+    if (letter != "Passive") {
+      btn.textContent = letter;
+    } else {
+      btn.textContent = "P";
+    }
+     
 
     btn.addEventListener("click", () => {
           if (canGuess) { 
@@ -163,3 +168,34 @@ function createButtonRow() {
 
   secondChallenge.insertBefore(introBox, container);
 }
+
+
+
+function startDailyCountdown(challenge) {
+          const timer = document.getElementById("dailyTimer");
+
+          function updateTimer() {
+              const now = new Date();
+
+              const nextMidnight = new Date();
+              nextMidnight.setHours(24, 0, 0, 0);
+
+              const diff = nextMidnight - now;
+
+              const hours = Math.floor(diff / 1000 / 60 / 60);
+              const minutes = Math.floor((diff / 1000 / 60) % 60);
+              const seconds = Math.floor((diff / 1000) % 60);
+
+              timer.textContent = `Prochain ${challenge} dans ${hours}h ${minutes}m ${seconds}s`;
+          }
+
+          updateTimer();
+          setInterval(updateTimer, 1000);
+      }
+
+
+
+function getTodayKey() {
+          const d = new Date();
+          return d.toISOString().slice(0,10);  
+      }

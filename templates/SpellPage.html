@@ -96,6 +96,11 @@
           </div><br>
           <p id="checkSlot" class="guesses-title"></p>
         </div>
+        
+        <div>
+          <p id="dailyTimer" class="tries-count">Champion à jour</p>
+        </div>
+         
 
       </section>
     </main>
@@ -142,12 +147,14 @@
       }); 
 
       window.onload = () => {
+          loadGame();
           updateHint();
           const img = document.createElement("img");
             img.src = spellImg;
             img.alt = "";
             img.classList.add("img-hint");
-          document.getElementById("img-hint").appendChild(img)     
+          document.getElementById("img-hint").appendChild(img)    
+           
       };
 
       async function submitGuess(name) {
@@ -185,17 +192,28 @@
             list.style.display = "none" 
 
             verify.textContent = `Bien joué ! C'était ${champ.name}`
-            console.log("le bon")
+            
+             
             
             let alreadyGuess = document.createElement("div")
             alreadyGuess.classList.add("guess-row")
             alreadyGuess.classList.add("true")
+            alreadyGuess.classList.add("happy-win");
+
             alreadyGuess.appendChild(img)
             alreadyGuess.appendChild(span)
+
             guessedHistory.prepend(alreadyGuess)
+
+            setTimeout(() => {
+                alreadyGuess.classList.remove("happy-win");
+            }, 700);
+
             tries++
             updateHint()
             createButtonRow();
+            championSolved = true;
+            saveGame();
         
         }else {
           verify.textContent = `${champ.name} n'est pas le bon champion`
@@ -211,6 +229,7 @@
           guessedHistory.prepend(alreadyGuess)
           tries++
           updateHint()
+          saveGame();
         }
       }
 
@@ -242,12 +261,65 @@
         if (slot == spellSlot) {
           document.getElementById("checkSlot").textContent  = `T'es un crack enfaite, c'était bien le ${spellSlot} spell !`
           btn.classList.add("correct");
+          btn.classList.add("happy-win");
+
+          setTimeout(() => {
+              btn.classList.remove("happy-win");
+          }, 600);
+
+          slotSolved = true;
+          saveGame();
+
+          startDailyCountdown("champion");
         }else {
           document.getElementById("checkSlot").textContent  = `T'es claqué au sol... C'était le ${spellSlot} spell`
           btn.classList.add("incorrect");
         }
         
       }
+
+
+      function saveGame() {
+          const data = {
+              tries: tries,
+              guessed: guessed,
+              solvedChampion: championSolved,
+              solvedSlot: slotSolved,
+              history: document.getElementById("guessedHistory").innerHTML,
+              dayKey: getTodayKey()
+          };
+
+          localStorage.setItem("spellDaily", JSON.stringify(data));
+      }
+
+
+      function loadGame() {
+        const raw = localStorage.getItem("spellDaily");
+        if (!raw) return;
+
+        const data = JSON.parse(raw);
+
+        if (data.dayKey !== getTodayKey()) {
+            localStorage.removeItem("spellDaily");
+            return;
+        }
+
+        tries = data.tries;
+        guessed = data.guessed;
+        championSolved = data.solvedChampion;
+        slotSolved = data.solvedSlot;
+
+        document.getElementById("guessedHistory").innerHTML = data.history;
+
+        updateHint();
+
+        if (championSolved) {
+            input.style.display = "none";
+            list.style.display = "none";
+            createButtonRow();
+        }
+      }
+
 
     </script>
 </body>
