@@ -86,6 +86,9 @@
 
     <script src="../static/js/common.js"></script>
     <script>
+      const pseudo = {{ printf "%q" .Pseudo }};
+      const userID = {{ .UserID }};
+      const username = pseudo + userID;
       const champions = {{ .ChampionsJSON }};
       champions.sort((a, b) => a.name.localeCompare(b.name));
       console.log(champions);
@@ -98,11 +101,15 @@
 
       let tries = 0
       let fullLore = ""
+      let championSolved = false;
 
       window.onload = () => {
-          loadGame();
+        console.log(`champDaily_${username}`)
           const loreElement = document.getElementById("lore");
-          fullLore = loreElement.textContent;
+          fullLore = loreElement.textContent.trim();  
+
+          loadGame();
+
           updateHint();
       }
       
@@ -131,6 +138,10 @@
       }); 
 
       async function submitGuess(name) {
+        if (!guessed.includes(name)) {
+            guessed.push(name);
+        }
+                
         const guessedHistory = document.getElementById("guessedHistory")
         
         const response = await fetch("/guess", {
@@ -202,8 +213,7 @@
           tries++
           updateHint();
           saveGame();
-        }
-        
+        } 
       } 
 
 
@@ -265,14 +275,13 @@ function secondInt(lore) {
         }
         document.getElementById("tries").textContent = message;
         document.getElementById("lore").textContent = displayLore;
-        lore = displayLore;
         document.getElementById("triesDisplay").textContent = `Essais : ${tries}`;
     }
     
 
     function saveGame() {
           const data = {
-              lore: lore,
+              lore: document.getElementById("lore").innerHTML,
               tries: tries,
               guessed: guessed,
               solvedChampion: championSolved, 
@@ -280,18 +289,18 @@ function secondInt(lore) {
               dayKey: getTodayKey()
           };
 
-          localStorage.setItem("champDaily", JSON.stringify(data));
+          localStorage.setItem(`champDaily_${username}`, JSON.stringify(data));
       }
 
 
       function loadGame() {
-        const raw = localStorage.getItem("champDaily");
+        const raw = localStorage.getItem(`champDaily_${username}`);
         if (!raw) return;
 
         const data = JSON.parse(raw);
 
         if (data.dayKey !== getTodayKey()) {
-            localStorage.removeItem("champDaily");
+            localStorage.removeItem(`champDaily_${username}`);
             return;
         }
 
@@ -301,13 +310,17 @@ function secondInt(lore) {
          
 
         document.getElementById("guessedHistory").innerHTML = data.history;
+        document.getElementById("lore").innerHTML = data.lore;
 
         updateHint();
 
         if (championSolved) {
             input.style.display = "none";
             list.style.display = "none";
-            createButtonRow();
+            
+            document.getElementById("try").textContent =
+            "Bien joué ! Vous avez déjà trouvé le champion du jour.";
+             
         }
       }
     

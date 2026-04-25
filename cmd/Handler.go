@@ -159,32 +159,11 @@ func handlerLogin(w http.ResponseWriter, r*http.Request){
 func handlerLogged(w http.ResponseWriter, r*http.Request){
 	switch r.Method {
 		case http.MethodGet :
-
-			c, err := r.Cookie("session_id")
-
+			 
+			userID, pseudo, err := GetCurrentUser(r)
 			if err != nil {
 				http.Redirect(w, r, "/login", http.StatusSeeOther)
 				return
-			}
-
-			userID, ok := sessions[c.Value] 
-
-			if !ok {
-				http.Redirect(w, r, "/login", http.StatusSeeOther)
-				return
-			}
-
-			log.Println("userID:", userID)
-
-			row := db.QueryRow("SELECT pseudo FROM users WHERE id = ?", userID)
-
-			var pseudo string
-			
-			err = row.Scan(&pseudo)
-
-			if err == sql.ErrNoRows {
-				http.Error(w,"identifiants invalide",401)
-				return 
 			}
 
 			t, err := template.ParseFiles("templates/HomePage.html")
@@ -195,7 +174,13 @@ func handlerLogged(w http.ResponseWriter, r*http.Request){
 			}					
 			log.Print(GetOrCreateDailyChampion("daily_champion"))
 
-			t.Execute(w, struct {Pseudo string}{Pseudo: pseudo})
+			t.Execute(w, struct {
+				Pseudo string
+				UserID int 
+			}{
+				Pseudo: pseudo,
+				UserID: userID,
+			})
 
 	default :
 			fmt.Fprint(w,"erreur 405")
@@ -204,27 +189,67 @@ func handlerLogged(w http.ResponseWriter, r*http.Request){
 
 
 func handlerProfil(w http.ResponseWriter, r*http.Request){
-	switch r.Method {
-		case http.MethodGet :
-			contenu, err := os.ReadFile("templates/ProfilPage.html")
-
-				if err!=nil {
-					http.Error(w,"Internal Server Error",500)
-					return
-				}
-
-			w.Header().Set("Content-Type", "text/html")
-			w.Write(contenu)
-
-	default :
-			fmt.Fprint(w,"erreur 405")
+	if r.Method != http.MethodGet {
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
 	}
+
+	userID, pseudo, err := GetCurrentUser(r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	t, err := template.ParseFiles("templates/ProfilPage.html")
+	if err != nil {
+		http.Error(w, "ERR_PARSE_TEMPLATE", http.StatusInternalServerError)
+		return
+	}
+	
+	var streak 		int 
+	var bestStreak 	int 
+	var lastPlayed 	string
+	var dayPlayed	int
+
+	err2 := db.QueryRow(
+		"SELECT streak, best_streak, day_played, last_played FROM users WHERE id = ?", userID, ).Scan(&streak, &bestStreak, &dayPlayed, &lastPlayed) 
+	if err2 != nil {
+		return 
+	}
+
+	data := struct {
+		Pseudo string
+		UserID int 
+		Streak int 
+		BestStreak int 
+		LastPlayed string
+		DayPlayed int
+	}{
+		Pseudo: pseudo,
+		UserID: userID, 
+		Streak: streak,
+		BestStreak: bestStreak,
+		LastPlayed: lastPlayed,
+		DayPlayed: dayPlayed,
+	}
+
+	if err := t.Execute(w, data); err != nil {
+		log.Println("jsp :", err)
+		return
+	}	
+
 }
 
 
 func handlerChamps(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
+	
+	userID, pseudo, err := GetCurrentUser(r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -257,10 +282,14 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 
 
 	data := struct {
+		Pseudo string
+		UserID int
 		ChampionID string
 		ChampionsJSON template.JS
 		ChampLore string
 	}{
+		Pseudo: pseudo,
+		UserID: userID,
 		ChampionID: championID,
 		ChampionsJSON: template.JS(championsJSON),
 		ChampLore: lore,
@@ -274,9 +303,16 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 
 
 
-func handlerItems(w http.ResponseWriter, r*http.Request){
+func handlerItems(w http.ResponseWriter, r*http.Request){ 
+	
 	if r.Method != http.MethodGet {
 		http.Error(w,"Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID, pseudo, err := GetCurrentUser(r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -341,6 +377,8 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 	}
 
 	data := struct {
+		Pseudo string
+		UserID int
 		ItemName      string
 		ItemStats     map[string]float64
 		ItemPrice     int
@@ -348,6 +386,8 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 		ItemStatsJSON template.JS
 		ItemComponentsJSON template.JS
 	}{
+		Pseudo: pseudo,
+		UserID: userID,
 		ItemName:      dailyCard.Name,
 		ItemStats:     dailyCard.Stats,
 		ItemPrice:     dailyCard.Price,
@@ -366,6 +406,12 @@ func handlerItems(w http.ResponseWriter, r*http.Request){
 func handlerSpell(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID, pseudo, err := GetCurrentUser(r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -393,13 +439,16 @@ func handlerSpell(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := struct {
+		Pseudo string
+		UserID int
 		Description string
 		ChampionsJSON template.JS
-
 		SpellSlot	string
 		SpellImg 	string 
 		SpellName    string
 	}{
+		Pseudo: pseudo,
+		UserID: userID,
 		Description: description,
 		ChampionsJSON: template.JS(championsJSON),
 		SpellSlot: spell.SpellSlot,
@@ -422,14 +471,23 @@ func handlerGuess(w http.ResponseWriter, r*http.Request) {
 			var req GuessRequest
 			var check GuessResponse 
 
-			err := json.NewDecoder(r.Body).Decode(&req)
-
+			userID,_,err := GetCurrentUser(r) 
 			if err != nil {
+				return
+			}
+
+			err2 := json.NewDecoder(r.Body).Decode(&req)
+
+			if err2 != nil {
 				http.Error(w,"JSON invalide", 400)
 				return
 			}
 			 
 			check.Same = SameChamp(req.Champion,"daily_champion") 
+			if check.Same {
+				UpdateStreak(userID)
+				log.Println("correct")
+			}
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(check)
 			
@@ -444,14 +502,25 @@ func handlerGuessItem(w http.ResponseWriter, r*http.Request) {
 			var req ItemGuessRequest
 			var check GuessResponse 
 
-			err := json.NewDecoder(r.Body).Decode(&req)
-
+			userID,_,err := GetCurrentUser(r) 
 			if err != nil {
+				return
+			}
+
+			err2 := json.NewDecoder(r.Body).Decode(&req)
+
+			if err2 != nil {
 				http.Error(w,"JSON invalide", 400)
 				return
 			}
 			 
 			check.Same = SameItem(req.Item) 
+
+			if check.Same {
+				UpdateStreak(userID)
+				log.Println("correct")
+			}
+
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(check)
 			
@@ -466,14 +535,25 @@ func handlerGuessSpell(w http.ResponseWriter, r*http.Request) {
 			var req GuessRequest
 			var check GuessResponse 
 
-			err := json.NewDecoder(r.Body).Decode(&req)
-
+			userID,_,err := GetCurrentUser(r)
 			if err != nil {
+				return
+			}
+
+			err2:= json.NewDecoder(r.Body).Decode(&req)
+
+			if err2 != nil {
 				http.Error(w,"JSON invalide", 400)
 				return
 			}
 			 
 			check.Same = SameChamp(req.Champion, "daily_spell") 
+
+			if check.Same {
+				UpdateStreak(userID)
+				log.Println("correct")
+			}
+
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(check)
 			

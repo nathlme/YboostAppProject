@@ -103,6 +103,10 @@
 
     <script src="../static/js/common.js"></script>
     <script>
+      const pseudo = {{ printf "%q" .Pseudo }};
+      const userID = {{ .UserID }};
+      const username = pseudo + userID;
+
       const items = {{ .ItemJSON }};
       const itemStats = {{ .ItemStatsJSON }};
       const itemComponents = {{ .ItemComponentsJSON }};
@@ -118,19 +122,16 @@
       }
 
       items.sort((a, b) => a.name.localeCompare(b.name));
-      console.log(items);
-      console.log("itemComponents =", itemComponents);
-      console.log(typeof renderList);
-      console.log(typeof renderComponentsHint);
+       
       
       let guessed = [];
+      let tries = 0;
+      let itemSolved = false;
 
       const input = document.getElementById("itemInput");
       const list = document.getElementById("itemList");
       const guessedHistory = document.getElementById("guessedHistory")
-
-      let tries = 0
-
+  
       input.addEventListener("input", function() {
         const filtered = FilteredList(items, input.value);
         renderList(filtered, list, guessed, input, submitGuess);
@@ -147,8 +148,7 @@
           const filtered = FilteredList(items, input.value);
           const closerElmt = filtered.find(item => !guessed.includes(item.name));
 
-          if (closerElmt) {
-            guessed.push(closerElmt.name);
+          if (closerElmt) { 
             submitGuess(closerElmt.name);
             input.value = "";
             renderList([], list, guessed, input, submitGuess);
@@ -158,6 +158,11 @@
       
       // Submit the guess of the player and return if its correct or not 
       async function submitGuess(name) {
+
+        if (!guessed.includes(name)) {
+            guessed.push(name);
+        }
+
         const guessedHistory = document.getElementById("guessedHistory")
         
         const response = await fetch("/guess-item", {
@@ -183,7 +188,7 @@
             list.style.display = "none" 
 
             verify.textContent = `Bien joué ! C'était ${item.name}`
-            console.log("le bon")
+             
             
             let alreadyGuess = document.createElement("div")
             alreadyGuess.classList.add("guess-row")
@@ -261,18 +266,18 @@
               dayKey: getTodayKey()
           };
 
-          localStorage.setItem("itemDaily", JSON.stringify(data));
+          localStorage.setItem(`itemDaily_${username}`, JSON.stringify(data));
       }
 
 
       function loadGame() {
-        const raw = localStorage.getItem("itemDaily");
+        const raw = localStorage.getItem(`itemDaily_${username}`);
         if (!raw) return;
 
         const data = JSON.parse(raw);
 
         if (data.dayKey !== getTodayKey()) {
-            localStorage.removeItem("itemDaily");
+            localStorage.removeItem(`itemDaily_${username}`);
             return;
         }
 
@@ -287,8 +292,10 @@
 
         if (itemSolved) {
             input.style.display = "none";
-            list.style.display = "none";
-            createButtonRow();
+            list.style.display = "none"; 
+
+            document.getElementById("try").textContent =
+            "Bien joué ! Vous avez déjà trouvé l'item du jour.";
         }
       }
     </script>

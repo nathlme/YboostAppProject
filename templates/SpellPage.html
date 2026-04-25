@@ -107,6 +107,10 @@
     </div>
     <script src="../static/js/common.js"></script>
     <script>
+      const pseudo = {{ printf "%q" .Pseudo }};
+      const userID = {{ .UserID }};
+      const username = pseudo + userID;
+
       const champions = {{ .ChampionsJSON }};
       const spellSlot = {{ .SpellSlot}};
       const spellImg = {{ .SpellImg}};
@@ -266,8 +270,7 @@
           setTimeout(() => {
               btn.classList.remove("happy-win");
           }, 600);
-
-          slotSolved = true;
+ 
           saveGame();
 
           startDailyCountdown("champion");
@@ -283,24 +286,23 @@
           const data = {
               tries: tries,
               guessed: guessed,
-              solvedChampion: championSolved,
-              solvedSlot: slotSolved,
+              solvedChampion: championSolved, 
               history: document.getElementById("guessedHistory").innerHTML,
               dayKey: getTodayKey()
           };
 
-          localStorage.setItem("spellDaily", JSON.stringify(data));
+          localStorage.setItem(`spellDaily_${username}`, JSON.stringify(data));
       }
 
 
       function loadGame() {
-        const raw = localStorage.getItem("spellDaily");
+        const raw = localStorage.getItem(`spellDaily_${username}`);
         if (!raw) return;
 
         const data = JSON.parse(raw);
 
         if (data.dayKey !== getTodayKey()) {
-            localStorage.removeItem("spellDaily");
+            localStorage.removeItem(`spellDaily_${username}`);
             return;
         }
 
@@ -317,6 +319,9 @@
             input.style.display = "none";
             list.style.display = "none";
             createButtonRow();
+
+            document.getElementById("try").textContent =
+            "Bien joué ! Vous avez déjà trouvé à qui appartenait le spell du jour.";
         }
       }
 

@@ -1,6 +1,12 @@
 body {
   margin: 0;
-  color: white;
+  color: rgb(224, 13, 13);
+}
+
+.background-zone {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
 }
 
 .background-zone::before {
