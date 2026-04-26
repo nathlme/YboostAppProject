@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>UHC LoLdle</title>
   <link rel="stylesheet" href="../static/css/ChampPage.css" />
+  <link rel="stylesheet" href="../static/css/global.css" />
 </head>
 
 <body>
@@ -51,7 +52,30 @@
       </div>
 
       <section class="game-wrapper">
-        <button id="toggleHints">Désactiver les indices</button>
+
+        <div class="top-buttons"> 
+          <button id="toggleHints">Désactiver les indices</button>  
+          <button id="openRules">Règles</button>
+
+          <div id="rulesModal" class="modal">
+            <div class="modal-box">
+              
+              <button id="closeRules" class="close-btn">✖</button>
+
+              <h2>Règles du jeu</h2>
+
+              <p>Trouvez le champion du jour grâce à son lore. Le nom et surnom du champion son masqués par des "*".</p>
+              <p>Après plusieurs essais, une partie supplémentaires du lore est dévoilée. Le lore complet du champion sera révélé une fois le champion trouvé.</p>
+              <p>La possibilité de désactiver les indices est disponible en appuyant sur le bouton "Désactiver les indices".</p>
+              <p>Une seule bonne réponse possible chaque jour, mais une possibilité de proposition énorme. </p>
+              <p>Maintenez votre streak en trouvant les réponses quotidiennement !!</p>
+              <h1>GL HF !</h1>
+
+            </div>
+          </div>
+        </div>
+
+
         <div class="intro-box">
           <p class="page-title">Devinez à quel champion de League of legends ce lore appartient ! </p><br><br>
           <p id="lore" class="intro-text">
@@ -79,7 +103,7 @@
         <p class="debug-daily">{{ printf "%q" .ChampionID }}</p>
 
         <div>
-          <p id="dailyTimer" class="tries-count">Champion à jour</p>
+          <p id="dailyTimer" class="tries-count"></p>
         </div>
 
       </section>
@@ -111,7 +135,7 @@
           fullLore = loreElement.textContent.trim();  
 
           loadGame();
-
+          startDailyCountdown("champion");
           updateHint();
       }
       
@@ -198,7 +222,7 @@
             updateHint();
             championSolved = true
             saveGame();
-            startDailyCountdown("champion");
+            
         
         }else {
           verify.textContent = `${champ.name} n'est pas le bon champion`
@@ -358,6 +382,26 @@ function secondInt(lore) {
         }
       }
     
+
+      const openRules = document.getElementById("openRules");
+      const closeRules = document.getElementById("closeRules");
+      const modal = document.getElementById("rulesModal");
+
+      openRules.addEventListener("click", () => {
+        modal.style.display = "flex";
+      });
+
+      closeRules.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+
+        
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+
     </script>
 
 </div>
