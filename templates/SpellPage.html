@@ -118,13 +118,15 @@
 
       champions.sort((a, b) => a.name.localeCompare(b.name));
 
-      let guessed = []
+      let tries = 0;
+      let guessed = [];
+      championSolved = false;
 
       const input = document.getElementById("champInput");
       const list = document.getElementById("champList");
-      const guessedHistory = document.getElementById("guessedHistory")
+      const guessedHistory = document.getElementById("guessedHistory");
 
-      let tries = 0
+      
 
       input.addEventListener("input", function() {
         const filtered = FilteredList(champions, input.value);
@@ -214,9 +216,10 @@
             }, 700);
 
             tries++
+            championSolved = true
             updateHint()
             createButtonRow();
-            championSolved = true;
+
             saveGame();
         
         }else {
@@ -240,21 +243,35 @@
       function updateHint() {
         let firstHintCount = 3 - tries;
         let secondHintCount = 6 - tries;
+        let firstHint = false; 
+        let secondHint = false; 
 
-        if (tries < 3) {
-          document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais : nom du sort`;
-        } else {
+        if (!championSolved) {
+          if (tries < 3) {
+            document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais : nom du sort`;
+          } else {
+            firstHint = true; 
+          }
+
+          if (tries < 6) {
+            document.getElementById("second-hint").textContent = `Deuxième indice dans ${secondHintCount} essais : image du sort`;
+          } else {
+            secondHint = true; 
+          }
+        }else {
+          firstHint = true;
+          secondHint = true; 
+        }
+         
+
+        if (firstHint) {
           document.getElementById("first-hint").textContent = "Premier indice débloqué : nom du sort";
           document.getElementById("name-hint").textContent = spellName;
-
         }
-
-        if (tries < 6) {
-          document.getElementById("second-hint").textContent = `Deuxième indice dans ${secondHintCount} essais : image du sort`;
-        } else {
+        
+        if (secondHint) {
           document.getElementById("second-hint").textContent = "Deuxième indice débloqué : image du sort";
           document.getElementById("img-hint").classList.remove("hidden");
-           
         }
 
         document.getElementById("triesDisplay").textContent = `Essais : ${tries}`;

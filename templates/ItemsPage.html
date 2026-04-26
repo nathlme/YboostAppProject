@@ -115,6 +115,8 @@
       const dailyItemName = {{ printf "%q" .ItemName }};
       const dailyItemPrice = {{ .ItemPrice }};
 
+       
+
       window.onload = () => {
         loadGame();
         renderStats(itemStats);
@@ -204,10 +206,11 @@
                 alreadyGuess.classList.remove("happy-win");
             }, 700);
 
+
             tries++
+            itemSolved = true;
             updateHint();
 
-            itemSolved = true;
             saveGame();
             startDailyCountdown("item");
         
@@ -235,18 +238,33 @@
         let priceHint = "Prix de l'item : ";
         let firstHintCount = 3 - tries;
         let secondHintCount = 6 - tries;
+        let firstHint = false;
+        let secondHint = false; 
 
-        if (tries < 3) {
-          document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais`;
+        if (!itemSolved) {
+          if (tries < 3) {
+            document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais`;
+          } else {
+            firstHint = true; 
+          }
+
+          if (tries < 6) {
+            document.getElementById("second-hint").textContent = `Deuxième indice dans ${secondHintCount} essais`;
+          } else {
+            secondHint = true;
+          }
         } else {
+          firstHint = true; 
+          secondHint = true; 
+        }
+         
+
+        if (firstHint) {
           priceHint = `Prix de l'item : ${dailyItemPrice}`
           document.getElementById("first-hint").textContent = "Premier indice débloqué";
-           
         }
 
-        if (tries < 6) {
-          document.getElementById("second-hint").textContent = `Deuxième indice dans ${secondHintCount} essais`;
-        } else {
+        if (secondHint) {
           document.getElementById("second-hint").textContent = "Deuxième indice débloqué";
           renderComponentsHint(itemComponents);
         }
@@ -295,7 +313,7 @@
             list.style.display = "none"; 
 
             document.getElementById("try").textContent =
-            "Bien joué ! Vous avez déjà trouvé l'item du jour.";
+            "Bien joué ! Tu as déjà trouvé l'item du jour.";
         }
       }
     </script>

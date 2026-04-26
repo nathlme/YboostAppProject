@@ -210,9 +210,10 @@ func handlerProfil(w http.ResponseWriter, r*http.Request){
 	var bestStreak 	int 
 	var lastPlayed 	string
 	var dayPlayed	int
+	var inscriptionDate string
 
 	err2 := db.QueryRow(
-		"SELECT streak, best_streak, day_played, last_played FROM users WHERE id = ?", userID, ).Scan(&streak, &bestStreak, &dayPlayed, &lastPlayed) 
+		"SELECT created_at, streak, best_streak, day_played, last_played FROM users WHERE id = ?", userID, ).Scan(&inscriptionDate, &streak, &bestStreak, &dayPlayed, &lastPlayed ) 
 	if err2 != nil {
 		return 
 	}
@@ -224,6 +225,7 @@ func handlerProfil(w http.ResponseWriter, r*http.Request){
 		BestStreak int 
 		LastPlayed string
 		DayPlayed int
+		InscriptionDate string
 	}{
 		Pseudo: pseudo,
 		UserID: userID, 
@@ -231,6 +233,7 @@ func handlerProfil(w http.ResponseWriter, r*http.Request){
 		BestStreak: bestStreak,
 		LastPlayed: lastPlayed,
 		DayPlayed: dayPlayed,
+		InscriptionDate: inscriptionDate,
 	}
 
 	if err := t.Execute(w, data); err != nil {
@@ -278,7 +281,7 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 	}
 
 	bannedWord := []string{name, title}
-	lore = HideName(lore, bannedWord)
+	HiddenLore := HideName(lore, bannedWord)
 
 
 	data := struct {
@@ -287,12 +290,14 @@ func handlerChamps(w http.ResponseWriter, r *http.Request) {
 		ChampionID string
 		ChampionsJSON template.JS
 		ChampLore string
+		FullLore string
 	}{
 		Pseudo: pseudo,
 		UserID: userID,
 		ChampionID: championID,
 		ChampionsJSON: template.JS(championsJSON),
-		ChampLore: lore,
+		ChampLore: HiddenLore,
+		FullLore: lore,
 	}
 
 	if err := t.Execute(w, data); err != nil {
@@ -562,5 +567,27 @@ func handlerGuessSpell(w http.ResponseWriter, r*http.Request) {
 	}
 }
 
+
+func handlerLogout(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", 405)
+		return
+	}
+	
+	c, err := r.Cookie("session_id")
+	if err == nil {
+		delete(sessions, c.Value)
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_id",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		HttpOnly: true,
+	})
+
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}
  
  

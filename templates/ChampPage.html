@@ -88,6 +88,7 @@
     <script>
       const pseudo = {{ printf "%q" .Pseudo }};
       const userID = {{ .UserID }};
+      
       const username = pseudo + userID;
       const champions = {{ .ChampionsJSON }};
       champions.sort((a, b) => a.name.localeCompare(b.name));
@@ -194,6 +195,7 @@
 
             tries++
             updateHint();
+            document.getElementById("lore").textContent = {{ printf "%q"  .FullLore}}
             championSolved = true
             saveGame();
             startDailyCountdown("champion");
@@ -319,7 +321,7 @@ function secondInt(lore) {
             list.style.display = "none";
             
             document.getElementById("try").textContent =
-            "Bien joué ! Vous avez déjà trouvé le champion du jour.";
+            "Bien joué ! Tu as déjà trouvé le champion du jour.";
              
         }
       }
