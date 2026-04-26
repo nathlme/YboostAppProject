@@ -50,6 +50,7 @@
       </div>
 
       <section class="game-wrapper">
+        <button id="toggleHintsBtn">Désactiver les indices</button>
         <div class="intro-box">
           <p class="page-title">Devinez à quel personnage de League of legends appartient ce sort ! </p><br><br>
           <p id="lore" class="intro-text">
@@ -240,13 +241,14 @@
         }
       }
 
+
       function updateHint() {
         let firstHintCount = 3 - tries;
         let secondHintCount = 6 - tries;
         let firstHint = false; 
         let secondHint = false; 
 
-        if (!championSolved) {
+        if (!championSolved && IsHintsVisible) {
           if (tries < 3) {
             document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais : nom du sort`;
           } else {
@@ -264,14 +266,18 @@
         }
          
 
-        if (firstHint) {
+        if (firstHint && IsHintsVisible) {
           document.getElementById("first-hint").textContent = "Premier indice débloqué : nom du sort";
           document.getElementById("name-hint").textContent = spellName;
+        }else {
+          document.getElementById("name-hint").textContent = "";
         }
         
-        if (secondHint) {
+        if (secondHint && IsHintsVisible) {
           document.getElementById("second-hint").textContent = "Deuxième indice débloqué : image du sort";
           document.getElementById("img-hint").classList.remove("hidden");
+        }else {
+          document.getElementById("img-hint").classList.add("hidden");
         }
 
         document.getElementById("triesDisplay").textContent = `Essais : ${tries}`;

@@ -51,6 +51,7 @@
       </div>
 
       <section class="game-wrapper">
+        <button id="toggleHintsBtn">Désactiver les indices</button>
         <div class="intro-box">
           <p class="page-title">Devinez quel item de League of legends a ces statistiques ! </p><br><br>
           <div id="stats" class="intro-text"></div> 
@@ -241,7 +242,7 @@
         let firstHint = false;
         let secondHint = false; 
 
-        if (!itemSolved) {
+        if (!itemSolved && IsHintsVisible) {
           if (tries < 3) {
             document.getElementById("first-hint").textContent = `Premier indice dans ${firstHintCount} essais`;
           } else {
@@ -259,14 +260,18 @@
         }
          
 
-        if (firstHint) {
+        if (firstHint && IsHintsVisible) {
           priceHint = `Prix de l'item : ${dailyItemPrice}`
           document.getElementById("first-hint").textContent = "Premier indice débloqué";
-        }
+        }else {
+          document.getElementById("price-hint").textContent = "";
+        } 
 
-        if (secondHint) {
+        if (secondHint && IsHintsVisible) {
           document.getElementById("second-hint").textContent = "Deuxième indice débloqué";
           renderComponentsHint(itemComponents);
+        }else {
+          document.getElementById("components-hint").innerHTML = "";
         }
 
         document.getElementById("price-hint").textContent = priceHint;

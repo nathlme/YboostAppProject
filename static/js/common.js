@@ -196,6 +196,34 @@ function startDailyCountdown(challenge) {
 
 
 function getTodayKey() {
-          const d = new Date();
-          return d.toISOString().slice(0,10);  
-      }
+  const d = new Date();
+  return d.toISOString().slice(0,10);  
+}
+
+
+let IsHintsVisible = true;
+
+const toggleBtns = document.getElementById("toggleHintsBtn");
+
+toggleBtns.addEventListener("click", () => {
+  IsHintsVisible = !IsHintsVisible;
+
+   toggleBtns.classList.toggle("active", !IsHintsVisible);
+   toggleBtns.textContent = IsHintsVisible ? "Désactiver les indices" : "Activer les indices";
+
+   updateHintsVisibility();
+});
+
+function updateHintsVisibility() {
+  if (IsHintsVisible) {
+    updateHint();
+  } else {
+   document.getElementById("first-hint").textContent = "Indices masqués";
+   document.getElementById("second-hint").textContent = "Indices masqués";
+   updateHint();
+   
+  }
+ } 
+
+
+      

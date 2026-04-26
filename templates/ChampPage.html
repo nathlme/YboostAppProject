@@ -51,6 +51,7 @@
       </div>
 
       <section class="game-wrapper">
+        <button id="toggleHints">Désactiver les indices</button>
         <div class="intro-box">
           <p class="page-title">Devinez à quel champion de League of legends ce lore appartient ! </p><br><br>
           <p id="lore" class="intro-text">
@@ -257,6 +258,28 @@ function secondInt(lore) {
 
     return result
 }
+    let hintsVisible = true;
+
+    const toggleBtn = document.getElementById("toggleHints");
+
+    toggleBtn.addEventListener("click", () => {
+        hintsVisible = !hintsVisible;
+
+        toggleBtn.classList.toggle("active", !hintsVisible);
+        toggleBtn.textContent = hintsVisible ? "Désactiver les indices" : "Activer les indices";
+
+        updateHintVisibility();
+    });
+
+    function updateHintVisibility() {
+      if (hintsVisible) {
+          updateHint();
+      } else {
+          document.getElementById("tries").textContent = "Indices masqués";
+         updateHint();
+      }
+    } 
+
 
     function updateHint() {
         let displayLore = ""
@@ -276,14 +299,18 @@ function secondInt(lore) {
               message = "Plus d'indice disponible...";
           }
         }else {
-          message = "Plus d'indice disponible...";
-          displayLore = {{ printf "%q" .FullLore}}
+          displayLore = {{ printf "%q" .FullLore}};
         }
          
-        document.getElementById("tries").textContent = message;
-        document.getElementById("lore").textContent = displayLore;
         document.getElementById("triesDisplay").textContent = `Essais : ${tries}`;
-    }
+
+        if (hintsVisible) {
+          document.getElementById("tries").textContent = message;
+          document.getElementById("lore").textContent = displayLore;
+        }else {
+          document.getElementById("lore").textContent = firstInt(fullLore);
+        }
+    };
     
 
     function saveGame() {
