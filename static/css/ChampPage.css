@@ -22,23 +22,31 @@ body {
 }
 
 /* =========================
-   SIDEBAR — inchangée visuellement
+          SIDEBAR  
    ========================= */
 
 .sidebar {
   position: relative;
-  z-index: 2;
-  height: 100vh;
+  z-index: 1;
+
+  min-height: 100vh;
+  align-self: stretch;
+
   background-color: #162841;
-  color: black;
+  color: #D7E3F4;
+
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 20px 12px;
-  width: 80px;
+  gap: 22px;
+
+  padding: 18px 14px;
+
+  width: 92px;
   transition: width 0.25s ease;
   overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .sidebar:hover {
@@ -46,47 +54,50 @@ body {
 }
 
 .sidebar-logo {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
   border-radius: 10px;
   margin: 0 auto;
 }
 
 .horizontal-line {
   width: 100%;
-  height: 5px;
+  height: 4px;
   background-color: #FECA74;
+  border-radius: 10px;
 }
 
 .sidebar nav {
-  margin-top: 60px;
+  margin-top: 55px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 42px;
 }
 
 .sidebar nav a {
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: rgb(0, 0, 0);
-  padding: 10px 20px;
+  gap: 14px;
+
+  color: #D7E3F4;
+  padding: 10px 18px;
   border-radius: 10px;
+
   transition: background 0.2s, transform 0.2s, color 0.2s;
 }
 
 .sidebar nav a:hover {
   color: #FECA74;
-  background: rgba(0,0,0,0.06);
+  background: rgba(255, 255, 255, 0.06);
   transform: translateX(4px);
 }
 
 .sidebar nav img {
-  width: 34px;
-  height: 34px;
-  flex: 0 0 34px;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
 }
 
 .sidebar nav a span {
@@ -101,11 +112,12 @@ body {
   transform: translateX(0);
 }
 
+
 .vertical-line {
   position: absolute;
   top: 0;
   right: 0;
-  width: 5px;
+  width: 4px;
   height: 100%;
   background-color: #FECA74;
 }
