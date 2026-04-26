@@ -195,7 +195,6 @@
 
             tries++
             updateHint();
-            document.getElementById("lore").textContent = {{ printf "%q"  .FullLore}}
             championSolved = true
             saveGame();
             startDailyCountdown("champion");
@@ -265,16 +264,22 @@ function secondInt(lore) {
         let SecondIntCount = 6 - tries
         let message = ""
 
-        if (tries <= 2) {
+        if (!championSolved) {
+          if (tries <= 2) {
             displayLore = firstInt(fullLore);
             message = `Premier indice dans ${FirstIntCount} essais`;
-        } else if (tries <= 5) {
-            displayLore = secondInt(fullLore);
-            message = `Dernier indice dans ${SecondIntCount} essais`;
-        } else {
-            displayLore = fullLore;
-            message = "Plus d'indice disponible...";
+          } else if (tries <= 5) {
+              displayLore = secondInt(fullLore);
+              message = `Dernier indice dans ${SecondIntCount} essais`;
+          } else {
+              displayLore = fullLore;
+              message = "Plus d'indice disponible...";
+          }
+        }else {
+          message = "Plus d'indice disponible...";
+          displayLore = {{ printf "%q" .FullLore}}
         }
+         
         document.getElementById("tries").textContent = message;
         document.getElementById("lore").textContent = displayLore;
         document.getElementById("triesDisplay").textContent = `Essais : ${tries}`;
