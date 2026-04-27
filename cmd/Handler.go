@@ -208,14 +208,21 @@ func handlerProfil(w http.ResponseWriter, r*http.Request){
 	
 	var streak 		int 
 	var bestStreak 	int 
-	var lastPlayed 	string
+	var lastPlayed 	sql.NullString
 	var dayPlayed	int
 	var inscriptionDate string
 
 	err2 := db.QueryRow(
 		"SELECT created_at, streak, best_streak, day_played, last_played FROM users WHERE id = ?", userID, ).Scan(&inscriptionDate, &streak, &bestStreak, &dayPlayed, &lastPlayed ) 
 	if err2 != nil {
-		return 
+		log.Println("Erreur SQL profil :", err2)
+		http.Error(w, "Erreur serveur", 500)
+		return
+	}
+
+	lp := ""
+	if lastPlayed.Valid {
+		lp = lastPlayed.String
 	}
 
 	data := struct {
@@ -231,7 +238,7 @@ func handlerProfil(w http.ResponseWriter, r*http.Request){
 		UserID: userID, 
 		Streak: streak,
 		BestStreak: bestStreak,
-		LastPlayed: lastPlayed,
+		LastPlayed: lp,
 		DayPlayed: dayPlayed,
 		InscriptionDate: inscriptionDate,
 	}
