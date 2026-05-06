@@ -65,7 +65,7 @@ func ResetStreak(userID int) error {
 	}
 
 	if !lastPlayed.Valid {
-		_, err = db.Exec(`UPDATE users SET streak = 1, best_streak = 1, day_played = 1, last_played = ? WHERE id = ?`, today, userID,)
+		_, err = db.Exec(`UPDATE users SET streak = 0, best_streak = 0, day_played = 1, last_played = ? WHERE id = ?`, today, userID,)
 		return err
 	}
 
