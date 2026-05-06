@@ -147,15 +147,10 @@ function createButtonRow() {
   introBox.append(pageTitle)
 
   container.innerHTML = "";
-  ["Passive", "Q", "W", "E", "R"].forEach(letter => {
+  ["Q", "W", "E", "R"].forEach(letter => {
     const btn = document.createElement("button");
-    if (letter != "Passive") {
-      btn.textContent = letter;
-    } else {
-      btn.textContent = "P";
-    }
-     
-
+    btn.textContent = letter;
+    
     btn.addEventListener("click", () => {
           if (canGuess) { 
               compareSlot(letter, btn);
