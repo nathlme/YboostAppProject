@@ -6,9 +6,232 @@
   padding: 40px 48px;
 }
 
-
-.welcome {
-  font-size: 80px;
-  color: #FECA74;
+.welcome-section {
+  padding: 70px 40px 50px 40px;
 }
 
+.welcome-content {
+  max-width: 700px;
+  background: rgba(24, 46, 77, 0.72);
+  border: 1px solid rgba(254, 202, 116, 0.25);
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.welcome-content h1 {
+  margin: 0 0 18px 0;
+  font-size: 42px;
+  line-height: 1.1;
+  color: #e0c27a;
+}
+
+.welcome-content p {
+  margin: 0 0 24px 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #d7e3f4;
+}
+
+
+.start-button {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 12px;
+  background-color: #feca74;
+  color: #162841;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.start-button:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+
+
+.about-section,
+.challenges-section,
+.how-to-play-section,
+.navigation-section,
+.footer-cta-section {
+  padding: 22px 40px 32px 40px;
+}
+
+.about-section h2,
+.challenges-section h2,
+.how-to-play-section h2,
+.navigation-section h2,
+.footer-cta-section h2 {
+  margin: 0 0 18px 0;
+  font-size: 30px;
+  color: #feca74;
+}
+
+.about-section p,
+.how-to-play-section p,
+.footer-cta-section p {
+  margin: 0;
+  max-width: 900px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #e6eef9;
+}
+
+.challenges-grid,
+.navigation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.challenge-card,
+.nav-card {
+  background: rgba(22, 40, 65, 0.75);
+  border: 1px solid rgba(254, 202, 116, 0.2);
+  border-radius: 18px;
+  padding: 24px;
+  box-sizing: border-box;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.2);
+}
+
+.challenge-card h3,
+.nav-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 22px;
+  color: #ffffff;
+}
+
+.challenge-card p,
+.nav-card p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #d7e3f4;
+}
+
+.challenge-link {
+  display: inline-block;
+  margin-top: 18px;
+  color: #feca74;
+  text-decoration: none;
+  font-weight: bold;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.challenge-link:hover {
+  opacity: 0.9;
+  transform: translateX(3px);
+}
+
+.footer-cta-section {
+  padding-bottom: 60px;
+}
+
+/* tablette */
+@media screen and (max-width: 1000px) {
+  .hero-section,
+  .about-section,
+  .challenges-section,
+  .how-to-play-section,
+  .navigation-section,
+  .footer-cta-section {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .hero-content h1 {
+    font-size: 34px;
+  }
+
+  .challenges-grid,
+  .navigation-grid {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+}
+
+/* mobile */
+@media screen and (max-width: 650px) {
+  .hero-section,
+  .about-section,
+  .challenges-section,
+  .how-to-play-section,
+  .navigation-section,
+  .footer-cta-section {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero-section {
+    padding-top: 32px;
+  }
+
+  .hero-content {
+    padding: 24px;
+  }
+
+  .hero-content h1 {
+    font-size: 28px;
+  }
+
+  .hero-content p,
+  .about-section p,
+  .how-to-play-section p,
+  .footer-cta-section p,
+  .challenge-card p,
+  .nav-card p {
+    font-size: 15px;
+  }
+
+  .challenges-grid,
+  .navigation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-section h2,
+  .challenges-section h2,
+  .how-to-play-section h2,
+  .navigation-section h2,
+  .footer-cta-section h2 {
+    font-size: 24px;
+  }
+}
+
+
+
+
+/* boutton indice */
+#toggleHints {
+  padding: 10px 16px;
+
+  background: linear-gradient(145deg, #0A1428, #1E2D4D);
+  color: #F0E6D2;
+
+  border: 2px solid #C8AA6E;
+  border-radius: 10px;
+
+  font-family: 'Beaufort for LOL', serif;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+  box-shadow:
+    inset 0 0 6px rgba(255,255,255,0.05),
+    0 0 10px rgba(200,170,110,0.25);
+}
+
+#toggleHints:hover {
+  transform: translateY(-2px);
+  border-color: #ff4d4d;
+  box-shadow:
+    0 0 12px rgba(255, 60, 60, 0.4);
+}
+
+/* état activé */
+#toggleHints.active {
+  background: linear-gradient(145deg, #2a0b0f, #7a1a1f);
+  border-color: #ff4d4d;
+  color: white;
+}

@@ -51,9 +51,182 @@
         <span class="brand-big">LoLdle</span>
       </div>
 
-      <h1 class="welcome">Bienvenue sur le LoLdle Ultra HardCore !!</h1>
+      <section class="welcome-section">
+        <div class="welcome-content">
+          <h1>Bienvenue sur UHC LoLdle</h1>
+          <p>
+            Teste chaque jour tes connaissances sur l'univers de League of Legends
+            à travers plusieurs défis autour des champions, des items et des sorts.
+          </p>
+          <a href="/Champs" class="start-button">Commencer un challenge</a>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <div class="section-container">
+          <h2>À propos du site</h2>
+          <p>
+            UHC LoLdle est un site de mini-jeux sur l'univers de League of Legends.
+            Le principe est simple : chaque challenge te propose de deviner un élément du jeu
+            grâce à différents indices qui se révèlent au fil des essais.
+          </p>
+        </div>
+      </section>
+      
+      <section class="challenges-section">
+        <div class="section-container">
+          <h2>Les challenges disponibles</h2>
+
+          <div class="challenges-grid">
+
+            <article class="challenge-card">
+              <h3>Challenge Champion</h3>
+              <p>
+                Devine le champion du jour à partir de son lore incomplé, tous les trois essais une nouvelle partie du lore se débloque !
+              </p>
+              <a href="/Champs" class="challenge-link">Accéder au challenge</a>
+            </article>
+
+            <article class="challenge-card">
+              <h3>Challenge Objet</h3>
+              <p>
+                Retrouve l'objet mystère grâce à ses statistiques, son prix
+                et ses composants qui se dévoilent au fur et à mesure.
+              </p>
+              <a href="/Items" class="challenge-link">Accéder au challenge</a>
+            </article>
+
+            <article class="challenge-card">
+              <h3>Challenge Sort</h3>
+              <p>
+                Analyse la description d'un sort et tente de retrouver
+                à quel champion il appartient, ainsi que son emplacement : Q, W, E ou R.
+              </p>
+              <a href="/Spells" class="challenge-link">Accéder au challenge</a>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="how-to-play-section">
+        <div class="section-container">
+          <h2>Comment jouer ?</h2>
+          <p>
+            Sélectionne un challenge depuis la barre latérale, lis les indices affichés
+            à l'écran, puis propose ta réponse. Certains indices se débloquent après
+            plusieurs essais pour t'aider à trouver la bonne réponse.
+          </p><br>
+          <p>En haut de chaque défis se trouve deux boutons : <button id="toggleHints">Désactiver les indices</button> et <button id="openRules">Règles</button> </p>
+          
+          <div id="hint-Modal" class="modalBis">
+            <div class="modal-box">
+              
+              <button id="close-hint" class="close-btn">✖</button>
+
+              <h2>Désactiver les indices</h2>
+              <p>Le bouton "Désactiver les indices" ou "Activer les indices" permet d'afficher ou non les indices du challenge, il peut être activé/désactivé autant de fois que voulus et à n'importe quel moment !</p>
+
+            </div>
+          </div>
+
+          <div id="rulesModal" class="modal">
+            <div class="modal-box">
+              
+              <button id="closeRules" class="close-btn">✖</button>
+
+              <h2>Règles du jeu</h2>
+              <p>Le bouton "Règles" vous affiche simplement l'objectif du challenge et ses spécificités.</p>
+
+            </div>
+          </div>
+        </div>
+      </section>
+      
+
+      <section class="navigation-section">
+        <div class="section-container">
+          <h2>Navigation</h2>
+          <div class="navigation-grid">
+            <div class="nav-card">
+              <h3>Home</h3>
+              <p>Reviens à la page d'accueil du site.</p>
+            </div>
+
+            <div class="nav-card">
+              <h3>Profile</h3>
+              <p>Consulte ton espace personnel.</p>
+            </div>
+
+            <div class="nav-card">
+              <h3>Champion</h3>
+              <p>Accède au défi dédié aux champions.</p>
+            </div>
+
+            <div class="nav-card">
+              <h3>Item</h3>
+              <p>Lance le challenge autour des objets du jeu.</p>
+            </div>
+
+            <div class="nav-card">
+              <h3>Spell</h3>
+              <p>Teste tes connaissances sur les sorts des champions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="footer-cta-section">
+        <div class="section-container">
+          <h2>Prêt à relever le défi ?</h2>
+          <p>
+            Choisis un mode de jeu dans la barre latérale et découvre
+            si tu maîtrises vraiment l'univers de Runeterra.
+          </p>
+        </div>
+      </section>
     </main>
 
+    <script>
+      const openRules = document.getElementById("openRules");
+      const closeRules = document.getElementById("closeRules");
+      const modal = document.getElementById("rulesModal");
+
+      openRules.addEventListener("click", () => {
+        modal.style.display = "flex";
+      });
+
+      closeRules.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+
+        
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+
+
+      const toggleHints = document.getElementById("toggleHints");
+      const closeHint = document.getElementById("close-hint");
+      const modalBis = document.getElementById("hint-Modal");
+
+      toggleHints.addEventListener("click", () => {
+        modalBis.style.display = "flex";
+      });
+
+      closeHint.addEventListener("click", () => {
+        modalBis.style.display = "none";
+      });
+
+        
+      modalBis.addEventListener("click", (e) => {
+        if (e.target === modalBis) {
+          modalBis.style.display = "none";
+        }
+      });
+    </script>
   </div>
 </body>
 </html>

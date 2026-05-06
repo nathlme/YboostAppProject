@@ -50,6 +50,41 @@ func GetCurrentUser(r *http.Request) (int, string, error) {
 }
 
 
+func ResetStreak(userID int) error {
+	now := time.Now()
+	today := now.Format("2006-01-02")
+
+	var streak int
+	var lastPlayed sql.NullString
+
+	err := db.QueryRow(
+		"SELECT streak, last_played FROM users WHERE id = ?", userID, ).Scan(&streak, &lastPlayed)
+
+	if err != nil {
+		return err
+	}
+
+	if !lastPlayed.Valid {
+		_, err = db.Exec(`UPDATE users SET streak = 1, best_streak = 1, day_played = 1, last_played = ? WHERE id = ?`, today, userID,)
+		return err
+	}
+
+	lastDate, _ := time.Parse("2006-01-02", lastPlayed.String)
+	yesterday := now.AddDate(0, 0, -1)
+
+	if lastDate.Format("2006-01-02") != yesterday.Format("2006-01-02") && lastDate.Format("2006-01-02") != today {
+		streak = 0
+	} else {
+		return nil 
+	}
+
+	_, err = db.Exec(
+		`UPDATE users SET streak = ? WHERE id = ?`, streak, userID, 
+	)
+
+	return err
+}
+
 func UpdateStreak(userID int) error {
 	now := time.Now()
 	today := now.Format("2006-01-02")

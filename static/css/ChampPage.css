@@ -60,40 +60,6 @@
 }
 
 
-/* =========================
-   RESPONSIVE
-   ========================= */
-
-@media (max-width: 900px) {
-  .content {
-    padding: 28px 20px;
-  }
-
-  .page-brand {
-    right: 20px;
-    top: 18px;
-  }
-
-  .brand-big {
-    font-size: 32px;
-  }
-
-  .brand-small {
-    font-size: 14px;
-    letter-spacing: 2px;
-  }
-
-  .intro-box,
-  .guesses-zone,
-  .search-zone {
-    width: 100%;
-  }
-
-  .search-box {
-    width: 100%;
-  }
-}
-
 
 /* =========================
    BARRE DE RECHERCHE

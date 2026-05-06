@@ -205,17 +205,24 @@ func handlerProfil(w http.ResponseWriter, r*http.Request){
 		http.Error(w, "ERR_PARSE_TEMPLATE", http.StatusInternalServerError)
 		return
 	}
-	
+		
+	err2 := ResetStreak(userID)
+	if err2 != nil{
+		log.Println("Erreur SQL profil :", err2)
+		http.Error(w, "Erreur serveur", 500)
+		return
+	}
+
 	var streak 		int 
 	var bestStreak 	int 
 	var lastPlayed 	sql.NullString
 	var dayPlayed	int
 	var inscriptionDate string
 
-	err2 := db.QueryRow(
+	err3 := db.QueryRow(
 		"SELECT created_at, streak, best_streak, day_played, last_played FROM users WHERE id = ?", userID, ).Scan(&inscriptionDate, &streak, &bestStreak, &dayPlayed, &lastPlayed ) 
-	if err2 != nil {
-		log.Println("Erreur SQL profil :", err2)
+	if err3 != nil {
+		log.Println("Erreur SQL profil :", err3)
 		http.Error(w, "Erreur serveur", 500)
 		return
 	}

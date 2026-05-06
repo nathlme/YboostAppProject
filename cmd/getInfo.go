@@ -9,8 +9,7 @@ import (
 	"strings"
 )
 
-
-// A list of Champion object 
+// A list of Champion object
 var championCards []ChampionCard
 // A list of Item object 
 var itemCards []ItemCard
@@ -45,13 +44,15 @@ func GetVersion() string{
 		return ""
 	}
 	
+
 	return versions[0]
 }
 
 
 //	Return a map of the ChampionResponse struct fill with every champion in the Lol API response 
 func GetChampion() (map[string]Champion, error) {
-	url := "https://ddragon.leagueoflegends.com/cdn/16.7.1/data/fr_FR/champion.json"
+	version := GetVersion()
+	url := fmt.Sprintf("https://ddragon.leagueoflegends.com/cdn/%s/data/fr_FR/champion.json",version)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -89,13 +90,15 @@ func LoadChampionCards() error{
 		return err
 	}
 
+	version := GetVersion()
+	url := fmt.Sprintf("https://ddragon.leagueoflegends.com/cdn/%s/img/champion/",version)
 
 	for _, champ := range Dico {
 		var card ChampionCard
 		card.ID = champ.ID
 		card.Name = champ.Name
 		card.Lore = champ.Lore
-		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.7.1/img/champion/", card.ID)
+		card.ImageUrl = BuildUrl(url, card.ID)
 		championCards = append(championCards, card)
 	}
 	
@@ -126,9 +129,10 @@ func GetFullLore() (string, string, string, error) {
 	}
 
 	lang := "fr_FR"
-
+	version := GetVersion()
 	championUrl := fmt.Sprintf(
-		"https://ddragon.leagueoflegends.com/cdn/16.2.1/data/%s/champion/%s.json",
+		"https://ddragon.leagueoflegends.com/cdn/%s/data/%s/champion/%s.json",
+		version,
 		lang,
 		dayliChamp,
 	)
@@ -163,7 +167,8 @@ func GetFullLore() (string, string, string, error) {
 
 // Return a map of the ItemResponse struct fill with every item in the Lol API response 
 func GetItem() (map[string]Item, error) {
-	url := "https://ddragon.leagueoflegends.com/cdn/16.7.1/data/fr_FR/item.json"
+	version := GetVersion()
+	url := fmt.Sprintf("https://ddragon.leagueoflegends.com/cdn/%s/data/fr_FR/item.json", version)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -197,6 +202,9 @@ func LoadItemCard() error {
 		return err
 	}
 
+	version := GetVersion()
+	url := fmt.Sprintf("https://ddragon.leagueoflegends.com/cdn/%s/img/item/",version)
+
 	for _, item := range dico {
 		if !IsValidChallengeItem(item) {
 			continue
@@ -206,7 +214,7 @@ func LoadItemCard() error {
 
 		card.Name 			= item.Name
 		card.ImageId 		= item.Image.Full
-		card.ImageUrl 		= BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/item/", card.ImageId)
+		card.ImageUrl 		= BuildUrl(url, card.ImageId)
 		card.Price		    = item.Gold.Total
 		card.Stats 			= item.Stats
 		card.SpecialRecipe 	= item.SpecialRecipe
@@ -228,70 +236,17 @@ func LoadItemCard() error {
 func GetItemComponents(fromIDs []string, dico map[string]Item) []ItemComponent {
 	components := []ItemComponent{}
 
+	version := GetVersion()
+	url := fmt.Sprintf("https://ddragon.leagueoflegends.com/cdn/%s/img/item/",version)
+
 	for _, id := range fromIDs {
 		if comp, ok := dico[id]; ok {
 			components = append(components, ItemComponent{
 				Name:     comp.Name,
-				ImageUrl: BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/item/", comp.Image.Full),
+				ImageUrl: BuildUrl(url, comp.Image.Full),
 			})
 		}
 	}
 
 	return components
 }
-
-
-// // Return a map of the SpellResponse struct fill with every spell of a champion in the Lol API response 
-// func GetSpell() (map[string]Spell, error) {
-// 	champion, err := GetOrCreateDailyChampion("daily_spell")
-// 	if err != nil {
-// 		return nil, err 
-// 	}
-
-// 	url := "https://ddragon.leagueoflegends.com/cdn/16.7.1/data/fr_FR/champion/" + champion + ".json"
-
-// 	resp, err := http.Get(url)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	defer resp.Body.Close()
-
-// 	body, err := io.ReadAll(resp.Body)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	var spellResult SpellResponse
-
-// 	err = json.Unmarshal(body,&spellResult)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	return spellResult.Data, nil 
-// }
-
-
-// func LoadSpellCard() error {
-// 	spellCards = []SpellCard{}
-
-// 	dico, err := GetSpell()
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	for  _,spell range dico {
-
-// 		var card SpellCard
-
-// 		card.ID = spell.ID
-// 		card.Name = spell.Name
-// 		card.Description = spell.Description
-// 		card.ImageUrl = BuildUrl("https://ddragon.leagueoflegends.com/cdn/16.2.1/img/spell/", card.ID)
-
-// 		spellCards = append(spellCards, card)
-// 	}
-
-// 	return nil
-// }
