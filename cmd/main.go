@@ -76,10 +76,10 @@ func main () {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
-			http.NotFound(w, r)
-			return
-		}
-			w.Write([]byte("Hello Yboost"))
+				http.NotFound(w, r)
+				return
+			}
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
 		})
 	
 
