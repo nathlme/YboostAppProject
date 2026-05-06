@@ -1,21 +1,5 @@
 
 /* =========================
-   CONTENU PRINCIPAL
-   ========================= */
-
-.content {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  padding: 40px 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-
-/* =========================
    ZONE RECHERCHE
    ========================= */
 
@@ -69,31 +53,6 @@
   border-radius: 10px;
 }
 
-
-.hint-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  padding: 22px 30px;
-  border-radius: 18px;
-  border: 1px solid rgba(200, 170, 110, 0.25);
-  background:
-  linear-gradient(180deg, rgba(7, 18, 34, 0.90), rgba(5, 11, 20, 0.90));
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
-  position: relative;
-  z-index: 1;
-}
-
-.hint-zone {
-  display: flex;
-  flex-direction: row;
-
-}
-
-#second-hint-box {
-  margin-left: 20px;
-}
 
 .price{
   display: flex;
@@ -275,38 +234,3 @@
 } 
 
 
-
-/* boutton indice */
-#toggleHintsBtn {
-  padding: 10px 16px;
-
-  background: linear-gradient(145deg, #0A1428, #1E2D4D);
-  color: #F0E6D2;
-
-  border: 2px solid #C8AA6E;
-  border-radius: 10px;
-
-  font-family: 'Beaufort for LOL', serif;
-  font-weight: bold;
-
-  cursor: pointer;
-
-  transition: all 0.2s ease;
-  box-shadow:
-    inset 0 0 6px rgba(255,255,255,0.05),
-    0 0 10px rgba(200,170,110,0.25);
-}
-
-#toggleHintsBtn:hover {
-  transform: translateY(-2px);
-  border-color: #ff4d4d;
-  box-shadow:
-    0 0 12px rgba(255, 60, 60, 0.4);
-}
-
-/* état activé */
-#toggleHintsBtn.active {
-  background: linear-gradient(145deg, #2a0b0f, #7a1a1f);
-  border-color: #ff4d4d;
-  color: white;
-}

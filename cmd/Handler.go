@@ -7,30 +7,50 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"os"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/go-sql-driver/mysql"
 )
 
+type AuthPageData struct {
+	ErrorMessage string
+	Email        string
+	Pseudo       string
+}
+
+func renderRegisterPage(w http.ResponseWriter, errorMessage, email, pseudo string) {
+	t, err := template.ParseFiles("templates/RegisterPage.html")
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	data := AuthPageData{
+		ErrorMessage: errorMessage,
+		Email:        email,
+		Pseudo:       pseudo,
+	}
+
+	t.Execute(w, data)
+}
 
 
 func handlerRegister(w http.ResponseWriter, r*http.Request ){
 	switch r.Method {
 		case http.MethodGet :
 
-			contenu, err := os.ReadFile("templates/RegisterPage.html")
-			if err!=nil {
-				http.Error(w,"Internal Server Error",500)
+			t, err := template.ParseFiles("templates/RegisterPage.html")
+			if err != nil {
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 				return
 			}
 			
-			w.Header().Set("Content-Type", "text/html")
-			w.Write(contenu)
-			
+			t.Execute(w, AuthPageData{})
+
 		case http.MethodPost :
 
 			err := r.ParseForm()
 			if err != nil {
-				http.Error(w,"Parse error",400)
+				renderRegisterPage(w, "Erreur de formulaire", "", "")	
 				return
 			}
 
@@ -38,120 +58,122 @@ func handlerRegister(w http.ResponseWriter, r*http.Request ){
 			password := r.FormValue("password")
 			pseudo := r.FormValue("pseudo")
 	
-			message := validateRegister(email,pseudo,password)
-
+			message := validateRegister(email, pseudo, password)
 			if message != "" {
-				http.Error(w,message,400)
+				renderRegisterPage(w, message, email, pseudo)
 				return
 			}
 
 			hash, err := PasswordHash([]byte(password))
 			if err != nil {
-				http.Error(w,"Erreur de Hash", 400)
+				renderRegisterPage(w, "Erreur lors du hash du mot de passe", email, pseudo)
 				return
 			}
 
-			rest, err := db.Exec("INSERT INTO users (email, pseudo, password_hash) VALUES (?,?,?) ",email, pseudo, hash)
-
-			id, _ := rest.LastInsertId()
-			log.Println("Nouvel ID:", id)
-
+			_, err = db.Exec(
+				"INSERT INTO users (email, pseudo, password_hash) VALUES (?,?,?)",
+				email, pseudo, hash,
+			)
 			if err != nil {
-				http.Error(w, "DB error", 500)
-				return 
+				if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
+					renderRegisterPage(w, "Email ou pseudo déjà utilisé", email, pseudo)
+					return
+				}
+
+				renderRegisterPage(w, "Impossible de créer le compte", email, pseudo)
+				return
 			}	
 
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
-			
-
-			log.Println("Hash:", hash)
-
-			log.Println("Nouvelle inscription :", email,len(password),pseudo)
-			
-			return
-			
+				
 		default :
-			fmt.Fprint(w,"erreur 405")
+			http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 	} 
 }
 
 
+func renderLoginPage(w http.ResponseWriter, errorMessage, email string) {
+	t, err := template.ParseFiles("templates/LoginPage.html")
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 
-func handlerLogin(w http.ResponseWriter, r*http.Request){
+	data := AuthPageData{
+		ErrorMessage: errorMessage,
+		Email:        email,
+	}
+
+	t.Execute(w, data)
+}
+
+func handlerLogin(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-		case http.MethodGet :
-			contenu, err := os.ReadFile("templates/LoginPage.html")
-
-				if err!=nil {
-					http.Error(w,"Internal Server Error",500)
-					return
-				}
-
-			w.Header().Set("Content-Type", "text/html")
-			w.Write(contenu)
-
-		case http.MethodPost :
-
-			err := r.ParseForm()
-			if err != nil {
-				http.Error(w,"Parse error", 400)
-				return
-			}
-
-			email := r.FormValue("email")
-			password := r.FormValue("password")
-			row := db.QueryRow("SELECT id, password_hash, pseudo FROM users WHERE email = ?",email)
-			
-			var id int
-			var hash string
-			var pseudo string
-
-			err = row.Scan(&id, &hash, &pseudo)
-
-			if err == sql.ErrNoRows {
-				http.Error(w,"identifiants invalide",401)
-				return 
-			}
-		
-			if err != nil {
-				http.Error(w, "DB error", 500)
-				return 
-			}	
-			
-			res := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-
-			if res != nil {
-				http.Error(w,"identifiants incorrect !",401)
-				return
-
-			}else {
-				log.Println("email : ",email,", pseudo : ",pseudo)
-
-				sessionID, err := generateSessionID()
-
-				if err != nil {
-					http.Error(w,"Cookie issues",500)
-					return
-				}
-
-				sessions[sessionID] = id
-
-				cookie := http.Cookie{
-					Name:     "session_id",
-					Value:    sessionID,
-					Path:     "/",
-					HttpOnly: true,
-					SameSite: http.SameSiteLaxMode,
-				}
-			
-				http.SetCookie(w,&cookie)
-
-				http.Redirect(w, r, "/logged", http.StatusSeeOther)
-				return 
-			}			
-		default :
-				fmt.Fprint(w,"erreur 405")
+	case http.MethodGet:
+		t, err := template.ParseFiles("templates/LoginPage.html")
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
 		}
+
+		t.Execute(w, AuthPageData{})
+
+	case http.MethodPost:
+		err := r.ParseForm()
+		if err != nil {
+			renderLoginPage(w, "Erreur de formulaire", "")
+			return
+		}
+
+		email := r.FormValue("email")
+		password := r.FormValue("password")
+
+		row := db.QueryRow("SELECT id, password_hash, pseudo FROM users WHERE email = ?", email)
+
+		var id int
+		var hash string
+		var pseudo string
+
+		err = row.Scan(&id, &hash, &pseudo)
+
+		if err == sql.ErrNoRows {
+			renderLoginPage(w, "Identifiants incorrects", email)
+			return
+		}
+
+		if err != nil {
+			renderLoginPage(w, "Erreur base de données", email)
+			return
+		}
+
+		res := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+		if res != nil {
+			renderLoginPage(w, "Identifiants incorrects", email)
+			return
+		}
+
+		sessionID, err := generateSessionID()
+		if err != nil {
+			renderLoginPage(w, "Erreur de session", email)
+			return
+		}
+
+		sessions[sessionID] = id
+
+		cookie := http.Cookie{
+			Name:     "session_id",
+			Value:    sessionID,
+			Path:     "/",
+			HttpOnly: true,
+			SameSite: http.SameSiteLaxMode,
+		}
+
+		http.SetCookie(w, &cookie)
+		http.Redirect(w, r, "/logged", http.StatusSeeOther)
+
+	default:
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+	}
 }
 
 
@@ -171,8 +193,7 @@ func handlerLogged(w http.ResponseWriter, r*http.Request){
 			if err!=nil {
 				http.Error(w,"Internal Server Error",500)
 				return
-			}					
-			log.Print(GetOrCreateDailyChampion("daily_champion"))
+			}
 
 			t.Execute(w, struct {
 				Pseudo string
@@ -492,6 +513,7 @@ func handlerGuess(w http.ResponseWriter, r*http.Request) {
 
 			userID,_,err := GetCurrentUser(r) 
 			if err != nil {
+				http.Error(w, "Non autorisé", http.StatusUnauthorized)
 				return
 			}
 
@@ -523,6 +545,7 @@ func handlerGuessItem(w http.ResponseWriter, r*http.Request) {
 
 			userID,_,err := GetCurrentUser(r) 
 			if err != nil {
+				http.Error(w, "Non autorisé", http.StatusUnauthorized)
 				return
 			}
 
@@ -556,6 +579,7 @@ func handlerGuessSpell(w http.ResponseWriter, r*http.Request) {
 
 			userID,_,err := GetCurrentUser(r)
 			if err != nil {
+				http.Error(w, "Non autorisé", http.StatusUnauthorized)
 				return
 			}
 

@@ -13,12 +13,17 @@ import (
 var championCards []ChampionCard
 // A list of Item object 
 var itemCards []ItemCard
-// // A list of Spell object 
-// var spellCards []SpellCard
+
+var cachedVersion string
+
 
 
 // Print the latest version of the League of legends API 
 func GetVersion() string{
+	if cachedVersion != "" {
+        return cachedVersion
+    }
+
 	url := "https://ddragon.leagueoflegends.com/api/versions.json"
 
 	resp, err := http.Get(url)
@@ -45,14 +50,15 @@ func GetVersion() string{
 	}
 	
 
-	return versions[0]
+	cachedVersion = versions[0]
+    return cachedVersion
 }
 
 
 //	Return a map of the ChampionResponse struct fill with every champion in the Lol API response 
 func GetChampion() (map[string]Champion, error) {
 	version := GetVersion()
-	url := fmt.Sprintf("https://ddragon.leagueoflegends.com/cdn/%s/data/fr_FR/champion.json",version)
+	url := fmt.Sprintf("https://ddragon.leagueoflegends.com/cdn/%s/data/fr_FR/champion.json", version)
 
 	resp, err := http.Get(url)
 	if err != nil {

@@ -15,10 +15,14 @@
 
     <form method="POST" action="/login" class="auth-card">
       <h1>Connexion</h1>
-      <p class="auth-subtitle">Entre dans l’arène et retrouve le champion du jour.</p>
+      <p class="auth-subtitle">Entre dans l'arène et retrouve le champion du jour.</p>
 
+      {{if .ErrorMessage}}
+        <p class="auth-error">{{.ErrorMessage}}</p>
+      {{end}}
+      
       <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Ton email">
+      <input type="email" id="email" name="email" placeholder="Ton email" value="{{.Email}}">
 
       <label for="password">Mot de passe</label>
       <input type="password" id="password" name="password" placeholder="Ton mot de passe">
@@ -26,7 +30,7 @@
       <button type="submit">Se connecter</button>
 
       <p class="auth-link">
-        Pas encore de compte ? <a href="/register">S’inscrire</a>
+        Pas encore de compte ? <a href="/register">S'inscrire</a>
       </p>
     </form>
   </div>

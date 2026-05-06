@@ -214,16 +214,20 @@ toggleBtns.addEventListener("click", () => {
    updateHintsVisibility();
 });
 
-function updateHintsVisibility() {
-  if (IsHintsVisible) {
-    updateHint();
-  } else {
-   document.getElementById("first-hint").textContent = "Indices masqués";
-   document.getElementById("second-hint").textContent = "Indices masqués";
-   updateHint();
-   
-  }
- } 
+
+function bindModal(openId, closeId, modalId) {
+  const open = document.getElementById(openId);
+  const close = document.getElementById(closeId);
+  const modal = document.getElementById(modalId);
+
+  if (!open || !close || !modal) return;
+
+  open.addEventListener("click", () => modal.style.display = "flex");
+  close.addEventListener("click", () => modal.style.display = "none");
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.style.display = "none";
+  });
+}
 
 
      

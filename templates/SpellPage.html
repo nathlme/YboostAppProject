@@ -44,7 +44,7 @@
             <div class="vertical-line"></div>
         </aside>
 
-        <main class="content">
+        <main class="challenge-content">
       <div class="page-brand">
         <span class="brand-small">UHC</span>
         <span class="brand-big">LoLdle</span>
@@ -80,7 +80,6 @@
           <p id="lore" class="intro-text">
             {{ .Description}}
           </p>
-          <div id="stats" class="intro-text"></div> 
         </div>
     
           
@@ -137,15 +136,16 @@
       const username = pseudo + userID;
 
       const champions = {{ .ChampionsJSON }};
-      const spellSlot = {{ .SpellSlot}};
-      const spellImg = {{ .SpellImg}};
-      const spellName = {{ .SpellName}};
+      const spellSlot = {{ printf "%q" .SpellSlot }};
+      const spellImg = {{ .SpellImg }};
+      const spellName = {{ printf "%q" .SpellName }};
 
       champions.sort((a, b) => a.name.localeCompare(b.name));
 
       let tries = 0;
       let guessed = [];
-      championSolved = false;
+      let championSolved = false;
+      let slotSolved = false;
 
       const input = document.getElementById("champInput");
       const list = document.getElementById("champList");
@@ -185,7 +185,7 @@
             img.alt = "";
             img.classList.add("img-hint");
           document.getElementById("img-hint").appendChild(img) 
-          startDailyCountdown("champion");   
+          startDailyCountdown("sort");   
            
       };
 
@@ -317,7 +317,8 @@
           setTimeout(() => {
               btn.classList.remove("happy-win");
           }, 600);
- 
+          
+          slotSolved = true;
           saveGame();
         }else {
           document.getElementById("checkSlot").textContent  = `T'es claqué au sol... C'était le ${spellSlot} spell`
@@ -332,6 +333,7 @@
               tries: tries,
               guessed: guessed,
               solvedChampion: championSolved, 
+              solvedSlot: slotSolved,
               history: document.getElementById("guessedHistory").innerHTML,
               dayKey: getTodayKey()
           };
@@ -354,7 +356,7 @@
         tries = data.tries;
         guessed = data.guessed;
         championSolved = data.solvedChampion;
-        slotSolved = data.solvedSlot;
+        slotSolved = data.solvedSlot || false;
 
         document.getElementById("guessedHistory").innerHTML = data.history;
 
@@ -368,26 +370,24 @@
             document.getElementById("try").textContent =
             "Bien joué ! Vous avez déjà trouvé à qui appartenait le spell du jour.";
         }
+
+        if (slotSolved) {
+
+        }
       }
 
-      const openRules = document.getElementById("openRules");
-      const closeRules = document.getElementById("closeRules");
-      const modal = document.getElementById("rulesModal");
-
-      openRules.addEventListener("click", () => {
-        modal.style.display = "flex";
-      });
-
-      closeRules.addEventListener("click", () => {
-        modal.style.display = "none";
-      });
-
+      function updateHintsVisibility() {
+        if (IsHintsVisible) {
+          updateHint();
+        } else {
+        document.getElementById("first-hint").textContent = "Indices masqués";
+        document.getElementById("second-hint").textContent = "Indices masqués";
+        updateHint();
         
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          modal.style.display = "none";
         }
-      });
+      } 
+    
+      bindModal("openRules", "closeRules", "rulesModal");
 
     </script>
 </body>
