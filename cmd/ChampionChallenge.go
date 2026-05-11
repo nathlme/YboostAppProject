@@ -131,6 +131,6 @@ func HideName(lore string, banned []string) string {
 		lore = re.ReplaceAllString(lore, mask)
 	}
 
-	 
+	
 	return lore
 }

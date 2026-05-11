@@ -297,11 +297,11 @@ La progression est conservée dans le navigateur avec localStorage.
 - Hash des mots de passe avec bcrypt
 - Requêtes SQL paramétrées
 - Gestion de session via cookie HttpOnly
+- Protection des sessions CSRF
 - Redirection des routes protégées vers la connexion si l’utilisateur n’est pas authentifié
 
 ## Axes d’amélioration possibles
 
-- Ajouter une protection CSRF
 - Ajouter des statistiques plus avancées au profil
 - Ajouter une meilleure gestion des erreurs réseau liées à l’API Riot
 - Ajouter des tests automatisés

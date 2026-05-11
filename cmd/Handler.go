@@ -229,7 +229,6 @@ func handlerProfil(w http.ResponseWriter, r*http.Request){
 		
 	err2 := ResetStreak(userID)
 	if err2 != nil{
-		log.Println("Erreur SQL profil :", err2)
 		http.Error(w, "Erreur serveur", 500)
 		return
 	}
@@ -527,7 +526,6 @@ func handlerGuess(w http.ResponseWriter, r*http.Request) {
 			check.Same = SameChamp(req.Champion,"daily_champion") 
 			if check.Same {
 				UpdateStreak(userID)
-				log.Println("correct")
 			}
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(check)
@@ -560,7 +558,6 @@ func handlerGuessItem(w http.ResponseWriter, r*http.Request) {
 
 			if check.Same {
 				UpdateStreak(userID)
-				log.Println("correct")
 			}
 
 			w.Header().Set("Content-Type", "application/json")
@@ -594,7 +591,6 @@ func handlerGuessSpell(w http.ResponseWriter, r*http.Request) {
 
 			if check.Same {
 				UpdateStreak(userID)
-				log.Println("correct")
 			}
 
 			w.Header().Set("Content-Type", "application/json")

@@ -7,7 +7,7 @@ import  (
 	"log"
 	"fmt"
 	"database/sql"
-    _ "github.com/go-sql-driver/mysql"
+    "github.com/go-sql-driver/mysql"
 	"net/url"
 	"strings"
 )
@@ -70,10 +70,6 @@ func main () {
 		log.Fatal(err)
 	}
 
-	log.Print("DB connected")
-
-
-
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 				http.NotFound(w, r)
@@ -111,7 +107,6 @@ func main () {
 	fmt.Println("http://localhost:8080/logged")
 	fmt.Println("http://localhost:8080/register")
 	fmt.Println("http://localhost:8080/login")
-	log.Println(len(championCards))
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 	
